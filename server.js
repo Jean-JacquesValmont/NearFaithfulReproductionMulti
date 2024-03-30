@@ -17,6 +17,11 @@ app.get('/script.js', (req, res) => {
   res.sendFile(join(__dirname, 'script.js'));
 });
 
+app.get('/scriptGame.js', (req, res) => {
+  res.set('Content-Type', 'text/javascript');
+  res.sendFile(join(__dirname, 'scriptGame.js'));
+});
+
 // Définir le type MIME pour les fichiers css
 app.get('/src/output.css', (req, res) => {
   res.set('Content-Type', 'text/css');

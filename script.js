@@ -13,6 +13,7 @@ const game = document.querySelector('.game');
 
 //Variable
 let timerDuration = 60
+let timerInterval = 0
 
 //// Envoyer les actions au serveur
 // Créer une nouvelle salle de jeu
@@ -63,7 +64,7 @@ socket.on("gameStarted", () => {
     game.classList.remove('hidden');
 
     // Démarrer le timer et lancer la fonction updateTimer toutes les secondes
-    let timerInterval = setInterval(updateTimer, 1000)
+    timerInterval = setInterval(updateTimer, 1000)
     console.log("Game Start!")
     
 })

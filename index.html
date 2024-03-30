@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	  <link href="./src/output.css" type="text/css" rel="stylesheet">
+    <title>Reproduction presque fidèle</title>
+</head>
+<body>
+    <div class="menu m-2">
+        <button id="createRoom" class="ml-2 p-2 border-2 border-black">Create Room</button>
+        <button id="joinRoom" class="ml-2 p-2 border-2 border-black">Join Room</button>
+        <input class="ml-2 p-2 border-2 border-black" type="text" id="roomId" placeholder="Room ID" value="">
+    </div>
+    <div class="roomMenu hidden">
+      <div >
+        <p id="nameRoomId">Room id :</p>
+        <p id="player">Joueur présent: </p>
+      </div>
+      <div class="flex">
+        <div class="flex flex-col">
+          <p>Timer (en seconde):</p>
+          <select id="Timer" class="p-2 border-2 border-black">
+          <option value="30">30</option>
+          <option value="60" selected>60</option>
+          <option value="90">90</option>
+        </select>
+        </div>
+        <button id="startGame" class="ml-2 p-2 border-2 border-black">Start Game</button>
+      </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/script.js"></script>
+</body>
+</html>

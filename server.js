@@ -23,6 +23,7 @@ app.get('/src/output.css', (req, res) => {
   res.sendFile(join(__dirname, 'src/output.css'));
 });
 
+
 io.on('connection', (socket) => {
   console.log('New client connected ', socket.id);
 
@@ -47,9 +48,12 @@ io.on('connection', (socket) => {
       console.log('La salle est vide');
     }
     
-    socket.emit("roomJoined", [...clientsInRoom])
-    socket.to(roomIdValue).emit("roomJoined", [...clientsInRoom])
-});
+    io.to(roomIdValue).emit("roomJoined", [...clientsInRoom])
+  });
+
+  socket.on("startGame", () => {
+    io.to(socket.id).emit("gameStarted")
+  })
 
   socket.on('disconnect', () => {
       console.log('Client disconnected ', socket.id);

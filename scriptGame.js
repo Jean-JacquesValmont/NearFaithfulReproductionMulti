@@ -1,6 +1,6 @@
 // Récupérer le canevas et le contexte 2D
-const canvas = document.getElementById('canvas');
-const context = canvas.getContext('2d');
+// const canvas = document.getElementById('canvas');
+// const context = canvas.getContext('2d');
 const canvasImage = document.getElementById('canvasImage');
 const contextImage = canvasImage.getContext('2d')
 
@@ -204,15 +204,13 @@ async function fetchImage() {
         randomImage.onload = function() {
             // Cette fonction est appelée lorsque l'image a été chargée
             contextImage.drawImage(this,0,0); // this fait référence à l'objet courant (=image)
+            contextImageResult.drawImage(this,0,0); // this fait référence à l'objet courant (=image)
           };
 
     } catch (error) {
         console.error('Une erreur s\'est produite lors de la récupération de l\'image :', error);
     }
 }
-
-// Appeler la fonction pour récupérer l'image
-// fetchImage();
 
 //Partie du code pour comparer les deux images
 // Comparer les pixels des deux images

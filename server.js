@@ -60,6 +60,21 @@ io.on('connection', (socket) => {
     io.to(socket.id).emit("gameStarted")
   })
 
+  socket.on("endOfTimer", (URL, roomId) => {
+    let hostUser = true
+    const clientsInRoom = io.sockets.adapter.rooms.get(roomId);
+    const arrayClientsInRoom = [...clientsInRoom]
+    console.log(arrayClientsInRoom)
+
+    if(socket.id == arrayClientsInRoom[0]){
+      io.to(socket.id).emit("elapsedTime", URL, hostUser)
+    }
+    else{
+      hostUser = false
+      io.to(arrayClientsInRoom[0]).emit("elapsedTime", URL, hostUser)
+    }
+  })
+
   socket.on('disconnect', () => {
       console.log('Client disconnected ', socket.id);
   });

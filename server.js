@@ -56,9 +56,9 @@ io.on('connection', (socket) => {
     io.to(roomIdValue).emit("roomJoined", [...clientsInRoom])
   });
 
-  socket.on("startGame", () => {
-    io.to(socket.id).emit("gameStarted")
-  })
+  socket.on("startGame", (imageUrl) => {
+    io.to(socket.id).emit("gameStarted", imageUrl);
+  });
 
   socket.on("endOfTimer", (URL, roomId) => {
     let hostUser = true

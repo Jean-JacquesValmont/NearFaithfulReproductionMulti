@@ -1,17 +1,9 @@
-// Récupérer le canevas et le contexte 2D
-// const canvas = document.getElementById('canvas');
-// const context = canvas.getContext('2d');
-const canvasImage = document.getElementById('canvasImage');
-const contextImage = canvasImage.getContext('2d')
-
 const brushSizeSelect = document.getElementById('brushSizeSelect');
 const toolSelect = document.getElementById('toolSelect');
 const colorSelect = document.getElementById('colorSelect');
 const clearAll = document.getElementById('clearAll');
 const undoButton = document.getElementById('undoButton');
 
-// const compareImage = document.getElementById('compareImage');
-const samePixelText = document.getElementById("samePixelText")
 // const toleranceSelect = document.getElementById('toleranceSelect');
 
 
@@ -43,8 +35,6 @@ let pixels2 = imageData2.data;
 // Déclarer une liste pour stocker les actions de dessin
 const actions = [];
 
-
-let tolerance = 50;
 
 // Fonction de dessin
 function draw(e) {
@@ -211,37 +201,6 @@ async function fetchImage() {
         console.error('Une erreur s\'est produite lors de la récupération de l\'image :', error);
     }
 }
-
-//Partie du code pour comparer les deux images
-// Comparer les pixels des deux images
-// compareImage.addEventListener("click", () => {
-//     imageData1 = context.getImageData(0, 0, canvas.width, canvas.height);
-//     imageData2 = contextImage.getImageData(0, 0, canvasImage.width, canvasImage.height);
-
-//     pixels1 = imageData1.data;
-//     pixels2 = imageData2.data;
-
-//     let samePixels = 0;
-
-//     for (let i = 0; i < pixels1.length; i += 4) {
-//         const diffRed = Math.abs(pixels1[i] - pixels2[i]);
-//         const diffGreen = Math.abs(pixels1[i + 1] - pixels2[i + 1]);
-//         const diffBlue = Math.abs(pixels1[i + 2] - pixels2[i + 2]);
-//         const diffAlpha = Math.abs(pixels1[i + 3] - pixels2[i + 3]);
-
-//         if (diffRed <= tolerance && diffGreen <= tolerance &&
-//             diffBlue <= tolerance && diffAlpha <= tolerance) {
-//             samePixels++;
-//         }
-//     }
-
-//     // Calculer le pourcentage de pixels identiques
-//     const totalPixels = canvas.width * canvas.height;
-//     const samePercentage = (samePixels / totalPixels) * 100;
-
-//     samePixelText.textContent = 'Pourcentage de pixels identiques: ' + samePercentage.toFixed(2) + '% ' + "Tolerance: " + tolerance
-//     console.log('Pourcentage de pixels identiques: ', samePercentage.toFixed(2) + '%', "Tolerance: ", tolerance);
-// })
 
 // Fonction pour obtenir la couleur d'un pixel aux coordonnées (x, y)
 function getPixelColor(x, y) {

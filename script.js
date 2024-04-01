@@ -9,13 +9,18 @@ const timer = document.getElementById("timer")
 const timerSelect = document.getElementById("timerSelect")
 const canvas = document.getElementById('canvas');
 const context = canvas.getContext('2d');
+const canvasImage = document.getElementById('canvasImage');
+const contextImage = canvasImage.getContext('2d')
 const canvasImageResult = document.getElementById('canvasImageResult');
 const contextImageResult = canvasImageResult.getContext('2d')
 const canvasPlayer1 = document.getElementById('canvasPlayer1');
 const contextPlayer1 = canvasPlayer1.getContext('2d')
 const canvasPlayer2 = document.getElementById('canvasPlayer2');
 const contextPlayer2 = canvasPlayer2.getContext('2d')
-
+const samePixelTextPlayer1 = document.getElementById("samePixelTextPlayer1")
+const samePixelTextPlayer2 = document.getElementById("samePixelTextPlayer2")
+const winnerText = document.getElementById("winnerText")
+const returnMenu = document.getElementById('returnMenu')
 
 const menu = document.querySelector('.menu');
 const roomMenu = document.querySelector('.roomMenu');
@@ -25,11 +30,18 @@ const finalResult = document.querySelector('.finalResult')
 //Variable
 let currentRoomID = ""
 let timerDuration = 5
-let timerInterval = 0
+let timerInterval
+let timerDurationFinalResult = 3
+let timerFinalResult
+let loadCanvas1 = false
+let loadCanvas2 = false
+
+let tolerance = 50;
 
 //// Envoyer les actions au serveur
 // Créer une nouvelle salle de jeu
-createRoom.addEventListener("click", () => {
+createRoom.addEventListener("click", async () => {
+    await fetchImage()
     socket.emit('createRoom');
 })
 
@@ -45,7 +57,9 @@ joinRoom.addEventListener("click", () => {
 
 // Lancer le jeu
 startGame.addEventListener("click", () => {
-    socket.emit('startGame');
+    // await fetchImage()
+    let imageDataURL = canvasImage.toDataURL()
+    socket.emit('startGame', imageDataURL);
 })
     
 //// Écouter les événements du serveur ////
@@ -73,9 +87,9 @@ socket.on('roomJoined', (clientsInRoom) => {
     console.log('Room joined:', clientsInRoom[0]);
 });
 
-socket.on("gameStarted", () => {
-    // Appeler la fonction pour récupérer l'image
-    // fetchImage();
+socket.on("gameStarted", (imageUrl) => {
+    convertURLToImage(imageUrl, contextImage)
+    convertURLToImage(imageUrl, contextImageResult)
     roomMenu.classList.add('hidden');
     game.classList.remove('hidden');
 
@@ -86,18 +100,26 @@ socket.on("gameStarted", () => {
 })
 
 socket.on("elapsedTime", (imageDataURL, hostUser) => {
-    // console.log("drawingData: ", imageDataURL)
+
     if(hostUser == true){
         convertURLToImage(imageDataURL, contextPlayer1)
+        loadCanvas1 = true
     }
     else{
         convertURLToImage(imageDataURL, contextPlayer2)
+        loadCanvas2 = true
     }
     
     game.classList.add('hidden');
     finalResult.classList.remove('hidden');
 
     console.log("Temps écoulée. Affichage des résultats.")
+    // Démarrer le timer pour calculer les résultats
+    // Le if est là car j'ai deux envois du socket "elapsedTime" et donc mon setInterval qui ce lance deux fois.
+    // Ce qui permet de le limiter à le lancer 1 fois.
+    if(loadCanvas1 == true && loadCanvas2 == true){
+        timerFinalResult = setInterval(updateTimerResult, 1000)
+    }
     
 })
 
@@ -113,12 +135,27 @@ function updateTimer() {
         clearInterval(timerInterval); // Arrêter le timer
 
         let imageDataURL = canvas.toDataURL()
-        console.log(imageDataURL)
         socket.emit('endOfTimer', imageDataURL, currentRoomID);
 
         console.log("Le temps est écoulé !");
     } else {
         timerDuration--; // Décrémenter le temps restant
+    }
+}
+
+// Fonction pour mettre à jour le timer
+function updateTimerResult() {
+    // Vérifier si le timer est écoulé
+    if (timerDurationFinalResult === 0) {
+        clearInterval(timerFinalResult); // Arrêter le timer
+        const resultPlayer1 = compareImage(canvasPlayer1, contextPlayer1, samePixelTextPlayer1)
+        const resultPlayer2 = compareImage(canvasPlayer2, contextPlayer2, samePixelTextPlayer2)
+
+        console.log("Score afficher.");
+        compareWithPrecision(resultPlayer1, resultPlayer2, 2)
+
+    } else {
+        timerDurationFinalResult--; // Décrémenter le temps restant
     }
 }
 
@@ -129,7 +166,7 @@ timerSelect.addEventListener("change", () => {
 })
 
 //Fonction pour transformer une URL en image
-function convertURLToImage(imageDataURL, context){
+const convertURLToImage = (imageDataURL, context) => {
     // Créer une nouvelle image
     const image = new Image();
 
@@ -138,7 +175,75 @@ function convertURLToImage(imageDataURL, context){
 
     // Attendre que l'image soit chargée
     image.onload = function() {
+        console.log("L'image est chargée avec succès !");
         // Dessiner l'image sur le canvas
         context.drawImage(image, 0, 0);
     };
+
+    // Ajouter un gestionnaire d'événements onerror pour gérer les cas où le chargement de l'image échoue
+    image.onerror = function() {
+        console.error("Erreur lors du chargement de l'image !");
+    };
 }
+
+//Partie du code pour comparer les deux images
+// Comparer les pixels des deux images
+const compareImage = (canvas, context, samePixelText) => {
+    imageData1 = context.getImageData(0, 0, canvas.width, canvas.height);
+    imageData2 = contextImageResult.getImageData(0, 0, canvasImageResult.width, canvasImageResult.height);
+
+    pixels1 = imageData1.data;
+    pixels2 = imageData2.data;
+
+    let samePixels = 0;
+
+    for (let i = 0; i < pixels1.length; i += 4) {
+        const diffRed = Math.abs(pixels1[i] - pixels2[i]);
+        const diffGreen = Math.abs(pixels1[i + 1] - pixels2[i + 1]);
+        const diffBlue = Math.abs(pixels1[i + 2] - pixels2[i + 2]);
+        const diffAlpha = Math.abs(pixels1[i + 3] - pixels2[i + 3]);
+
+        if (diffRed <= tolerance && diffGreen <= tolerance &&
+            diffBlue <= tolerance && diffAlpha <= tolerance) {
+            samePixels++;
+        }
+    }
+
+    // Calculer le pourcentage de pixels identiques
+    const totalPixels = canvas.width * canvas.height;
+    const samePercentage = (samePixels / totalPixels) * 100;
+
+    samePixelText.textContent = 'Pourcentage de pixels identiques: ' + samePercentage.toFixed(2) + '%'
+    return samePercentage.toFixed(2)
+}
+
+// Comparaison avec une précision de 2 décimales
+function compareWithPrecision(a, b, precision) {
+    if(Math.round(a * 10 ** precision) > Math.round(b * 10 ** precision)){
+        winnerText.textContent = "Le gagnant est player1."
+    }
+    else if(Math.round(a * 10 ** precision) < Math.round(b * 10 ** precision)){
+        winnerText.textContent = "Le gagnant est player2."
+    }
+    else if(Math.round(a * 10 ** precision) == Math.round(b * 10 ** precision)){
+        winnerText.textContent = "Egalité."
+    }
+}
+
+returnMenu.addEventListener('click', () => {
+    finalResult.classList.add('hidden');
+    menu.classList.remove('hidden');
+
+    //Remettre à zéro les variables
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    contextImage.clearRect(0, 0, canvasImage.width, canvasImage.height);
+    contextPlayer1.clearRect(0, 0, canvasPlayer1.width, canvasPlayer1.height);
+    contextPlayer2.clearRect(0, 0, canvasPlayer2.width, canvasPlayer2.height);
+    samePixelTextPlayer1.textContent = 'Pourcentage de pixels identiques: 0%'
+    samePixelTextPlayer2.textContent = 'Pourcentage de pixels identiques: 0%'
+    winnerText.textContent = ""
+    timerDuration = 5
+    timerDurationFinalResult = 3
+    loadCanvas1 = false
+    loadCanvas2 = false
+})

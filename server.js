@@ -32,11 +32,8 @@ app.get('/src/output.css', (req, res) => {
 io.on('connection', (socket) => {
   console.log('New client connected ', socket.id);
 
-  // Créer une nouvelle salle de jeu et connecter le premier joueur
   socket.on('createRoom', () => {
       socket.join(socket.id)
-      // console.log("Room ID created server:", socket.id)
-      
       socket.emit("roomCreated", socket.id)
   });
 
@@ -56,8 +53,8 @@ io.on('connection', (socket) => {
     io.to(roomIdValue).emit("roomJoined", [...clientsInRoom])
   });
 
-  socket.on("startGame", (imageUrl) => {
-    io.to(socket.id).emit("gameStarted", imageUrl);
+  socket.on("startGame", (imageURL) => {
+    io.to(socket.id).emit("gameStarted", imageURL);
   });
 
   socket.on("endOfTimer", (URL, roomId) => {

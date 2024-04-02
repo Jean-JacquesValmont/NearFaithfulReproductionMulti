@@ -25,7 +25,7 @@ const colorButtons = colors.map(color => document.getElementById(`color${colors.
 let randomImage = new Image()
 
 let imageData1 = context.getImageData(0, 0, canvas.width, canvas.height);
-let imageData2 = contextImage.getImageData(0, 0, canvasImage.width, canvasImage.height);
+let imageData2 = contextImageFetch.getImageData(0, 0, canvasImageFetch.width, canvasImageFetch.height);
 
 let pixels1 = imageData1.data;
 let pixels2 = imageData2.data;
@@ -34,7 +34,7 @@ let pixels2 = imageData2.data;
 const actions = [];
 
 // Fonction de dessin
-function draw(e) {
+const draw = (e) => {
     if (!isDrawing) return;
 
     if (tool == "brush"){
@@ -118,7 +118,7 @@ colorButtons.forEach(button => {
 });
 
 // Fonction pour effacer le canvas
-function clearCanvas() {
+const clearCanvas = () => {
     context.clearRect(0, 0, canvas.width, canvas.height);
 }
 
@@ -126,13 +126,13 @@ function clearCanvas() {
 clearAll.addEventListener("click", clearCanvas())
 
 // Fonction pour enregistrer une action de dessin
-function recordAction() {
+const recordAction = () => {
     const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
     actions.push(imageData);
 }
 
 // Fonction pour annuler la dernière action de dessin
-function undo() {
+const undo = () => {
     if (actions.length > 0) {
         actions.pop(); // Supprimer la dernière action de la liste
         redrawCanvas(); // Redessiner le canvas avec les actions restantes
@@ -140,7 +140,7 @@ function undo() {
 }
 
 // Fonction pour redessiner le canvas avec les actions restantes dans la liste
-function redrawCanvas() {
+const redrawCanvas = () => {
     clearCanvas(); // Effacer le canvas
 
     // Redessiner toutes les actions restantes
@@ -153,7 +153,7 @@ function redrawCanvas() {
 undoButton.addEventListener('click', undo());
 
 // Pour récupérer une image
-async function fetchImage() {
+const fetchImage = async () => {
     try {
         const apiKey = '1rIW4mEHWJeRPQR1vGtU+g==a0KWLUCB8HcKGCKs';
 

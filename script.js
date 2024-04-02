@@ -7,16 +7,6 @@ const player = document.getElementById("player")
 const startGame = document.getElementById("startGame")
 const timer = document.getElementById("timer")
 const timerSelect = document.getElementById("timerSelect")
-const canvas = document.getElementById('canvas');
-const context = canvas.getContext('2d');
-const canvasImage = document.getElementById('canvasImage');
-const contextImage = canvasImage.getContext('2d')
-const canvasImageResult = document.getElementById('canvasImageResult');
-const contextImageResult = canvasImageResult.getContext('2d')
-const canvasPlayer1 = document.getElementById('canvasPlayer1');
-const contextPlayer1 = canvasPlayer1.getContext('2d')
-const canvasPlayer2 = document.getElementById('canvasPlayer2');
-const contextPlayer2 = canvasPlayer2.getContext('2d')
 const samePixelTextPlayer1 = document.getElementById("samePixelTextPlayer1")
 const samePixelTextPlayer2 = document.getElementById("samePixelTextPlayer2")
 const winnerText = document.getElementById("winnerText")
@@ -26,6 +16,17 @@ const menu = document.querySelector('.menu');
 const roomMenu = document.querySelector('.roomMenu');
 const game = document.querySelector('.game');
 const finalResult = document.querySelector('.finalResult')
+
+const canvas = document.getElementById('canvas');
+const context = canvas.getContext('2d');
+const canvasImageFetch = document.getElementById('canvasImageFetch');
+const contextImageFetch = canvasImageFetch.getContext('2d')
+const canvasImageFetchResult = document.getElementById('canvasImageFetchResult');
+const contextImageFetchResult = canvasImageFetchResult.getContext('2d')
+const canvasPlayer1 = document.getElementById('canvasPlayer1');
+const contextPlayer1 = canvasPlayer1.getContext('2d')
+const canvasPlayer2 = document.getElementById('canvasPlayer2');
+const contextPlayer2 = canvasPlayer2.getContext('2d')
 
 //Variable
 let currentRoomID = ""
@@ -57,8 +58,7 @@ joinRoom.addEventListener("click", () => {
 
 // Lancer le jeu
 startGame.addEventListener("click", () => {
-    // await fetchImage()
-    let imageDataURL = canvasImage.toDataURL()
+    let imageDataURL = canvasImageFetch.toDataURL()
     socket.emit('startGame', imageDataURL);
 })
     
@@ -70,7 +70,6 @@ socket.on('roomCreated', (roomID) => {
     currentRoomID = roomID
     nameRoomId.textContent = "Room id: " + roomID
     player.textContent = "Joueur présent: " + roomID
-    console.log('Room created:', roomID);
 });
 
 socket.on('roomJoined', (clientsInRoom) => {
@@ -87,16 +86,14 @@ socket.on('roomJoined', (clientsInRoom) => {
     console.log('Room joined:', clientsInRoom[0]);
 });
 
-socket.on("gameStarted", (imageUrl) => {
-    convertURLToImage(imageUrl, contextImage)
-    convertURLToImage(imageUrl, contextImageResult)
+socket.on("gameStarted", (imageURL) => {
+    convertURLToImage(imageURL, contextImageFetch)
+    convertURLToImage(imageURL, contextImageFetchResult)
     roomMenu.classList.add('hidden');
     game.classList.remove('hidden');
 
     // Démarrer le timer et lancer la fonction updateTimer toutes les secondes
     timerInterval = setInterval(updateTimer, 1000)
-    console.log("Game Start!")
-    
 })
 
 socket.on("elapsedTime", (imageDataURL, hostUser) => {
@@ -113,7 +110,6 @@ socket.on("elapsedTime", (imageDataURL, hostUser) => {
     game.classList.add('hidden');
     finalResult.classList.remove('hidden');
 
-    console.log("Temps écoulée. Affichage des résultats.")
     // Démarrer le timer pour calculer les résultats
     // Le if est là car j'ai deux envois du socket "elapsedTime" et donc mon setInterval qui ce lance deux fois.
     // Ce qui permet de le limiter à le lancer 1 fois.
@@ -123,10 +119,10 @@ socket.on("elapsedTime", (imageDataURL, hostUser) => {
     
 })
 
-//// Option roomMenu
-//Timer
+////// Option roomMenu
+//// Timer
 // Fonction pour mettre à jour le timer
-function updateTimer() {
+const updateTimer = () => {
     // Afficher le temps restant
     timer.textContent = "Timer: " + timerDuration
 
@@ -140,22 +136,6 @@ function updateTimer() {
         console.log("Le temps est écoulé !");
     } else {
         timerDuration--; // Décrémenter le temps restant
-    }
-}
-
-// Fonction pour mettre à jour le timer
-function updateTimerResult() {
-    // Vérifier si le timer est écoulé
-    if (timerDurationFinalResult === 0) {
-        clearInterval(timerFinalResult); // Arrêter le timer
-        const resultPlayer1 = compareImage(canvasPlayer1, contextPlayer1, samePixelTextPlayer1)
-        const resultPlayer2 = compareImage(canvasPlayer2, contextPlayer2, samePixelTextPlayer2)
-
-        console.log("Score afficher.");
-        compareWithPrecision(resultPlayer1, resultPlayer2, 2)
-
-    } else {
-        timerDurationFinalResult--; // Décrémenter le temps restant
     }
 }
 
@@ -186,11 +166,28 @@ const convertURLToImage = (imageDataURL, context) => {
     };
 }
 
+//////Div resultat final
+// Fonction pour mettre à jour le timer
+const updateTimerResult = () => {
+    // Vérifier si le timer est écoulé
+    if (timerDurationFinalResult === 0) {
+        clearInterval(timerFinalResult); // Arrêter le timer
+        const resultPlayer1 = compareImage(canvasPlayer1, contextPlayer1, samePixelTextPlayer1)
+        const resultPlayer2 = compareImage(canvasPlayer2, contextPlayer2, samePixelTextPlayer2)
+
+        console.log("Score afficher.");
+        compareWithPrecision(resultPlayer1, resultPlayer2, 2)
+
+    } else {
+        timerDurationFinalResult--; // Décrémenter le temps restant
+    }
+}
+
 //Partie du code pour comparer les deux images
 // Comparer les pixels des deux images
 const compareImage = (canvas, context, samePixelText) => {
     imageData1 = context.getImageData(0, 0, canvas.width, canvas.height);
-    imageData2 = contextImageResult.getImageData(0, 0, canvasImageResult.width, canvasImageResult.height);
+    imageData2 = contextImageFetchResult.getImageData(0, 0, canvasImageFetchResult.width, canvasImageFetchResult.height);
 
     pixels1 = imageData1.data;
     pixels2 = imageData2.data;
@@ -218,7 +215,7 @@ const compareImage = (canvas, context, samePixelText) => {
 }
 
 // Comparaison avec une précision de 2 décimales
-function compareWithPrecision(a, b, precision) {
+const compareWithPrecision = (a, b, precision) => {
     if(Math.round(a * 10 ** precision) > Math.round(b * 10 ** precision)){
         winnerText.textContent = "Le gagnant est player1."
     }
@@ -236,7 +233,7 @@ returnMenu.addEventListener('click', () => {
 
     //Remettre à zéro les variables
     context.clearRect(0, 0, canvas.width, canvas.height);
-    contextImage.clearRect(0, 0, canvasImage.width, canvasImage.height);
+    contextImageFetch.clearRect(0, 0, canvasImageFetch.width, canvasImageFetch.height);
     contextPlayer1.clearRect(0, 0, canvasPlayer1.width, canvasPlayer1.height);
     contextPlayer2.clearRect(0, 0, canvasPlayer2.width, canvasPlayer2.height);
     samePixelTextPlayer1.textContent = 'Pourcentage de pixels identiques: 0%'

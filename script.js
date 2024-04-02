@@ -177,6 +177,7 @@ const updateTimerResult = () => {
 
         console.log("Score afficher.");
         compareWithPrecision(resultPlayer1, resultPlayer2, 2)
+        console.log("Résultat final afficher!")
 
     } else {
         timerDurationFinalResult--; // Décrémenter le temps restant

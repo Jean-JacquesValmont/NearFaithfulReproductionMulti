@@ -181,8 +181,8 @@ const fetchImage = async () => {
 
         randomImage.onload = function() {
             // Cette fonction est appelée lorsque l'image a été chargée
-            contextImage.drawImage(this,0,0); // this fait référence à l'objet courant (=image)
-            contextImageResult.drawImage(this,0,0);
+            contextImageFetch.drawImage(this,0,0); // this fait référence à l'objet courant (=image)
+            contextImageFetchResult.drawImage(this,0,0);
           };
 
     } catch (error) {

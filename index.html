@@ -7,109 +7,130 @@
     <title>Reproduction presque fidèle</title>
 </head>
 <body>
-    <div class="menu m-2">
-        <button id="createRoom" class="ml-2 p-2 border-2 border-black">Create Room</button>
-        <button id="joinRoom" class="ml-2 p-2 border-2 border-black">Join Room</button>
-        <input class="ml-2 p-2 border-2 border-black" type="text" id="roomId" placeholder="Room ID" value="">
-    </div>
-    <div class="roomMenu hidden">
-      <div >
-        <p id="nameRoomId">Room id :</p>
-        <p id="player">Joueur présent: </p>
-      </div>
-      <div class="flex">
-        <div class="flex flex-col">
-          <p>Timer (en seconde):</p>
-          <select id="timerSelect" class="p-2 border-2 border-black">
-            <option value="5">5</option>
-            <option value="60" selected>60</option>
-            <option value="90">90</option>
-        </select>
+    <div class="menu flex flex-col justify-center items-center m-2">
+        <h1 class="text-center text-6xl mt-8 mb-16 p-4">Near Faithful Reproduction</h1>
+        <div class="w-120 flex flex-col justify-center items-center border-2 border-black p-16">
+          <button id="createRoom" class="w-36 ml-2 p-2 border-2 border-black">Create Room</button>
+          <div class="flex justify-center p-4">
+            <input class="ml-2 p-2 border-2 border-black" type="text" id="roomId" placeholder="Enter Room ID" value="">
+            <button id="joinRoom" class="ml-2 p-2 border-2 border-black">Join Room</button>
+          </div>
         </div>
+        <div class="flex flex-col justify-center text-center p-4">
+          <h3 class="text-2xl p-4">But du jeu</h3>
+          <p class="p-2">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed ducimus maxime architecto rem fugit accusantium sint, repellat, nobis doloribus eos dicta reiciendis! Aliquid provident officia id ipsum perferendis a corporis.</p>
+        </div>
+    </div>
+
+    <div class="roomMenu hidden flex-col justify-center items-center">
+      <h2 class="text-center text-4xl m-4 p-4">Chacun pour soi</h2>
+      <div class=" flex flex-col justify-center items-center border-2 border-black m-2">
+        <h4 id="nameRoomId" class="text-2xl font-bold">Room ID </h4>
+      
+        <div class="flex justify-between">
+          <div class="flex flex-col ml-4 mr-4">
+            <p id="player" class="text-xl font-bold">Players</p>
+          </div>
+          <div class="flex flex-col justify-center items-center">
+            <p class="text-xl font-bold mb-4">Select Options: </p>
+            <div class="flex justify-between">
+              <p class="mr-4">Timer (en seconde):</p>
+              <select id="timerSelect" class="p-2 border-2 border-black">
+                <option value="5">5</option>
+                <option value="60" selected>60</option>
+                <option value="90">90</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-center items-center">
         <button id="startGame" class="ml-2 p-2 border-2 border-black">Start Game</button>
       </div>
     </div>
-    <div class="game hidden">
-      <p id="timer">Timer: 60</p>
+
+    <div class="game hidden flex-col justify-center items-center">
+      <h2 class="text-center text-4xl m-4 p-4">A toi de jouer!</h2>
+      <div class="flex">
+        <p id="round" class="text-2xl font-bold p-2">Manche: 1</p>
+        <p id="timer" class="text-2xl font-bold p-2">Timer: 60</p>
+      </div>
       <div class="flex">
         <canvas id="canvasImageFetch" class="border-2 border-black" width="640" height="480"></canvas>
         <canvas id="canvas" class="border-2 border-black" width="640" height="480"></canvas>
       </div>
-      <div class="flex justify-center">
+      <div class="flex justify-center items-center">
           <div class="flex flex-col p-2">
-              <p>Taille du pinceau:</p>
-              <select id="brushSizeSelect" class="p-2 border-2 border-black">
-                  <option value="1">1px</option>
-                  <option value="3">3px</option>
-                  <option value="5">5px</option>
-                  <option value="7">7px</option>
-                  <option value="10" selected>10px</option>
-                  <option value="15">15px</option>
-                  <option value="20">20px</option>
-                  <option value="30">30px</option>
-                  <option value="50">50px</option>
-              </select>
-          </div>
-          <div class="flex flex-col p-2">
-              <p>Outils pour colorier:</p>
               <select id="toolSelect" class="p-2 border-2 border-black">
-                  <option value="brush">Pinceau</option>
-                  <option value="paintBucket">Pot de peinture</option>
-                  <option value="eraser">Gomme</option>
-              </select>
+                <option value="brush">Pinceau</option>
+                <option value="paintBucket">Pot de peinture</option>
+                <option value="eraser">Gomme</option>
+            </select>
           </div>
-          <div class="p-2">
-              <div class="flex">
-                  <p>Couleur choisi:</p>
-                  <canvas id="colorSelect" class="mt-2 ml-2 border-2 border-black" width="16" height="16"></canvas>
-              </div>
-              <div>
-                  <button id="color0" class="bg-white text-white p-2 border-2 border-black"></button>
-                  <button id="color1" class="bg-gray-300 p-2 border-2 border-black"></button>
-                  <button id="color2" class="bg-red-300 p-2 border-2 border-black"></button>
-                  <button id="color3" class="bg-orange-300 p-2 border-2 border-black"></button>
-                  <button id="color4" class="bg-yellow-300 p-2 border-2 border-black"></button>
-                  <button id="color5" class="bg-green-300 p-2 border-2 border-black"></button>
-                  <button id="color6" class="bg-cyan-300 p-2 border-2 border-black"></button>
-                  <button id="color7" class="bg-blue-300 p-2 border-2 border-black"></button>
-                  <button id="color8" class="bg-purple-300 p-2 border-2 border-black"></button>
-                  <button id="color9" class="bg-pink-300 p-2 border-2 border-black"></button>
-              </div>
-              <div>
-                  <button id="color10" class="bg-black p-2 border-2 border-black"></button>
-                  <button id="color11" class="bg-gray-700 p-2 border-2 border-black"></button>
-                  <button id="color12" class="bg-red-700 p-2 border-2 border-black"></button>
-                  <button id="color13" class="bg-orange-700 p-2 border-2 border-black"></button>
-                  <button id="color14" class="bg-yellow-700 p-2 border-2 border-black"></button>
-                  <button id="color15" class="bg-green-700 p-2 border-2 border-black"></button>
-                  <button id="color16" class="bg-cyan-700 p-2 border-2 border-black"></button>
-                  <button id="color17" class="bg-blue-700 p-2 border-2 border-black"></button>
-                  <button id="color18" class="bg-purple-700 p-2 border-2 border-black"></button>
-                  <button id="color19" class="bg-pink-700 p-2 border-2 border-black"></button>
-              </div>
+          <div class="flex flex-col p-2">
+              <select id="brushSizeSelect" class="p-2 border-2 border-black">
+                <option value="1">1px</option>
+                <option value="3">3px</option>
+                <option value="5">5px</option>
+                <option value="7">7px</option>
+                <option value="10" selected>10px</option>
+                <option value="15">15px</option>
+                <option value="20">20px</option>
+                <option value="30">30px</option>
+                <option value="50">50px</option>
+            </select>
           </div>
+          <canvas id="colorSelect" class="mt-2 ml-2 border-2 border-black" width="40" height="40"></canvas>
           <div class="p-2">
-              <p>Action:</p>
-              <button id="clearAll" class="p-2 border-2 border-black">Tout effacer</button>
-              <button id="undoButton" class="p-2 border-2 border-black">Retour en arrière</button>
+            <div class="w-60">
+                <button id="color0" class="bg-white text-white p-2 border-2 border-black"></button>
+                <button id="color1" class="bg-gray-300 p-2 border-2 border-black"></button>
+                <button id="color2" class="bg-red-300 p-2 border-2 border-black"></button>
+                <button id="color3" class="bg-orange-300 p-2 border-2 border-black"></button>
+                <button id="color4" class="bg-yellow-300 p-2 border-2 border-black"></button>
+                <button id="color5" class="bg-green-300 p-2 border-2 border-black"></button>
+                <button id="color6" class="bg-cyan-300 p-2 border-2 border-black"></button>
+                <button id="color7" class="bg-blue-300 p-2 border-2 border-black"></button>
+                <button id="color8" class="bg-purple-300 p-2 border-2 border-black"></button>
+                <button id="color9" class="bg-pink-300 p-2 border-2 border-black"></button>
+            </div>
+            <div class="w-60">
+                <button id="color10" class="bg-black p-2 border-2 border-black"></button>
+                <button id="color11" class="bg-gray-700 p-2 border-2 border-black"></button>
+                <button id="color12" class="bg-red-700 p-2 border-2 border-black"></button>
+                <button id="color13" class="bg-orange-700 p-2 border-2 border-black"></button>
+                <button id="color14" class="bg-yellow-700 p-2 border-2 border-black"></button>
+                <button id="color15" class="bg-green-700 p-2 border-2 border-black"></button>
+                <button id="color16" class="bg-cyan-700 p-2 border-2 border-black"></button>
+                <button id="color17" class="bg-blue-700 p-2 border-2 border-black"></button>
+                <button id="color18" class="bg-purple-700 p-2 border-2 border-black"></button>
+                <button id="color19" class="bg-pink-700 p-2 border-2 border-black"></button>
+            </div>
+          </div>
+          <div class="flex p-2">
+              <button id="clearAll" class="w-36 mx-2 p-2 border-2 border-black">Tout effacer</button>
+              <button id="undoButton" class="w-36 mx-2 p-2 border-2 border-black">Retour en arrière</button>
           </div>
       </div>
     </div>
-    <div class="finalResult hidden">
+
+    <div class="finalResult hidden flex-col justify-center items-center">
+      <h2 class="text-center text-4xl m-4 p-4">Résultat</h2>
       <canvas id="canvasImageFetchResult" class="border-2 border-black" width="640" height="480"></canvas>
       <div class="flex">
-        <div class="flex flex-col">
-          <p>Player1</p>
+        <div class="flex flex-col justify-center items-center mx-2">
+          <p class="text-2xl p-2">Player 1</p>
           <canvas id="canvasPlayer1" class="border-2 border-black" width="640" height="480"></canvas>
-          <p id="samePixelTextPlayer1">Pourcentage de pixels identiques : 0%</p>
+          <p id="samePixelTextPlayer1" class="text-2xl p-2">Pourcentage de pixels identiques : 0%</p>
         </div>
-        <div class="flex flex-col">
-          <p>Player2</p>
+        <div class="flex flex-col justify-center items-center mx-2">
+          <p class="text-2xl p-2">Player 2</p>
           <canvas id="canvasPlayer2" class="border-2 border-black" width="640" height="480"></canvas>
-          <p id="samePixelTextPlayer2">Pourcentage de pixels identiques : 0%</p>
+          <p id="samePixelTextPlayer2" class="text-2xl p-2">Pourcentage de pixels identiques : 0%</p>
         </div>
       </div>
-      <p id="winnerText"></p>
+      <p id="winnerText" class="text-2xl p-2"></p>
       <button id="returnMenu" class="ml-2 p-2 border-2 border-black">Retour au menu</button>
       <button></button>
     </div>

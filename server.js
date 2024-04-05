@@ -28,7 +28,6 @@ app.get('/src/output.css', (req, res) => {
   res.sendFile(join(__dirname, 'src/output.css'));
 });
 
-
 io.on('connection', (socket) => {
   console.log('New client connected ', socket.id);
 

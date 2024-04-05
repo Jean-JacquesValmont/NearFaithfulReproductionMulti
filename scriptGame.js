@@ -123,7 +123,7 @@ const clearCanvas = () => {
 }
 
 // Événement pour effacer tout le canvas
-clearAll.addEventListener("click", clearCanvas())
+clearAll.addEventListener("click", clearCanvas)
 
 // Fonction pour enregistrer une action de dessin
 const recordAction = () => {
@@ -150,7 +150,7 @@ const redrawCanvas = () => {
 }
 
 // Événement pour annuler la dernière action de dessin (par exemple, lorsqu'un bouton "Annuler" est cliqué)
-undoButton.addEventListener('click', undo());
+undoButton.addEventListener('click', undo);
 
 // Pour récupérer une image
 const fetchImage = async () => {

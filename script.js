@@ -30,7 +30,7 @@ const contextPlayer2 = canvasPlayer2.getContext('2d')
 
 //Variable
 let currentRoomID = ""
-let timerDuration = 5
+let timerDuration = 60
 let timerInterval
 let timerDurationFinalResult = 3
 let timerFinalResult
@@ -42,7 +42,7 @@ let tolerance = 50;
 //// Envoyer les actions au serveur
 // Créer une nouvelle salle de jeu
 createRoom.addEventListener("click", async () => {
-    await fetchImage()
+    // await fetchImage()
     socket.emit('createRoom');
 })
 
@@ -65,16 +65,20 @@ startGame.addEventListener("click", () => {
 //// Écouter les événements du serveur ////
 socket.on('roomCreated', (roomID) => {
     menu.classList.add('hidden');
+    menu.classList.remove('flex');
     roomMenu.classList.remove('hidden');
+    roomMenu.classList.add('flex');
 
     currentRoomID = roomID
-    nameRoomId.textContent = "Room id: " + roomID
-    player.textContent = "Joueur présent: " + roomID
+    nameRoomId.textContent = "Room ID " + roomID
+    player.textContent = "Players " + roomID
 });
 
 socket.on('roomJoined', (clientsInRoom) => {
     menu.classList.add('hidden');
+    menu.classList.remove('flex');
     roomMenu.classList.remove('hidden');
+    roomMenu.classList.add('flex');
 
     let allclientsInRoom = ""
     currentRoomID = clientsInRoom[0]
@@ -90,7 +94,9 @@ socket.on("gameStarted", (imageURL) => {
     convertURLToImage(imageURL, contextImageFetch)
     convertURLToImage(imageURL, contextImageFetchResult)
     roomMenu.classList.add('hidden');
+    roomMenu.classList.remove('flex');
     game.classList.remove('hidden');
+    game.classList.add('flex');
 
     // Démarrer le timer et lancer la fonction updateTimer toutes les secondes
     timerInterval = setInterval(updateTimer, 1000)
@@ -108,7 +114,9 @@ socket.on("elapsedTime", (imageDataURL, hostUser) => {
     }
     
     game.classList.add('hidden');
+    game.classList.remove('flex');
     finalResult.classList.remove('hidden');
+    finalResult.classList.add('flex');
 
     // Démarrer le timer pour calculer les résultats
     // Le if est là car j'ai deux envois du socket "elapsedTime" et donc mon setInterval qui ce lance deux fois.

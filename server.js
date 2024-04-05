@@ -53,10 +53,12 @@ io.on('connection', (socket) => {
   });
 
   socket.on('sendPlayersInRoom', (allclientsInRoom, roomID) => {
-    
     io.to(roomID).emit("sendedPlayersInRoom", allclientsInRoom)
   });
 
+  socket.on("timerChange", (timerDuration) => {
+    io.to(socket.id).emit("timerChanged", timerDuration);
+  })
 
   socket.on("startGame", (imageURL) => {
     io.to(socket.id).emit("gameStarted", imageURL);

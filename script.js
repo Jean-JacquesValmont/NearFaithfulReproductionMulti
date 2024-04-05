@@ -7,6 +7,7 @@ const copyButton = document.getElementById('copyID');
 const errorCopyID = document.getElementById('errorCopyID');
 const namePlayer = document.getElementById('namePlayer')
 const player = document.getElementById("player")
+const timerText = document.getElementById("timerText")
 const startGame = document.getElementById("startGame")
 const timer = document.getElementById("timer")
 const timerSelect = document.getElementById("timerSelect")
@@ -17,6 +18,9 @@ const returnMenu = document.getElementById('returnMenu')
 
 const menu = document.querySelector('.menu');
 const roomMenu = document.querySelector('.roomMenu');
+const timerSelectClass = document.querySelector('.timerSelectClass');
+const timerSelectText = document.querySelector('.timerSelectText');
+const buttonStartGame = document.querySelector('.buttonStartGame');
 const game = document.querySelector('.game');
 const finalResult = document.querySelector('.finalResult')
 
@@ -75,6 +79,7 @@ socket.on('roomCreated', (roomID) => {
     menu.classList.remove('flex');
     roomMenu.classList.remove('hidden');
     roomMenu.classList.add('flex');
+    timerSelectText.classList.add("hidden")
 
     currentRoomID = roomID
     nameRoomId.textContent = roomID
@@ -99,6 +104,9 @@ socket.on('roomJoined', (clientsInRoom, namePlayerJoin) => {
     else{
         currentRoomID = clientsInRoom[0]
         nameRoomId.textContent = clientsInRoom[0]
+        buttonStartGame.classList.add('hidden');
+        buttonStartGame.classList.remove('flex');
+        timerSelectClass.classList.add("hidden")
     }
 
     console.log('Room joined:', clientsInRoom[0]);
@@ -113,6 +121,10 @@ socket.on("sendedPlayersInRoom", (allclientsInRoomSended) => {
         newParagraph.textContent = allclientsInRoom[i]
         player.appendChild(newParagraph)
     }
+})
+
+socket.on("timerChanged", (timerChanged) => {
+    timerText.textContent = timerChanged
 })
 
 socket.on("gameStarted", (imageURL) => {
@@ -187,7 +199,9 @@ const updateTimer = () => {
 // Événement pour définir le timer
 timerSelect.addEventListener("change", () => {
     timerDuration = timerSelect.value
-    timer.textContent = "Timer: " + timerSelect.value
+    timer.textContent = "Timer (en seconde):" + timerSelect.value
+
+    socket.emit('timerChange', timerDuration);
 })
 
 //Fonction pour transformer une URL en image

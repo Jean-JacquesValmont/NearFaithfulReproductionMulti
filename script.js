@@ -3,6 +3,9 @@ const createRoom = document.getElementById("createRoom")
 const joinRoom = document.getElementById("joinRoom")
 const roomId = document.getElementById('roomId')
 const nameRoomId = document.getElementById('nameRoomId')
+const copyButton = document.getElementById('copyID');
+const errorCopyID = document.getElementById('errorCopyID');
+const namePlayer = document.getElementById('namePlayer')
 const player = document.getElementById("player")
 const startGame = document.getElementById("startGame")
 const timer = document.getElementById("timer")
@@ -29,6 +32,7 @@ const canvasPlayer2 = document.getElementById('canvasPlayer2');
 const contextPlayer2 = canvasPlayer2.getContext('2d')
 
 //Variable
+let currentNamePlayer = namePlayer.value
 let currentRoomID = ""
 let timerDuration = 60
 let timerInterval
@@ -70,8 +74,8 @@ socket.on('roomCreated', (roomID) => {
     roomMenu.classList.add('flex');
 
     currentRoomID = roomID
-    nameRoomId.textContent = "Room ID " + roomID
-    player.textContent = "Players " + roomID
+    nameRoomId.textContent = roomID
+    player.textContent = currentNamePlayer
 });
 
 socket.on('roomJoined', (clientsInRoom) => {
@@ -128,6 +132,18 @@ socket.on("elapsedTime", (imageDataURL, hostUser) => {
 })
 
 ////// Option roomMenu
+
+copyButton.addEventListener('click', () => {
+    navigator.clipboard.writeText(nameRoomId.textContent)
+    .then(() => {
+      console.log('Room ID copied successfully!');
+      errorCopyID.textContent = 'Room ID copied successfully!'
+    })
+    .catch(err => {
+      console.error('Unable to copy Room ID:', err);
+      errorCopyID.textContent = 'Unable to copy Room ID. Please copy manually.'
+    });
+})
 //// Timer
 // Fonction pour mettre à jour le timer
 const updateTimer = () => {
@@ -238,7 +254,9 @@ const compareWithPrecision = (a, b, precision) => {
 
 returnMenu.addEventListener('click', () => {
     finalResult.classList.add('hidden');
+    finalResult.classList.remove('flex');
     menu.classList.remove('hidden');
+    menu.classList.add('flex');
 
     //Remettre à zéro les variables
     context.clearRect(0, 0, canvas.width, canvas.height);

@@ -13,6 +13,10 @@ const timer = document.getElementById("timer")
 const timerSelect = document.getElementById("timerSelect")
 const samePixelTextPlayer1 = document.getElementById("samePixelTextPlayer1")
 const samePixelTextPlayer2 = document.getElementById("samePixelTextPlayer2")
+const namePlayer1 = document.getElementById("namePlayer1")
+const namePlayer2 = document.getElementById("namePlayer2")
+const progressBarPlayer1 = document.getElementById("progressBarPlayer1")
+const progressBarPlayer2 = document.getElementById("progressBarPlayer2")
 const winnerText = document.getElementById("winnerText")
 const returnMenu = document.getElementById('returnMenu')
 
@@ -51,7 +55,9 @@ let tolerance = 50;
 //// Envoyer les actions au serveur
 // Créer une nouvelle salle de jeu
 createRoom.addEventListener("click", async () => {
-    // await fetchImage()
+    createRoom.disabled = true
+    await fetchImage()
+    createRoom.disabled = false
     currentNamePlayer = namePlayer.value
     socket.emit('createRoom');
 })
@@ -70,7 +76,9 @@ joinRoom.addEventListener("click", () => {
 // Lancer le jeu
 startGame.addEventListener("click", () => {
     let imageDataURL = canvasImageFetch.toDataURL()
-    socket.emit('startGame', imageDataURL);
+    if(allclientsInRoom.length >= 2){
+        socket.emit('startGame', imageDataURL);
+    }
 })
     
 //// Écouter les événements du serveur ////
@@ -99,7 +107,7 @@ socket.on('roomJoined', (clientsInRoom, namePlayerJoin) => {
     if(currentNamePlayer != namePlayerJoin){
         allclientsInRoom.push(namePlayerJoin)
         
-        socket.emit('sendPlayersInRoom', allclientsInRoom, clientsInRoom[0]);
+        socket.emit('sendPlayersInRoom', allclientsInRoom, clientsInRoom[0], timerDuration);
     }
     else{
         currentRoomID = clientsInRoom[0]
@@ -112,9 +120,11 @@ socket.on('roomJoined', (clientsInRoom, namePlayerJoin) => {
     console.log('Room joined:', clientsInRoom[0]);
 });
 
-socket.on("sendedPlayersInRoom", (allclientsInRoomSended) => {
+socket.on("sendedPlayersInRoom", (allclientsInRoomSended, currentTimer) => {
     player.innerHTML = ''
     allclientsInRoom = allclientsInRoomSended
+    timerDuration = currentTimer
+    timerText.textContent = currentTimer
 
     for(let i = 0; i < allclientsInRoom.length; i++){
         const newParagraph = document.createElement('p');
@@ -124,7 +134,9 @@ socket.on("sendedPlayersInRoom", (allclientsInRoomSended) => {
 })
 
 socket.on("timerChanged", (timerChanged) => {
+    timer.textContent = timerChanged
     timerText.textContent = timerChanged
+    timerDuration = timerChanged
 })
 
 socket.on("gameStarted", (imageURL) => {
@@ -150,6 +162,8 @@ socket.on("elapsedTime", (imageDataURL, hostUser) => {
         loadCanvas2 = true
     }
     
+    updateProgressBar(0, progressBarPlayer1);
+    updateProgressBar(0, progressBarPlayer2);
     game.classList.add('hidden');
     game.classList.remove('flex');
     finalResult.classList.remove('hidden');
@@ -188,6 +202,8 @@ const updateTimer = () => {
         clearInterval(timerInterval); // Arrêter le timer
 
         let imageDataURL = canvas.toDataURL()
+        namePlayer1.textContent = allclientsInRoom[0]
+        namePlayer2.textContent = allclientsInRoom[1]
         socket.emit('endOfTimer', imageDataURL, currentRoomID);
 
         console.log("Le temps est écoulé !");
@@ -199,7 +215,7 @@ const updateTimer = () => {
 // Événement pour définir le timer
 timerSelect.addEventListener("change", () => {
     timerDuration = timerSelect.value
-    timer.textContent = "Timer (en seconde):" + timerSelect.value
+    timer.textContent = "Timer :" + timerSelect.value
 
     socket.emit('timerChange', timerDuration);
 })
@@ -231,8 +247,8 @@ const updateTimerResult = () => {
     // Vérifier si le timer est écoulé
     if (timerDurationFinalResult === 0) {
         clearInterval(timerFinalResult); // Arrêter le timer
-        const resultPlayer1 = compareImage(canvasPlayer1, contextPlayer1, samePixelTextPlayer1)
-        const resultPlayer2 = compareImage(canvasPlayer2, contextPlayer2, samePixelTextPlayer2)
+        const resultPlayer1 = compareImage(canvasPlayer1, contextPlayer1, samePixelTextPlayer1, progressBarPlayer1)
+        const resultPlayer2 = compareImage(canvasPlayer2, contextPlayer2, samePixelTextPlayer2, progressBarPlayer2)
 
         console.log("Score afficher.");
         compareWithPrecision(resultPlayer1, resultPlayer2, 2)
@@ -245,7 +261,7 @@ const updateTimerResult = () => {
 
 //Partie du code pour comparer les deux images
 // Comparer les pixels des deux images
-const compareImage = (canvas, context, samePixelText) => {
+const compareImage = (canvas, context, samePixelText, progressBar) => {
     imageData1 = context.getImageData(0, 0, canvas.width, canvas.height);
     imageData2 = contextImageFetchResult.getImageData(0, 0, canvasImageFetchResult.width, canvasImageFetchResult.height);
 
@@ -269,18 +285,28 @@ const compareImage = (canvas, context, samePixelText) => {
     // Calculer le pourcentage de pixels identiques
     const totalPixels = canvas.width * canvas.height;
     const samePercentage = (samePixels / totalPixels) * 100;
+    updateProgressBar(samePercentage, progressBar);
 
     samePixelText.textContent = 'Pourcentage de pixels identiques: ' + samePercentage.toFixed(2) + '%'
     return samePercentage.toFixed(2)
 }
 
+// Fonction pour mettre à jour la barre de progression
+const updateProgressBar = (progress, progressBarID) => {
+    // Assurez-vous que la valeur de progression est entre 0 et 100
+    if (progress >= 0 && progress <= 100) {
+      // Mettre à jour la largeur de la barre de progression en pourcentage
+      progressBarID.style.width = progress + '%';
+    }
+  }
+
 // Comparaison avec une précision de 2 décimales
 const compareWithPrecision = (a, b, precision) => {
     if(Math.round(a * 10 ** precision) > Math.round(b * 10 ** precision)){
-        winnerText.textContent = "Le gagnant est player1."
+        winnerText.textContent = allclientsInRoom[0]
     }
     else if(Math.round(a * 10 ** precision) < Math.round(b * 10 ** precision)){
-        winnerText.textContent = "Le gagnant est player2."
+        winnerText.textContent = allclientsInRoom[1]
     }
     else if(Math.round(a * 10 ** precision) == Math.round(b * 10 ** precision)){
         winnerText.textContent = "Egalité."
@@ -296,14 +322,17 @@ returnMenu.addEventListener('click', () => {
     //Remettre à zéro les variables
     player.innerHTML = ''
     allclientsInRoom = []
+    timerSelect.value = 60
     context.clearRect(0, 0, canvas.width, canvas.height);
     contextImageFetch.clearRect(0, 0, canvasImageFetch.width, canvasImageFetch.height);
     contextPlayer1.clearRect(0, 0, canvasPlayer1.width, canvasPlayer1.height);
     contextPlayer2.clearRect(0, 0, canvasPlayer2.width, canvasPlayer2.height);
     samePixelTextPlayer1.textContent = 'Pourcentage de pixels identiques: 0%'
     samePixelTextPlayer2.textContent = 'Pourcentage de pixels identiques: 0%'
+    namePlayer1.textContent = "Player 1"
+    namePlayer2.textContent = "Player 2"
     winnerText.textContent = ""
-    timerDuration = 5
+    timerDuration = 60
     timerDurationFinalResult = 3
     loadCanvas1 = false
     loadCanvas2 = false

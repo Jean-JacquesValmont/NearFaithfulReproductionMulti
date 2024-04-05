@@ -36,7 +36,7 @@ io.on('connection', (socket) => {
       socket.emit("roomCreated", socket.id)
   });
 
-  socket.on('joinRoom', (roomIdValue) => {
+  socket.on('joinRoom', (roomIdValue, namePlayerJoin) => {
     socket.join(roomIdValue)
     console.log("Join room ID server:", roomIdValue)
 
@@ -49,8 +49,14 @@ io.on('connection', (socket) => {
       console.log('La salle est vide');
     }
     
-    io.to(roomIdValue).emit("roomJoined", [...clientsInRoom])
+    io.to(roomIdValue).emit("roomJoined", [...clientsInRoom], namePlayerJoin)
   });
+
+  socket.on('sendPlayersInRoom', (allclientsInRoom, roomID) => {
+    
+    io.to(roomID).emit("sendedPlayersInRoom", allclientsInRoom)
+  });
+
 
   socket.on("startGame", (imageURL) => {
     io.to(socket.id).emit("gameStarted", imageURL);

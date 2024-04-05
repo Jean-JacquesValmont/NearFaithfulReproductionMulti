@@ -33,6 +33,7 @@ const contextPlayer2 = canvasPlayer2.getContext('2d')
 
 //Variable
 let currentNamePlayer = namePlayer.value
+let allclientsInRoom = []
 let currentRoomID = ""
 let timerDuration = 60
 let timerInterval
@@ -47,16 +48,18 @@ let tolerance = 50;
 // Créer une nouvelle salle de jeu
 createRoom.addEventListener("click", async () => {
     // await fetchImage()
+    currentNamePlayer = namePlayer.value
     socket.emit('createRoom');
 })
 
 // Rejoindre salle de jeu
 joinRoom.addEventListener("click", () => {
+    currentNamePlayer = namePlayer.value
     let roomIdValue = roomId.value;
     if(roomIdValue == ""){
         return
     }
-    socket.emit('joinRoom', roomIdValue);
+    socket.emit('joinRoom', roomIdValue, currentNamePlayer);
     roomId.value = ""
 })
 
@@ -75,24 +78,42 @@ socket.on('roomCreated', (roomID) => {
 
     currentRoomID = roomID
     nameRoomId.textContent = roomID
-    player.textContent = currentNamePlayer
+    allclientsInRoom.push(currentNamePlayer)
+
+    const newParagraph = document.createElement('p');
+    newParagraph.textContent = currentNamePlayer
+    player.appendChild(newParagraph)
 });
 
-socket.on('roomJoined', (clientsInRoom) => {
+socket.on('roomJoined', (clientsInRoom, namePlayerJoin) => {
     menu.classList.add('hidden');
     menu.classList.remove('flex');
     roomMenu.classList.remove('hidden');
     roomMenu.classList.add('flex');
 
-    let allclientsInRoom = ""
-    currentRoomID = clientsInRoom[0]
-    nameRoomId.textContent = "Room id: " + clientsInRoom[0]
-    for(let i = 0; i < clientsInRoom.length; i++){
-        allclientsInRoom += clientsInRoom[i] + " "
+    if(currentNamePlayer != namePlayerJoin){
+        allclientsInRoom.push(namePlayerJoin)
+        
+        socket.emit('sendPlayersInRoom', allclientsInRoom, clientsInRoom[0]);
     }
-    player.textContent = "Joueur présent: " + allclientsInRoom
+    else{
+        currentRoomID = clientsInRoom[0]
+        nameRoomId.textContent = clientsInRoom[0]
+    }
+
     console.log('Room joined:', clientsInRoom[0]);
 });
+
+socket.on("sendedPlayersInRoom", (allclientsInRoomSended) => {
+    player.innerHTML = ''
+    allclientsInRoom = allclientsInRoomSended
+
+    for(let i = 0; i < allclientsInRoom.length; i++){
+        const newParagraph = document.createElement('p');
+        newParagraph.textContent = allclientsInRoom[i]
+        player.appendChild(newParagraph)
+    }
+})
 
 socket.on("gameStarted", (imageURL) => {
     convertURLToImage(imageURL, contextImageFetch)
@@ -259,6 +280,8 @@ returnMenu.addEventListener('click', () => {
     menu.classList.add('flex');
 
     //Remettre à zéro les variables
+    player.innerHTML = ''
+    allclientsInRoom = []
     context.clearRect(0, 0, canvas.width, canvas.height);
     contextImageFetch.clearRect(0, 0, canvasImageFetch.width, canvasImageFetch.height);
     contextPlayer1.clearRect(0, 0, canvasPlayer1.width, canvasPlayer1.height);

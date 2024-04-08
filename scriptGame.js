@@ -16,8 +16,9 @@ brushSizeSelect.value = "10";
 toolSelect.value = "brush"
 colorSelect.style.backgroundColor = '#000000'
 
-const colors = ['#FFFFFF', ' #d1d5db', '#fca5a5', '#fdba74', '#fde047', '#86efac', '#67e8f9', '#93c5fd', '#d8b4fe', '#f9a8d4',
-'#000000', '#374151', '#b91c1c', '#c2410c ', '#a16207', '#15803d',  '#0e7490',  '#1d4ed8', '#7e22ce', '#be185d'];
+const colors = ['#FFFFFF', '#d1d5db', '#fca5a5', '#fdba74', '#fde047', '#86efac', '#67e8f9', '#93c5fd', '#d8b4fe', '#f9a8d4',
+                '#77340e', '#687282', '#ea4646', '#f1731b', '#DDB216', '#21C362', '#05B4D3', '#3883F5', '#885BF5', '#E14C9D',
+                '#000000', '#374151', '#b91c1c', '#c2410c', '#a16207', '#15803d', '#0e7490', '#1d4ed8', '#7e22ce', '#be185d'];
 
 const colorButtons = colors.map(color => document.getElementById(`color${colors.indexOf(color)}`));
 
@@ -76,6 +77,9 @@ canvas.addEventListener('mouseenter', () => {
 // Ajoute un écouteur d'événements pour l'événement 'mouseleave' pour réinitialiser le curseur lorsque tu sors du canvas
 canvas.addEventListener('mouseleave', () => {
     canvas.style.cursor = 'default';
+    isDrawing = false;
+    context.beginPath(); // Commencer un nouveau chemin après avoir relâché le bouton de la souris
+    recordAction();
 });
 
 // Événement pour commencer le dessin

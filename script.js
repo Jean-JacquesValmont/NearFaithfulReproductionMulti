@@ -56,7 +56,7 @@ let tolerance = 50;
 // Créer une nouvelle salle de jeu
 createRoom.addEventListener("click", async () => {
     createRoom.disabled = true
-    await fetchImage()
+    // await fetchImage()
     createRoom.disabled = false
     currentNamePlayer = namePlayer.value
     socket.emit('createRoom');
@@ -336,4 +336,5 @@ returnMenu.addEventListener('click', () => {
     timerDurationFinalResult = 3
     loadCanvas1 = false
     loadCanvas2 = false
+    actions.length = 0
 })

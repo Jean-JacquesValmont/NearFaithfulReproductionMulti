@@ -15,10 +15,28 @@ const timer = document.getElementById("timer")
 const timerSelect = document.getElementById("timerSelect")
 const samePixelTextPlayer1 = document.getElementById("samePixelTextPlayer1")
 const samePixelTextPlayer2 = document.getElementById("samePixelTextPlayer2")
+const samePixelTextPlayer3 = document.getElementById("samePixelTextPlayer3")
+const samePixelTextPlayer4 = document.getElementById("samePixelTextPlayer4")
+const samePixelTextPlayer5 = document.getElementById("samePixelTextPlayer5")
+const samePixelTextPlayer6 = document.getElementById("samePixelTextPlayer6")
+const samePixelTextPlayer7 = document.getElementById("samePixelTextPlayer7")
+const samePixelTextPlayer8 = document.getElementById("samePixelTextPlayer8")
 const namePlayer1 = document.getElementById("namePlayer1")
 const namePlayer2 = document.getElementById("namePlayer2")
+const namePlayer3 = document.getElementById("namePlayer3")
+const namePlayer4 = document.getElementById("namePlayer4")
+const namePlayer5 = document.getElementById("namePlayer5")
+const namePlayer6 = document.getElementById("namePlayer6")
+const namePlayer7 = document.getElementById("namePlayer7")
+const namePlayer8 = document.getElementById("namePlayer8")
 const progressBarPlayer1 = document.getElementById("progressBarPlayer1")
 const progressBarPlayer2 = document.getElementById("progressBarPlayer2")
+const progressBarPlayer3 = document.getElementById("progressBarPlayer3")
+const progressBarPlayer4 = document.getElementById("progressBarPlayer4")
+const progressBarPlayer5 = document.getElementById("progressBarPlayer5")
+const progressBarPlayer6 = document.getElementById("progressBarPlayer6")
+const progressBarPlayer7 = document.getElementById("progressBarPlayer7")
+const progressBarPlayer8 = document.getElementById("progressBarPlayer8")
 const winnerText = document.getElementById("winnerText")
 const returnMenu = document.getElementById('returnMenu')
 
@@ -30,6 +48,12 @@ const timerSelectClass = document.querySelector('.timerSelectClass');
 const timerSelectText = document.querySelector('.timerSelectText');
 const buttonStartGame = document.querySelector('.buttonStartGame');
 const game = document.querySelector('.game');
+const resultPlayer3Class = document.querySelector(".resultPlayer3Class")
+const resultPlayer4Class = document.querySelector(".resultPlayer4Class")
+const resultPlayer5Class = document.querySelector(".resultPlayer5Class")
+const resultPlayer6Class = document.querySelector(".resultPlayer6Class")
+const resultPlayer7Class = document.querySelector(".resultPlayer7Class")
+const resultPlayer8Class = document.querySelector(".resultPlayer8Class")
 const finalResult = document.querySelector('.finalResult')
 
 const canvas = document.getElementById('canvas');
@@ -42,6 +66,8 @@ const canvasPlayer1 = document.getElementById('canvasPlayer1');
 const contextPlayer1 = canvasPlayer1.getContext('2d')
 const canvasPlayer2 = document.getElementById('canvasPlayer2');
 const contextPlayer2 = canvasPlayer2.getContext('2d')
+const canvasPlayer3 = document.getElementById('canvasPlayer3');
+const contextPlayer3 = canvasPlayer2.getContext('2d')
 
 //Variable
 let currentNamePlayer = namePlayer.value
@@ -81,7 +107,7 @@ joinRoom.addEventListener("click", () => {
 // Lancer le jeu
 startGame.addEventListener("click", () => {
     let imageDataURL = canvasImageFetch.toDataURL()
-    if(allclientsInRoom.length >= 2){
+    if(allclientsInRoom.length == numberOfPlayerRoom){
         socket.emit('startGame', imageDataURL);
     }
 })
@@ -93,7 +119,9 @@ socket.on('roomCreated', (roomID) => {
     roomMenu.classList.remove('hidden');
     roomMenu.classList.add('flex');
     numberOfPlayerTextClass.classList.add("hidden")
+    numberOfPlayerClass.classList.remove("hidden")
     timerSelectText.classList.add("hidden")
+    timerSelectClass.classList.remove("hidden")
 
     currentRoomID = roomID
     nameRoomId.textContent = roomID
@@ -109,6 +137,7 @@ socket.on('roomJoined', (clientsInRoom, namePlayerJoin) => {
     menu.classList.remove('flex');
     roomMenu.classList.remove('hidden');
     roomMenu.classList.add('flex');
+    
 
     if(currentNamePlayer != namePlayerJoin){
         allclientsInRoom.push(namePlayerJoin)
@@ -121,7 +150,9 @@ socket.on('roomJoined', (clientsInRoom, namePlayerJoin) => {
         buttonStartGame.classList.add('hidden');
         buttonStartGame.classList.remove('flex');
         numberOfPlayerClass.classList.add("hidden")
+        numberOfPlayerTextClass.classList.remove("hidden")
         timerSelectClass.classList.add("hidden")
+        timerSelectText.classList.remove("hidden")
     }
 
     console.log('Room joined:', clientsInRoom[0]);
@@ -133,6 +164,7 @@ socket.on("sendedPlayersInRoom", (allclientsInRoomSended, currentTimer, numberOf
     timerDuration = currentTimer
     timerText.textContent = currentTimer
     numberOfPlayerRoom = numberOfPlayerRoomSended
+    numberOfPlayerText.textContent = numberOfPlayerRoomSended
 
     for(let i = 0; i < allclientsInRoom.length; i++){
         const newParagraph = document.createElement('p');
@@ -158,6 +190,47 @@ socket.on("gameStarted", (imageURL) => {
     roomMenu.classList.remove('flex');
     game.classList.remove('hidden');
     game.classList.add('flex');
+
+    resultPlayer3Class.classList.remove("hidden")
+    resultPlayer4Class.classList.remove("hidden")
+    resultPlayer5Class.classList.remove("hidden")
+    resultPlayer6Class.classList.remove("hidden")
+    resultPlayer7Class.classList.remove("hidden")
+    resultPlayer8Class.classList.remove("hidden")
+
+    if (numberOfPlayerRoom == 2){
+        resultPlayer3Class.classList.add("hidden")
+        resultPlayer4Class.classList.add("hidden")
+        resultPlayer5Class.classList.add("hidden")
+        resultPlayer6Class.classList.add("hidden")
+        resultPlayer7Class.classList.add("hidden")
+        resultPlayer8Class.classList.add("hidden")
+    }
+    else if(numberOfPlayerRoom == 3){
+        resultPlayer4Class.classList.add("hidden")
+        resultPlayer5Class.classList.add("hidden")
+        resultPlayer6Class.classList.add("hidden")
+        resultPlayer7Class.classList.add("hidden")
+        resultPlayer8Class.classList.add("hidden")
+    }
+    else if(numberOfPlayerRoom == 4){
+        resultPlayer5Class.classList.add("hidden")
+        resultPlayer6Class.classList.add("hidden")
+        resultPlayer7Class.classList.add("hidden")
+        resultPlayer8Class.classList.add("hidden")
+    }
+    else if(numberOfPlayerRoom == 5){
+        resultPlayer6Class.classList.add("hidden")
+        resultPlayer7Class.classList.add("hidden")
+        resultPlayer8Class.classList.add("hidden")
+    }
+    else if(numberOfPlayerRoom == 6){
+        resultPlayer7Class.classList.add("hidden")
+        resultPlayer8Class.classList.add("hidden")
+    }
+    else if(numberOfPlayerRoom == 7){
+        resultPlayer8Class.classList.add("hidden")
+    }
 
     // Démarrer le timer et lancer la fonction updateTimer toutes les secondes
     timerInterval = setInterval(updateTimer, 1000)
@@ -341,6 +414,7 @@ returnMenu.addEventListener('click', () => {
     //Remettre à zéro les variables
     player.innerHTML = ''
     allclientsInRoom = []
+    numberOfPlayer.value = 2
     timerSelect.value = 60
     context.clearRect(0, 0, canvas.width, canvas.height);
     contextImageFetch.clearRect(0, 0, canvasImageFetch.width, canvasImageFetch.height);

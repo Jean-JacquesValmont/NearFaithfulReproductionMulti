@@ -8,6 +8,8 @@ const errorCopyID = document.getElementById('errorCopyID');
 const namePlayer = document.getElementById('namePlayer')
 const player = document.getElementById("player")
 const timerText = document.getElementById("timerText")
+const numberOfPlayer = document.getElementById("numberOfPlayer")
+const numberOfPlayerText = document.getElementById("numberOfPlayerText")
 const startGame = document.getElementById("startGame")
 const timer = document.getElementById("timer")
 const timerSelect = document.getElementById("timerSelect")
@@ -22,6 +24,8 @@ const returnMenu = document.getElementById('returnMenu')
 
 const menu = document.querySelector('.menu');
 const roomMenu = document.querySelector('.roomMenu');
+const numberOfPlayerClass = document.querySelector('.numberOfPlayerClass');
+const numberOfPlayerTextClass = document.querySelector('.numberOfPlayerTextClass');
 const timerSelectClass = document.querySelector('.timerSelectClass');
 const timerSelectText = document.querySelector('.timerSelectText');
 const buttonStartGame = document.querySelector('.buttonStartGame');
@@ -43,6 +47,7 @@ const contextPlayer2 = canvasPlayer2.getContext('2d')
 let currentNamePlayer = namePlayer.value
 let allclientsInRoom = []
 let currentRoomID = ""
+let numberOfPlayerRoom = 2
 let timerDuration = 60
 let timerInterval
 let timerDurationFinalResult = 3
@@ -87,6 +92,7 @@ socket.on('roomCreated', (roomID) => {
     menu.classList.remove('flex');
     roomMenu.classList.remove('hidden');
     roomMenu.classList.add('flex');
+    numberOfPlayerTextClass.classList.add("hidden")
     timerSelectText.classList.add("hidden")
 
     currentRoomID = roomID
@@ -107,30 +113,36 @@ socket.on('roomJoined', (clientsInRoom, namePlayerJoin) => {
     if(currentNamePlayer != namePlayerJoin){
         allclientsInRoom.push(namePlayerJoin)
         
-        socket.emit('sendPlayersInRoom', allclientsInRoom, clientsInRoom[0], timerDuration);
+        socket.emit('sendPlayersInRoom', allclientsInRoom, clientsInRoom[0], timerDuration, numberOfPlayerRoom);
     }
     else{
         currentRoomID = clientsInRoom[0]
         nameRoomId.textContent = clientsInRoom[0]
         buttonStartGame.classList.add('hidden');
         buttonStartGame.classList.remove('flex');
+        numberOfPlayerClass.classList.add("hidden")
         timerSelectClass.classList.add("hidden")
     }
 
     console.log('Room joined:', clientsInRoom[0]);
 });
 
-socket.on("sendedPlayersInRoom", (allclientsInRoomSended, currentTimer) => {
+socket.on("sendedPlayersInRoom", (allclientsInRoomSended, currentTimer, numberOfPlayerRoomSended) => {
     player.innerHTML = ''
     allclientsInRoom = allclientsInRoomSended
     timerDuration = currentTimer
     timerText.textContent = currentTimer
+    numberOfPlayerRoom = numberOfPlayerRoomSended
 
     for(let i = 0; i < allclientsInRoom.length; i++){
         const newParagraph = document.createElement('p');
         newParagraph.textContent = allclientsInRoom[i]
         player.appendChild(newParagraph)
     }
+})
+
+socket.on("numberOfPlayerChanged", (numberOfPlayerChanged) => {
+    numberOfPlayerText.textContent = numberOfPlayerChanged
 })
 
 socket.on("timerChanged", (timerChanged) => {
@@ -179,7 +191,6 @@ socket.on("elapsedTime", (imageDataURL, hostUser) => {
 })
 
 ////// Option roomMenu
-
 copyButton.addEventListener('click', () => {
     navigator.clipboard.writeText(nameRoomId.textContent)
     .then(() => {
@@ -191,6 +202,7 @@ copyButton.addEventListener('click', () => {
       errorCopyID.textContent = 'Unable to copy Room ID. Please copy manually.'
     });
 })
+
 //// Timer
 // Fonction pour mettre à jour le timer
 const updateTimer = () => {
@@ -211,6 +223,13 @@ const updateTimer = () => {
         timerDuration--; // Décrémenter le temps restant
     }
 }
+
+// Événement pour définir le nombre de joueurs
+numberOfPlayer.addEventListener("change", () => {
+    numberOfPlayerRoom = numberOfPlayer.value
+
+    socket.emit('numberOfPlayerChange', numberOfPlayerRoom);
+})
 
 // Événement pour définir le timer
 timerSelect.addEventListener("change", () => {

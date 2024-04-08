@@ -52,9 +52,14 @@ io.on('connection', (socket) => {
     io.to(roomIdValue).emit("roomJoined", [...clientsInRoom], namePlayerJoin)
   });
 
-  socket.on('sendPlayersInRoom', (allclientsInRoom, roomID, timerDuration) => {
-    io.to(roomID).emit("sendedPlayersInRoom", allclientsInRoom, timerDuration)
+  socket.on('sendPlayersInRoom', (allclientsInRoom, roomID, timerDuration, numberOfPlayerRoom) => {
+    io.to(roomID).emit("sendedPlayersInRoom", allclientsInRoom, timerDuration, numberOfPlayerRoom)
   });
+
+  socket.on("numberOfPlayerChange", (numberOfPlayerRoom) => {
+    console.log("numberOfPlayerRoom: ", numberOfPlayerRoom)
+    io.to(socket.id).emit("numberOfPlayerChanged", numberOfPlayerRoom);
+  })
 
   socket.on("timerChange", (timerDuration) => {
     console.log("timerDuration: ", timerDuration)

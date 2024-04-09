@@ -52,6 +52,13 @@ io.on('connection', (socket) => {
     io.to(roomIdValue).emit("roomJoined", [...clientsInRoom], namePlayerJoin)
   });
 
+  socket.on("leaveRoom", (roomID, namePlayerLeaved) => {
+    socket.leave(roomID)
+    console.log("Leave room ID server:", roomID)
+
+    io.to(roomID).emit("roomLeaved", namePlayerLeaved)
+  })
+
   socket.on('sendPlayersInRoom', (allclientsInRoom, roomID, timerDuration, numberOfPlayerRoom) => {
     io.to(roomID).emit("sendedPlayersInRoom", allclientsInRoom, timerDuration, numberOfPlayerRoom)
   });

@@ -10,6 +10,7 @@ const player = document.getElementById("player")
 const timerText = document.getElementById("timerText")
 const numberOfPlayer = document.getElementById("numberOfPlayer")
 const numberOfPlayerText = document.getElementById("numberOfPlayerText")
+const leaveRoom = document.getElementById("leaveRoom")
 const startGame = document.getElementById("startGame")
 const timer = document.getElementById("timer")
 const timerSelect = document.getElementById("timerSelect")
@@ -120,6 +121,18 @@ joinRoom.addEventListener("click", () => {
     roomId.value = ""
 })
 
+leaveRoom.addEventListener("click", () => {
+    menu.classList.add('flex');
+    menu.classList.remove('hidden');
+    roomMenu.classList.remove('flex');
+    roomMenu.classList.add('hidden');
+
+    //Remettre à zéro les variables
+    initGame()
+
+    socket.emit('leaveRoom', currentRoomID, currentNamePlayer)
+})
+
 // Lancer le jeu
 startGame.addEventListener("click", () => {
     let imageDataURL = canvasImageFetch.toDataURL()
@@ -173,6 +186,18 @@ socket.on('roomJoined', (clientsInRoom, namePlayerJoin) => {
 
     console.log('Room joined:', clientsInRoom[0]);
 });
+
+socket.on("roomLeaved", (namePlayerLeaved) => {
+    allclientsInRoom = removePlayerFromArray(allclientsInRoom, namePlayerLeaved)
+    console.log("allclientsInRoom: ", allclientsInRoom)
+
+    player.innerHTML = ''
+    for(let i = 0; i < allclientsInRoom.length; i++){
+        const newParagraph = document.createElement('p');
+        newParagraph.textContent = allclientsInRoom[i]
+        player.appendChild(newParagraph)
+    }
+})
 
 socket.on("sendedPlayersInRoom", (allclientsInRoomSended, currentTimer, numberOfPlayerRoomSended) => {
     player.innerHTML = ''
@@ -547,6 +572,10 @@ returnMenu.addEventListener('click', () => {
     menu.classList.add('flex');
 
     //Remettre à zéro les variables
+    initGame()
+})
+
+const initGame = () => {
     player.innerHTML = ''
     allclientsInRoom.length = 0
     numberOfPlayer.value = 2
@@ -589,4 +618,12 @@ returnMenu.addEventListener('click', () => {
     loadCanvas7 = false
     loadCanvas8 = false
     actions.length = 0
-})
+}
+
+const removePlayerFromArray = (array, stringToRemove) => {
+    const index = array.indexOf(stringToRemove);
+    if (index !== -1) {
+        array.splice(index, 1); // Supprimer l'élément trouvé à l'index
+        return array
+    }
+}

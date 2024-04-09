@@ -188,14 +188,15 @@ socket.on('roomJoined', (clientsInRoom, namePlayerJoin) => {
 });
 
 socket.on("roomLeaved", (namePlayerLeaved) => {
-    allclientsInRoom = removePlayerFromArray(allclientsInRoom, namePlayerLeaved)
-    console.log("allclientsInRoom: ", allclientsInRoom)
+    if(allclientsInRoom != undefined && allclientsInRoom.length >= 1){
+        allclientsInRoom = removePlayerFromArray(allclientsInRoom, namePlayerLeaved)
 
-    player.innerHTML = ''
-    for(let i = 0; i < allclientsInRoom.length; i++){
-        const newParagraph = document.createElement('p');
-        newParagraph.textContent = allclientsInRoom[i]
-        player.appendChild(newParagraph)
+        player.innerHTML = ''
+        for(let i = 0; i < allclientsInRoom.length; i++){
+            const newParagraph = document.createElement('p');
+            newParagraph.textContent = allclientsInRoom[i]
+            player.appendChild(newParagraph)
+        }
     }
 })
 
@@ -570,15 +571,20 @@ returnMenu.addEventListener('click', () => {
     finalResult.classList.remove('flex');
     menu.classList.remove('hidden');
     menu.classList.add('flex');
+    buttonStartGame.classList.add('flex');
+    buttonStartGame.classList.remove('hidden');
 
     //Remettre à zéro les variables
     initGame()
+
+    socket.emit('leaveRoom', currentRoomID, currentNamePlayer)
 })
 
 const initGame = () => {
     player.innerHTML = ''
     allclientsInRoom.length = 0
     numberOfPlayer.value = 2
+    numberOfPlayerText.value = 2
     timerSelect.value = 60
     context.clearRect(0, 0, canvas.width, canvas.height);
     contextImageFetch.clearRect(0, 0, canvasImageFetch.width, canvasImageFetch.height);
@@ -607,6 +613,7 @@ const initGame = () => {
     namePlayer7.textContent = "Player 7"
     namePlayer8.textContent = "Player 8"
     winnerText.textContent = ""
+    numberOfPlayerRoom = 2
     timerDuration = 60
     timerDurationFinalResult = 3
     loadCanvas1 = false

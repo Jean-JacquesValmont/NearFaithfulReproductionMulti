@@ -71,17 +71,21 @@ io.on('connection', (socket) => {
   });
 
   socket.on("endOfTimer", (URL, roomId) => {
-    let hostUser = true
+    let User = 0
     const clientsInRoom = io.sockets.adapter.rooms.get(roomId);
     const arrayClientsInRoom = [...clientsInRoom]
     console.log(arrayClientsInRoom)
 
     if(socket.id == arrayClientsInRoom[0]){
-      io.to(socket.id).emit("elapsedTime", URL, hostUser)
+      io.to(socket.id).emit("elapsedTime", URL, User)
     }
     else{
-      hostUser = false
-      io.to(arrayClientsInRoom[0]).emit("elapsedTime", URL, hostUser)
+      for(let i=0; i < arrayClientsInRoom.length; i++ ){
+        if(socket.id == arrayClientsInRoom[i]){
+          User = i
+          io.to(arrayClientsInRoom[0]).emit("elapsedTime", URL, User)
+        }
+      }
     }
   })
 

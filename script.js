@@ -67,7 +67,17 @@ const contextPlayer1 = canvasPlayer1.getContext('2d')
 const canvasPlayer2 = document.getElementById('canvasPlayer2');
 const contextPlayer2 = canvasPlayer2.getContext('2d')
 const canvasPlayer3 = document.getElementById('canvasPlayer3');
-const contextPlayer3 = canvasPlayer2.getContext('2d')
+const contextPlayer3 = canvasPlayer3.getContext('2d')
+const canvasPlayer4 = document.getElementById('canvasPlayer4');
+const contextPlayer4 = canvasPlayer4.getContext('2d')
+const canvasPlayer5 = document.getElementById('canvasPlayer5');
+const contextPlayer5 = canvasPlayer5.getContext('2d')
+const canvasPlayer6 = document.getElementById('canvasPlayer6');
+const contextPlayer6 = canvasPlayer6.getContext('2d')
+const canvasPlayer7 = document.getElementById('canvasPlayer7');
+const contextPlayer7 = canvasPlayer7.getContext('2d')
+const canvasPlayer8 = document.getElementById('canvasPlayer8');
+const contextPlayer8 = canvasPlayer8.getContext('2d')
 
 //Variable
 let currentNamePlayer = namePlayer.value
@@ -80,6 +90,12 @@ let timerDurationFinalResult = 3
 let timerFinalResult
 let loadCanvas1 = false
 let loadCanvas2 = false
+let loadCanvas3 = false
+let loadCanvas4 = false
+let loadCanvas5 = false
+let loadCanvas6 = false
+let loadCanvas7 = false
+let loadCanvas8 = false
 
 let tolerance = 50;
 
@@ -174,6 +190,7 @@ socket.on("sendedPlayersInRoom", (allclientsInRoomSended, currentTimer, numberOf
 })
 
 socket.on("numberOfPlayerChanged", (numberOfPlayerChanged) => {
+    numberOfPlayerRoom = numberOfPlayerChanged
     numberOfPlayerText.textContent = numberOfPlayerChanged
 })
 
@@ -236,19 +253,84 @@ socket.on("gameStarted", (imageURL) => {
     timerInterval = setInterval(updateTimer, 1000)
 })
 
-socket.on("elapsedTime", (imageDataURL, hostUser) => {
+socket.on("elapsedTime", (imageDataURL, User) => {
 
-    if(hostUser == true){
+    if(numberOfPlayerRoom == 2){
+        loadCanvas3 = true
+        loadCanvas4 = true
+        loadCanvas5 = true
+        loadCanvas6 = true
+        loadCanvas7 = true
+        loadCanvas8 = true
+    }
+    else if(numberOfPlayerRoom == 3){
+        loadCanvas4 = true
+        loadCanvas5 = true
+        loadCanvas6 = true
+        loadCanvas7 = true
+        loadCanvas8 = true
+    }
+    else if(numberOfPlayerRoom == 4){
+        loadCanvas5 = true
+        loadCanvas6 = true
+        loadCanvas7 = true
+        loadCanvas8 = true
+    }
+    else if(numberOfPlayerRoom == 5){
+        loadCanvas6 = true
+        loadCanvas7 = true
+        loadCanvas8 = true
+    }
+    else if(numberOfPlayerRoom == 6){
+        loadCanvas7 = true
+        loadCanvas8 = true
+    }
+    else if(numberOfPlayerRoom == 7){
+        loadCanvas8 = true
+    }
+
+    if(User == 0){
         convertURLToImage(imageDataURL, contextPlayer1)
         loadCanvas1 = true
     }
-    else{
+    else if(User == 1) {
         convertURLToImage(imageDataURL, contextPlayer2)
         loadCanvas2 = true
+    }
+    else if(User == 2) {
+        convertURLToImage(imageDataURL, contextPlayer3)
+        loadCanvas3 = true
+    }
+    else if(User == 3) {
+        convertURLToImage(imageDataURL, contextPlayer4)
+        loadCanvas4 = true
+    }
+    else if(User == 4) {
+        convertURLToImage(imageDataURL, contextPlayer5)
+        loadCanvas5 = true
+    }
+    else if(User == 5) {
+        convertURLToImage(imageDataURL, contextPlayer6)
+        loadCanvas6 = true
+    }
+    else if(User == 6) {
+        convertURLToImage(imageDataURL, contextPlayer7)
+        loadCanvas7 = true
+    }
+    else if(User == 7) {
+        convertURLToImage(imageDataURL, contextPlayer8)
+        loadCanvas8 = true
     }
     
     updateProgressBar(0, progressBarPlayer1);
     updateProgressBar(0, progressBarPlayer2);
+    updateProgressBar(0, progressBarPlayer3);
+    updateProgressBar(0, progressBarPlayer4);
+    updateProgressBar(0, progressBarPlayer5);
+    updateProgressBar(0, progressBarPlayer6);
+    updateProgressBar(0, progressBarPlayer7);
+    updateProgressBar(0, progressBarPlayer8);
+
     game.classList.add('hidden');
     game.classList.remove('flex');
     finalResult.classList.remove('hidden');
@@ -257,7 +339,10 @@ socket.on("elapsedTime", (imageDataURL, hostUser) => {
     // Démarrer le timer pour calculer les résultats
     // Le if est là car j'ai deux envois du socket "elapsedTime" et donc mon setInterval qui ce lance deux fois.
     // Ce qui permet de le limiter à le lancer 1 fois.
-    if(loadCanvas1 == true && loadCanvas2 == true){
+    if(loadCanvas1 == true && loadCanvas2 == true
+    && loadCanvas3 == true && loadCanvas4 == true
+    && loadCanvas5 == true && loadCanvas6 == true
+    && loadCanvas7 == true && loadCanvas8 == true){
         timerFinalResult = setInterval(updateTimerResult, 1000)
     }
     
@@ -289,6 +374,12 @@ const updateTimer = () => {
         let imageDataURL = canvas.toDataURL()
         namePlayer1.textContent = allclientsInRoom[0]
         namePlayer2.textContent = allclientsInRoom[1]
+        namePlayer3.textContent = allclientsInRoom[2]
+        namePlayer4.textContent = allclientsInRoom[3]
+        namePlayer5.textContent = allclientsInRoom[4]
+        namePlayer6.textContent = allclientsInRoom[5]
+        namePlayer7.textContent = allclientsInRoom[6]
+        namePlayer8.textContent = allclientsInRoom[7]
         socket.emit('endOfTimer', imageDataURL, currentRoomID);
 
         console.log("Le temps est écoulé !");
@@ -307,7 +398,7 @@ numberOfPlayer.addEventListener("change", () => {
 // Événement pour définir le timer
 timerSelect.addEventListener("change", () => {
     timerDuration = timerSelect.value
-    timer.textContent = "Timer :" + timerSelect.value
+    timer.textContent = "Timer:" + timerSelect.value
 
     socket.emit('timerChange', timerDuration);
 })
@@ -339,11 +430,50 @@ const updateTimerResult = () => {
     // Vérifier si le timer est écoulé
     if (timerDurationFinalResult === 0) {
         clearInterval(timerFinalResult); // Arrêter le timer
-        const resultPlayer1 = compareImage(canvasPlayer1, contextPlayer1, samePixelTextPlayer1, progressBarPlayer1)
-        const resultPlayer2 = compareImage(canvasPlayer2, contextPlayer2, samePixelTextPlayer2, progressBarPlayer2)
+        let resultPlayer1 = compareImage(canvasPlayer1, contextPlayer1, samePixelTextPlayer1, progressBarPlayer1)
+        let resultPlayer2 = compareImage(canvasPlayer2, contextPlayer2, samePixelTextPlayer2, progressBarPlayer2)
+        let resultPlayer3 = compareImage(canvasPlayer3, contextPlayer3, samePixelTextPlayer3, progressBarPlayer3)
+        let resultPlayer4 = compareImage(canvasPlayer4, contextPlayer4, samePixelTextPlayer4, progressBarPlayer4)
+        let resultPlayer5 = compareImage(canvasPlayer5, contextPlayer5, samePixelTextPlayer5, progressBarPlayer5)
+        let resultPlayer6 = compareImage(canvasPlayer6, contextPlayer6, samePixelTextPlayer6, progressBarPlayer6)
+        let resultPlayer7 = compareImage(canvasPlayer7, contextPlayer7, samePixelTextPlayer7, progressBarPlayer7)
+        let resultPlayer8 = compareImage(canvasPlayer8, contextPlayer8, samePixelTextPlayer8, progressBarPlayer8)
+        if(numberOfPlayerRoom == 2){
+            resultPlayer3 = 0
+            resultPlayer4 = 0
+            resultPlayer5 = 0
+            resultPlayer6 = 0
+            resultPlayer7 = 0
+            resultPlayer8 = 0
+        }
+        else if(numberOfPlayerRoom == 3){
+            resultPlayer4 = 0
+            resultPlayer5 = 0
+            resultPlayer6 = 0
+            resultPlayer7 = 0
+            resultPlayer8 = 0
+        }
+        else if(numberOfPlayerRoom == 4){
+            resultPlayer5 = 0
+            resultPlayer6 = 0
+            resultPlayer7 = 0
+            resultPlayer8 = 0
+        }
+        else if(numberOfPlayerRoom == 5){
+            resultPlayer6 = 0
+            resultPlayer7 = 0
+            resultPlayer8 = 0
+        }
+        else if(numberOfPlayerRoom == 6){
+            resultPlayer7 = 0
+            resultPlayer8 = 0
+        }
+        else if(numberOfPlayerRoom == 7){
+            resultPlayer8 = 0
+        }
 
         console.log("Score afficher.");
-        compareWithPrecision(resultPlayer1, resultPlayer2, 2)
+        compareWithPrecision(2, resultPlayer1, resultPlayer2, resultPlayer3,resultPlayer4,resultPlayer5,resultPlayer6,resultPlayer7,resultPlayer8)
         console.log("Résultat final afficher!")
 
     } else {
@@ -393,17 +523,22 @@ const updateProgressBar = (progress, progressBarID) => {
   }
 
 // Comparaison avec une précision de 2 décimales
-const compareWithPrecision = (a, b, precision) => {
-    if(Math.round(a * 10 ** precision) > Math.round(b * 10 ** precision)){
-        winnerText.textContent = allclientsInRoom[0]
+const compareWithPrecision = (precision, ...values) => {
+    let maxValue = -Infinity;
+    let maxIndex = -1;
+
+    values.forEach((value, index) => {
+        const roundedValue = Math.round(value * 10 ** precision);
+        if (roundedValue > maxValue) {
+            maxValue = roundedValue;
+            maxIndex = index;
+        }
+    });
+
+    if (maxIndex !== -1) {
+        winnerText.textContent = allclientsInRoom[maxIndex];
     }
-    else if(Math.round(a * 10 ** precision) < Math.round(b * 10 ** precision)){
-        winnerText.textContent = allclientsInRoom[1]
-    }
-    else if(Math.round(a * 10 ** precision) == Math.round(b * 10 ** precision)){
-        winnerText.textContent = "Egalité."
-    }
-}
+};
 
 returnMenu.addEventListener('click', () => {
     finalResult.classList.add('hidden');
@@ -413,21 +548,45 @@ returnMenu.addEventListener('click', () => {
 
     //Remettre à zéro les variables
     player.innerHTML = ''
-    allclientsInRoom = []
+    allclientsInRoom.length = 0
     numberOfPlayer.value = 2
     timerSelect.value = 60
     context.clearRect(0, 0, canvas.width, canvas.height);
     contextImageFetch.clearRect(0, 0, canvasImageFetch.width, canvasImageFetch.height);
     contextPlayer1.clearRect(0, 0, canvasPlayer1.width, canvasPlayer1.height);
     contextPlayer2.clearRect(0, 0, canvasPlayer2.width, canvasPlayer2.height);
+    contextPlayer3.clearRect(0, 0, canvasPlayer3.width, canvasPlayer3.height);
+    contextPlayer4.clearRect(0, 0, canvasPlayer4.width, canvasPlayer4.height);
+    contextPlayer5.clearRect(0, 0, canvasPlayer5.width, canvasPlayer5.height);
+    contextPlayer6.clearRect(0, 0, canvasPlayer6.width, canvasPlayer6.height);
+    contextPlayer7.clearRect(0, 0, canvasPlayer7.width, canvasPlayer7.height);
+    contextPlayer8.clearRect(0, 0, canvasPlayer8.width, canvasPlayer8.height);
     samePixelTextPlayer1.textContent = 'Pourcentage de pixels identiques: 0%'
     samePixelTextPlayer2.textContent = 'Pourcentage de pixels identiques: 0%'
+    samePixelTextPlayer3.textContent = 'Pourcentage de pixels identiques: 0%'
+    samePixelTextPlayer4.textContent = 'Pourcentage de pixels identiques: 0%'
+    samePixelTextPlayer5.textContent = 'Pourcentage de pixels identiques: 0%'
+    samePixelTextPlayer6.textContent = 'Pourcentage de pixels identiques: 0%'
+    samePixelTextPlayer7.textContent = 'Pourcentage de pixels identiques: 0%'
+    samePixelTextPlayer8.textContent = 'Pourcentage de pixels identiques: 0%'
     namePlayer1.textContent = "Player 1"
     namePlayer2.textContent = "Player 2"
+    namePlayer3.textContent = "Player 3"
+    namePlayer4.textContent = "Player 4"
+    namePlayer5.textContent = "Player 5"
+    namePlayer6.textContent = "Player 6"
+    namePlayer7.textContent = "Player 7"
+    namePlayer8.textContent = "Player 8"
     winnerText.textContent = ""
     timerDuration = 60
     timerDurationFinalResult = 3
     loadCanvas1 = false
     loadCanvas2 = false
+    loadCanvas3 = false
+    loadCanvas4 = false
+    loadCanvas5 = false
+    loadCanvas6 = false
+    loadCanvas7 = false
+    loadCanvas8 = false
     actions.length = 0
 })

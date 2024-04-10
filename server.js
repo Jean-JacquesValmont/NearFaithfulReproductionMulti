@@ -28,6 +28,12 @@ app.get('/src/output.css', (req, res) => {
   res.sendFile(join(__dirname, 'src/output.css'));
 });
 
+app.get('/image/background_NFR.png', (req, res) => {
+  res.set('Content-Type', 'text/css');
+  res.sendFile(join(__dirname, 'image/background_NFR.png'));
+});
+
+
 io.on('connection', (socket) => {
   console.log('New client connected ', socket.id);
 
@@ -59,8 +65,8 @@ io.on('connection', (socket) => {
     io.to(roomID).emit("roomLeaved", namePlayerLeaved)
   })
 
-  socket.on('sendPlayersInRoom', (allclientsInRoom, roomID, timerDuration, numberOfPlayerRoom) => {
-    io.to(roomID).emit("sendedPlayersInRoom", allclientsInRoom, timerDuration, numberOfPlayerRoom)
+  socket.on('sendPlayersInRoom', (allclientsInRoom, roomID, timerDuration, numberOfPlayerRoom, currentPrecision, currentTolerance) => {
+    io.to(roomID).emit("sendedPlayersInRoom", allclientsInRoom, timerDuration, numberOfPlayerRoom, currentPrecision, currentTolerance)
   });
 
   socket.on("numberOfPlayerChange", (numberOfPlayerRoom) => {
@@ -71,6 +77,16 @@ io.on('connection', (socket) => {
   socket.on("timerChange", (timerDuration) => {
     console.log("timerDuration: ", timerDuration)
     io.to(socket.id).emit("timerChanged", timerDuration);
+  })
+
+  socket.on("precisionChange", (precisionChanged) => {
+    console.log("precisionChanged: ", precisionChanged)
+    io.to(socket.id).emit("precisionChanged", precisionChanged);
+  })
+
+  socket.on("toleranceChange", (toleranceChanged) => {
+    console.log("toleranceChanged: ", toleranceChanged)
+    io.to(socket.id).emit("toleranceChanged", toleranceChanged);
   })
 
   socket.on("startGame", (imageURL) => {

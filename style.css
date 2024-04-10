@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+h1 {
+    -webkit-text-stroke-width: 4px; /* Épaisseur du contour */
+    -webkit-text-stroke-color: white; /* Couleur du contour */
+}

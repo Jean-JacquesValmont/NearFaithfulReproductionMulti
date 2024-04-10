@@ -761,6 +761,10 @@ video {
   margin-top: 0.5rem;
 }
 
+.mt-4 {
+  margin-top: 1rem;
+}
+
 .mt-8 {
   margin-top: 2rem;
 }
@@ -874,6 +878,10 @@ video {
 
 .w-60 {
   width: 15rem;
+}
+
+.w-\[80rem\] {
+  width: 80rem;
 }
 
 .w-\[this-is\\\\\] {
@@ -1800,6 +1808,14 @@ video {
   border-width: 2px;
 }
 
+.border-4 {
+  border-width: 4px;
+}
+
+.border-8 {
+  border-width: 8px;
+}
+
 .border-x {
   border-left-width: 1px;
   border-right-width: 1px;
@@ -1858,9 +1874,24 @@ video {
   border-style: none;
 }
 
+.border-\[\#33FFD3\] {
+  --tw-border-opacity: 1;
+  border-color: rgb(51 255 211 / var(--tw-border-opacity));
+}
+
 .border-black {
   --tw-border-opacity: 1;
   border-color: rgb(0 0 0 / var(--tw-border-opacity));
+}
+
+.border-white {
+  --tw-border-opacity: 1;
+  border-color: rgb(255 255 255 / var(--tw-border-opacity));
+}
+
+.bg-\[\#3100D3\] {
+  --tw-bg-opacity: 1;
+  background-color: rgb(49 0 211 / var(--tw-bg-opacity));
 }
 
 .bg-\[rgb\(255\2c 0\2c 0\)\] {
@@ -2023,6 +2054,10 @@ video {
   background-color: rgb(161 98 7 / var(--tw-bg-opacity));
 }
 
+.bg-\[url\(\'\.\.\/image\/background_NFR\.png\'\)\] {
+  background-image: url('../image/background_NFR.png');
+}
+
 .decoration-slice {
   -webkit-box-decoration-break: slice;
           box-decoration-break: slice;
@@ -2145,6 +2180,15 @@ video {
   padding: 1rem;
 }
 
+.px-2 {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.pb-2 {
+  padding-bottom: 0.5rem;
+}
+
 .text-left {
   text-align: left;
 }
@@ -2211,9 +2255,16 @@ video {
   line-height: 2.5rem;
 }
 
-.text-6xl {
-  font-size: 3.75rem;
-  line-height: 1;
+.text-\[2rem\] {
+  font-size: 2rem;
+}
+
+.text-\[4rem\] {
+  font-size: 4rem;
+}
+
+.text-\[6rem\] {
+  font-size: 6rem;
 }
 
 .text-xl {
@@ -2671,6 +2722,13 @@ video {
 
 .forced-color-adjust-none {
   forced-color-adjust: none;
+}
+
+h1 {
+  -webkit-text-stroke-width: 4px;
+  /* Épaisseur du contour */
+  -webkit-text-stroke-color: white;
+  /* Couleur du contour */
 }
 
 @media (min-width: 640px) {

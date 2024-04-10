@@ -7,13 +7,17 @@ const copyButton = document.getElementById('copyID');
 const errorCopyID = document.getElementById('errorCopyID');
 const namePlayer = document.getElementById('namePlayer')
 const player = document.getElementById("player")
-const timerText = document.getElementById("timerText")
 const numberOfPlayer = document.getElementById("numberOfPlayer")
 const numberOfPlayerText = document.getElementById("numberOfPlayerText")
+const timerSelect = document.getElementById("timerSelect")
+const timerText = document.getElementById("timerText")
+const precisionSelect = document.getElementById("precisionSelect")
+const precisionText = document.getElementById("precisionText")
+const toleranceSelect = document.getElementById("toleranceSelect")
+const toleranceText = document.getElementById("toleranceText")
 const leaveRoom = document.getElementById("leaveRoom")
 const startGame = document.getElementById("startGame")
 const timer = document.getElementById("timer")
-const timerSelect = document.getElementById("timerSelect")
 const samePixelTextPlayer1 = document.getElementById("samePixelTextPlayer1")
 const samePixelTextPlayer2 = document.getElementById("samePixelTextPlayer2")
 const samePixelTextPlayer3 = document.getElementById("samePixelTextPlayer3")
@@ -46,7 +50,11 @@ const roomMenu = document.querySelector('.roomMenu');
 const numberOfPlayerClass = document.querySelector('.numberOfPlayerClass');
 const numberOfPlayerTextClass = document.querySelector('.numberOfPlayerTextClass');
 const timerSelectClass = document.querySelector('.timerSelectClass');
-const timerSelectText = document.querySelector('.timerSelectText');
+const timerTextClass = document.querySelector('.timerTextClass');
+const precisionSelectClass = document.querySelector('.precisionSelectClass');
+const precisionTextClass = document.querySelector('.precisionTextClass');
+const toleranceSelectClass = document.querySelector('.toleranceSelectClass');
+const toleranceTextClass = document.querySelector('.toleranceTextClass');
 const buttonStartGame = document.querySelector('.buttonStartGame');
 const game = document.querySelector('.game');
 const resultPlayer1Class = document.querySelector(".resultPlayer1Class")
@@ -101,13 +109,10 @@ let loadCanvas7 = false
 let loadCanvas8 = false
 
 let tolerance = 50;
+let precision = 2
 
-const initGame = () => {
-    player.innerHTML = ''
-    allclientsInRoom.length = 0
-    numberOfPlayer.value = 2
-    numberOfPlayerText.value = 2
-    timerSelect.value = 60
+
+const resetVariables = () => {
     context.clearRect(0, 0, canvas.width, canvas.height);
     contextImageFetch.clearRect(0, 0, canvasImageFetch.width, canvasImageFetch.height);
     contextPlayer1.clearRect(0, 0, canvasPlayer1.width, canvasPlayer1.height);
@@ -118,6 +123,35 @@ const initGame = () => {
     contextPlayer6.clearRect(0, 0, canvasPlayer6.width, canvasPlayer6.height);
     contextPlayer7.clearRect(0, 0, canvasPlayer7.width, canvasPlayer7.height);
     contextPlayer8.clearRect(0, 0, canvasPlayer8.width, canvasPlayer8.height);
+
+    currentNamePlayer = namePlayer.value
+    allclientsInRoom.length = 0
+    currentRoomID = ""
+    numberOfPlayerRoom = 2
+    timerDuration = 60
+    timerInterval
+    timerDurationFinalResult = 3
+    timerFinalResult
+    loadCanvas1 = false
+    loadCanvas2 = false
+    loadCanvas3 = false
+    loadCanvas4 = false
+    loadCanvas5 = false
+    loadCanvas6 = false
+    loadCanvas7 = false
+    loadCanvas8 = false
+    tolerance = 50;
+    precision = 2
+
+    player.innerHTML = ''
+    numberOfPlayer.value = 2
+    numberOfPlayerText.value = 2
+    timerSelect.value = 60
+    timerText.value = 60
+    precisionSelect.value = 2
+    precisionText.value = 2
+    toleranceSelect.value = 50
+    toleranceText.value = 50
     samePixelTextPlayer1.textContent = 'Pourcentage de pixels identiques: 0%'
     samePixelTextPlayer2.textContent = 'Pourcentage de pixels identiques: 0%'
     samePixelTextPlayer3.textContent = 'Pourcentage de pixels identiques: 0%'
@@ -135,17 +169,6 @@ const initGame = () => {
     namePlayer7.textContent = "Player 7"
     namePlayer8.textContent = "Player 8"
     winnerText.textContent = ""
-    numberOfPlayerRoom = 2
-    timerDuration = 60
-    timerDurationFinalResult = 3
-    loadCanvas1 = false
-    loadCanvas2 = false
-    loadCanvas3 = false
-    loadCanvas4 = false
-    loadCanvas5 = false
-    loadCanvas6 = false
-    loadCanvas7 = false
-    loadCanvas8 = false
     actions.length = 0
 }
 
@@ -174,7 +197,7 @@ leaveRoom.addEventListener("click", () => {
     makingVisibleClass(menu)
     makingInvisibleClass(roomMenu)
 
-    initGame()
+    resetVariables()
 
     socket.emit('leaveRoom', currentRoomID, currentNamePlayer)
 })
@@ -194,8 +217,12 @@ socket.on('roomCreated', (roomID) => {
 
     numberOfPlayerTextClass.classList.add("hidden")
     numberOfPlayerClass.classList.remove("hidden")
-    timerSelectText.classList.add("hidden")
+    timerTextClass.classList.add("hidden")
     timerSelectClass.classList.remove("hidden")
+    precisionTextClass.classList.add("hidden")
+    precisionSelectClass.classList.remove("hidden")
+    toleranceTextClass.classList.add("hidden")
+    toleranceSelectClass.classList.remove("hidden")
 
     currentRoomID = roomID
     nameRoomId.textContent = roomID
@@ -213,7 +240,7 @@ socket.on('roomJoined', (clientsInRoom, namePlayerJoin) => {
     if(currentNamePlayer != namePlayerJoin){
         allclientsInRoom.push(namePlayerJoin)
         
-        socket.emit('sendPlayersInRoom', allclientsInRoom, clientsInRoom[0], timerDuration, numberOfPlayerRoom);
+        socket.emit('sendPlayersInRoom', allclientsInRoom, clientsInRoom[0], timerDuration, numberOfPlayerRoom, precision, tolerance);
     }
     else{
         currentRoomID = clientsInRoom[0]
@@ -224,7 +251,11 @@ socket.on('roomJoined', (clientsInRoom, namePlayerJoin) => {
         numberOfPlayerClass.classList.add("hidden")
         numberOfPlayerTextClass.classList.remove("hidden")
         timerSelectClass.classList.add("hidden")
-        timerSelectText.classList.remove("hidden")
+        timerTextClass.classList.remove("hidden")
+        precisionSelectClass.classList.add("hidden")
+        precisionTextClass.classList.remove("hidden")
+        toleranceSelectClass.classList.add("hidden")
+        toleranceTextClass.classList.remove("hidden")
     }
 
     console.log('Room joined:', clientsInRoom[0]);
@@ -243,14 +274,18 @@ socket.on("roomLeaved", (namePlayerLeaved) => {
     }
 })
 
-socket.on("sendedPlayersInRoom", (allclientsInRoomSended, currentTimer, numberOfPlayerRoomSended) => {
-    player.innerHTML = ''
-    allclientsInRoom = allclientsInRoomSended
-    timerDuration = currentTimer
-    timerText.textContent = currentTimer
+socket.on("sendedPlayersInRoom", (allclientsInRoomSended, currentTimer, numberOfPlayerRoomSended, currentPrecision, currentTolerance) => {
     numberOfPlayerRoom = numberOfPlayerRoomSended
     numberOfPlayerText.textContent = numberOfPlayerRoomSended
+    timerDuration = currentTimer
+    timerText.textContent = currentTimer
+    precision = currentPrecision
+    precisionText.textContent = currentPrecision
+    tolerance = currentTolerance
+    toleranceText.textContent = currentTolerance
 
+    player.innerHTML = ''
+    allclientsInRoom = allclientsInRoomSended
     for(let i = 0; i < allclientsInRoom.length; i++){
         const newParagraph = document.createElement('p');
         newParagraph.textContent = allclientsInRoom[i]
@@ -267,6 +302,16 @@ socket.on("timerChanged", (timerChanged) => {
     timer.textContent = timerChanged
     timerText.textContent = timerChanged
     timerDuration = timerChanged
+})
+
+socket.on("precisionChanged", (precisionChanged) => {
+    precision = precisionChanged
+    precisionText.textContent = precisionChanged
+})
+
+socket.on("toleranceChanged", (toleranceChanged) => {
+    tolerance = toleranceChanged
+    toleranceText.textContent = toleranceChanged
 })
 
 socket.on("gameStarted", (imageURL) => {
@@ -294,7 +339,6 @@ socket.on("elapsedTime", (imageDataURL, User) => {
     makingInvisibleClass(game)
     makingVisibleClass(finalResult)
     
-    const contexts = [contextPlayer1, contextPlayer2, contextPlayer3, contextPlayer4, contextPlayer5, contextPlayer6, contextPlayer7, contextPlayer8];
     const progressBars = [progressBarPlayer1, progressBarPlayer2, progressBarPlayer3, progressBarPlayer4, progressBarPlayer5, progressBarPlayer6, progressBarPlayer7, progressBarPlayer8];
  
     if(numberOfPlayerRoom == 2){
@@ -406,8 +450,21 @@ timerSelect.addEventListener("change", () => {
     socket.emit('timerChange', timerDuration);
 })
 
+// Événement pour définir le timer
+precisionSelect.addEventListener("change", () => {
+    precision = precisionSelect.value
+
+    socket.emit('precisionChange', precision);
+})
+
+// Événement pour définir le timer
+toleranceSelect.addEventListener("change", () => {
+    tolerance = toleranceSelect.value
+
+    socket.emit('toleranceChange', tolerance);
+})
+
 //////Div resultat final
-// Fonction pour mettre à jour le timer
 const updateTimerGame = () => {
     // Afficher le temps restant
     timer.textContent = "Timer: " + timerDuration
@@ -431,7 +488,6 @@ const updateTimerGame = () => {
     }
 }
 
-//Fonction pour transformer une URL en image
 const convertURLToImage = (imageDataURL, context) => {
     // Créer une nouvelle image
     const image = new Image();
@@ -452,7 +508,6 @@ const convertURLToImage = (imageDataURL, context) => {
     };
 }
 
-// Fonction pour mettre à jour le timer
 const updateTimerResult = () => {
     // Vérifier si le timer est écoulé
     if (timerDurationFinalResult === 0) {
@@ -501,7 +556,7 @@ const updateTimerResult = () => {
         }
 
         console.log("Score afficher.");
-        compareWithPrecision(2, resultPlayer1, resultPlayer2, resultPlayer3,resultPlayer4,resultPlayer5,resultPlayer6,resultPlayer7,resultPlayer8)
+        compareWithPrecision(precision, resultPlayer1, resultPlayer2, resultPlayer3,resultPlayer4,resultPlayer5,resultPlayer6,resultPlayer7,resultPlayer8)
         console.log("Résultat final afficher!")
 
     } else {
@@ -510,7 +565,6 @@ const updateTimerResult = () => {
 }
 
 //Partie du code pour comparer les deux images
-// Comparer les pixels des deux images
 const compareImage = (canvas, context, samePixelText, progressBar) => {
     imageData1 = context.getImageData(0, 0, canvas.width, canvas.height);
     imageData2 = contextImageFetchResult.getImageData(0, 0, canvasImageFetchResult.width, canvasImageFetchResult.height);
@@ -537,45 +591,50 @@ const compareImage = (canvas, context, samePixelText, progressBar) => {
     const samePercentage = (samePixels / totalPixels) * 100;
     updateProgressBar(samePercentage, progressBar);
 
-    samePixelText.textContent = 'Pourcentage de pixels identiques: ' + samePercentage.toFixed(2) + '%'
-    return samePercentage.toFixed(2)
+    samePixelText.textContent = 'Pourcentage de pixels identiques: ' + samePercentage.toFixed(precision) + '%'
+    return samePercentage.toFixed(precision)
 }
 
-// Fonction pour mettre à jour la barre de progression
 const updateProgressBar = (progress, progressBarID) => {
     // Assurez-vous que la valeur de progression est entre 0 et 100
     if (progress >= 0 && progress <= 100) {
       // Mettre à jour la largeur de la barre de progression en pourcentage
       progressBarID.style.width = progress + '%';
     }
-  }
+}
 
-// Comparaison avec une précision de 2 décimales
 const compareWithPrecision = (precision, ...values) => {
-    let maxValue = -Infinity;
-    let maxIndex = -1;
+    let maxValue1 = -Infinity;
+    let maxIndex1 = -1;
+    let maxValue2 = -Infinity;
+    let maxIndex2 = -1;
 
     values.forEach((value, index) => {
         const roundedValue = Math.round(value * 10 ** precision);
-        if (roundedValue > maxValue) {
-            maxValue = roundedValue;
-            maxIndex = index;
+        if (roundedValue > maxValue1) {
+            maxValue2 = maxValue1;
+            maxIndex2 = maxIndex1;
+            maxValue1 = roundedValue;
+            maxIndex1 = index;
+        } else if (roundedValue > maxValue2) {
+            maxValue2 = roundedValue;
+            maxIndex2 = index;
         }
     });
 
-    if (maxIndex !== -1) {
-        winnerText.textContent = allclientsInRoom[maxIndex];
+    if (maxValue1 === maxValue2) {
+        winnerText.textContent = "Égalité";
+    } else {
+        winnerText.textContent = allclientsInRoom[maxIndex1];
     }
-};
+}
 
-//Revenir au menu
 returnMenu.addEventListener('click', () => {
     makingInvisibleClass(finalResult)
     makingVisibleClass(menu)
     makingVisibleClass(buttonStartGame)
 
-    //Remettre à zéro les variables
-    initGame()
+    resetVariables()
 
     socket.emit('leaveRoom', currentRoomID, currentNamePlayer)
 })

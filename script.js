@@ -49,6 +49,8 @@ const timerSelectClass = document.querySelector('.timerSelectClass');
 const timerSelectText = document.querySelector('.timerSelectText');
 const buttonStartGame = document.querySelector('.buttonStartGame');
 const game = document.querySelector('.game');
+const resultPlayer1Class = document.querySelector(".resultPlayer1Class")
+const resultPlayer2Class = document.querySelector(".resultPlayer2Class")
 const resultPlayer3Class = document.querySelector(".resultPlayer3Class")
 const resultPlayer4Class = document.querySelector(".resultPlayer4Class")
 const resultPlayer5Class = document.querySelector(".resultPlayer5Class")
@@ -100,6 +102,53 @@ let loadCanvas8 = false
 
 let tolerance = 50;
 
+const initGame = () => {
+    player.innerHTML = ''
+    allclientsInRoom.length = 0
+    numberOfPlayer.value = 2
+    numberOfPlayerText.value = 2
+    timerSelect.value = 60
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    contextImageFetch.clearRect(0, 0, canvasImageFetch.width, canvasImageFetch.height);
+    contextPlayer1.clearRect(0, 0, canvasPlayer1.width, canvasPlayer1.height);
+    contextPlayer2.clearRect(0, 0, canvasPlayer2.width, canvasPlayer2.height);
+    contextPlayer3.clearRect(0, 0, canvasPlayer3.width, canvasPlayer3.height);
+    contextPlayer4.clearRect(0, 0, canvasPlayer4.width, canvasPlayer4.height);
+    contextPlayer5.clearRect(0, 0, canvasPlayer5.width, canvasPlayer5.height);
+    contextPlayer6.clearRect(0, 0, canvasPlayer6.width, canvasPlayer6.height);
+    contextPlayer7.clearRect(0, 0, canvasPlayer7.width, canvasPlayer7.height);
+    contextPlayer8.clearRect(0, 0, canvasPlayer8.width, canvasPlayer8.height);
+    samePixelTextPlayer1.textContent = 'Pourcentage de pixels identiques: 0%'
+    samePixelTextPlayer2.textContent = 'Pourcentage de pixels identiques: 0%'
+    samePixelTextPlayer3.textContent = 'Pourcentage de pixels identiques: 0%'
+    samePixelTextPlayer4.textContent = 'Pourcentage de pixels identiques: 0%'
+    samePixelTextPlayer5.textContent = 'Pourcentage de pixels identiques: 0%'
+    samePixelTextPlayer6.textContent = 'Pourcentage de pixels identiques: 0%'
+    samePixelTextPlayer7.textContent = 'Pourcentage de pixels identiques: 0%'
+    samePixelTextPlayer8.textContent = 'Pourcentage de pixels identiques: 0%'
+    namePlayer1.textContent = "Player 1"
+    namePlayer2.textContent = "Player 2"
+    namePlayer3.textContent = "Player 3"
+    namePlayer4.textContent = "Player 4"
+    namePlayer5.textContent = "Player 5"
+    namePlayer6.textContent = "Player 6"
+    namePlayer7.textContent = "Player 7"
+    namePlayer8.textContent = "Player 8"
+    winnerText.textContent = ""
+    numberOfPlayerRoom = 2
+    timerDuration = 60
+    timerDurationFinalResult = 3
+    loadCanvas1 = false
+    loadCanvas2 = false
+    loadCanvas3 = false
+    loadCanvas4 = false
+    loadCanvas5 = false
+    loadCanvas6 = false
+    loadCanvas7 = false
+    loadCanvas8 = false
+    actions.length = 0
+}
+
 //// Envoyer les actions au serveur
 // Créer une nouvelle salle de jeu
 createRoom.addEventListener("click", async () => {
@@ -122,12 +171,9 @@ joinRoom.addEventListener("click", () => {
 })
 
 leaveRoom.addEventListener("click", () => {
-    menu.classList.add('flex');
-    menu.classList.remove('hidden');
-    roomMenu.classList.remove('flex');
-    roomMenu.classList.add('hidden');
+    makingVisibleClass(menu)
+    makingInvisibleClass(roomMenu)
 
-    //Remettre à zéro les variables
     initGame()
 
     socket.emit('leaveRoom', currentRoomID, currentNamePlayer)
@@ -143,10 +189,9 @@ startGame.addEventListener("click", () => {
     
 //// Écouter les événements du serveur ////
 socket.on('roomCreated', (roomID) => {
-    menu.classList.add('hidden');
-    menu.classList.remove('flex');
-    roomMenu.classList.remove('hidden');
-    roomMenu.classList.add('flex');
+    makingInvisibleClass(menu)
+    makingVisibleClass(roomMenu)
+
     numberOfPlayerTextClass.classList.add("hidden")
     numberOfPlayerClass.classList.remove("hidden")
     timerSelectText.classList.add("hidden")
@@ -162,11 +207,8 @@ socket.on('roomCreated', (roomID) => {
 });
 
 socket.on('roomJoined', (clientsInRoom, namePlayerJoin) => {
-    menu.classList.add('hidden');
-    menu.classList.remove('flex');
-    roomMenu.classList.remove('hidden');
-    roomMenu.classList.add('flex');
-    
+    makingInvisibleClass(menu)
+    makingVisibleClass(roomMenu)
 
     if(currentNamePlayer != namePlayerJoin){
         allclientsInRoom.push(namePlayerJoin)
@@ -176,8 +218,9 @@ socket.on('roomJoined', (clientsInRoom, namePlayerJoin) => {
     else{
         currentRoomID = clientsInRoom[0]
         nameRoomId.textContent = clientsInRoom[0]
-        buttonStartGame.classList.add('hidden');
-        buttonStartGame.classList.remove('flex');
+        makingInvisibleClass(buttonStartGame)
+        makingVisibleClass(roomMenu)
+
         numberOfPlayerClass.classList.add("hidden")
         numberOfPlayerTextClass.classList.remove("hidden")
         timerSelectClass.classList.add("hidden")
@@ -229,58 +272,31 @@ socket.on("timerChanged", (timerChanged) => {
 socket.on("gameStarted", (imageURL) => {
     convertURLToImage(imageURL, contextImageFetch)
     convertURLToImage(imageURL, contextImageFetchResult)
-    roomMenu.classList.add('hidden');
-    roomMenu.classList.remove('flex');
-    game.classList.remove('hidden');
-    game.classList.add('flex');
+    makingInvisibleClass(roomMenu)
+    makingVisibleClass(game)
 
-    resultPlayer3Class.classList.remove("hidden")
-    resultPlayer4Class.classList.remove("hidden")
-    resultPlayer5Class.classList.remove("hidden")
-    resultPlayer6Class.classList.remove("hidden")
-    resultPlayer7Class.classList.remove("hidden")
-    resultPlayer8Class.classList.remove("hidden")
-
-    if (numberOfPlayerRoom == 2){
-        resultPlayer3Class.classList.add("hidden")
-        resultPlayer4Class.classList.add("hidden")
-        resultPlayer5Class.classList.add("hidden")
-        resultPlayer6Class.classList.add("hidden")
-        resultPlayer7Class.classList.add("hidden")
-        resultPlayer8Class.classList.add("hidden")
-    }
-    else if(numberOfPlayerRoom == 3){
-        resultPlayer4Class.classList.add("hidden")
-        resultPlayer5Class.classList.add("hidden")
-        resultPlayer6Class.classList.add("hidden")
-        resultPlayer7Class.classList.add("hidden")
-        resultPlayer8Class.classList.add("hidden")
-    }
-    else if(numberOfPlayerRoom == 4){
-        resultPlayer5Class.classList.add("hidden")
-        resultPlayer6Class.classList.add("hidden")
-        resultPlayer7Class.classList.add("hidden")
-        resultPlayer8Class.classList.add("hidden")
-    }
-    else if(numberOfPlayerRoom == 5){
-        resultPlayer6Class.classList.add("hidden")
-        resultPlayer7Class.classList.add("hidden")
-        resultPlayer8Class.classList.add("hidden")
-    }
-    else if(numberOfPlayerRoom == 6){
-        resultPlayer7Class.classList.add("hidden")
-        resultPlayer8Class.classList.add("hidden")
-    }
-    else if(numberOfPlayerRoom == 7){
-        resultPlayer8Class.classList.add("hidden")
+    const playerClasses = [ resultPlayer1Class, resultPlayer2Class ,resultPlayer3Class, resultPlayer4Class, 
+        resultPlayer5Class, resultPlayer6Class, resultPlayer7Class, resultPlayer8Class];
+    
+    // Supprimer la classe "hidden" pour tous les éléments
+    playerClasses.forEach(playerClass => playerClass.classList.remove("hidden"));
+    
+    // Ajouter la classe "hidden" pour les éléments excédant le nombre de joueurs dans la salle
+    for (let i = numberOfPlayerRoom; i < playerClasses.length; i++) {
+        playerClasses[i].classList.add("hidden");
     }
 
     // Démarrer le timer et lancer la fonction updateTimer toutes les secondes
-    timerInterval = setInterval(updateTimer, 1000)
+    timerInterval = setInterval(updateTimerGame, 1000)
 })
 
 socket.on("elapsedTime", (imageDataURL, User) => {
-
+    makingInvisibleClass(game)
+    makingVisibleClass(finalResult)
+    
+    const contexts = [contextPlayer1, contextPlayer2, contextPlayer3, contextPlayer4, contextPlayer5, contextPlayer6, contextPlayer7, contextPlayer8];
+    const progressBars = [progressBarPlayer1, progressBarPlayer2, progressBarPlayer3, progressBarPlayer4, progressBarPlayer5, progressBarPlayer6, progressBarPlayer7, progressBarPlayer8];
+ 
     if(numberOfPlayerRoom == 2){
         loadCanvas3 = true
         loadCanvas4 = true
@@ -347,28 +363,16 @@ socket.on("elapsedTime", (imageDataURL, User) => {
         convertURLToImage(imageDataURL, contextPlayer8)
         loadCanvas8 = true
     }
-    
-    updateProgressBar(0, progressBarPlayer1);
-    updateProgressBar(0, progressBarPlayer2);
-    updateProgressBar(0, progressBarPlayer3);
-    updateProgressBar(0, progressBarPlayer4);
-    updateProgressBar(0, progressBarPlayer5);
-    updateProgressBar(0, progressBarPlayer6);
-    updateProgressBar(0, progressBarPlayer7);
-    updateProgressBar(0, progressBarPlayer8);
 
-    game.classList.add('hidden');
-    game.classList.remove('flex');
-    finalResult.classList.remove('hidden');
-    finalResult.classList.add('flex');
+    for (let i = 0; i < progressBars.length; i++) {
+        updateProgressBar(0, progressBars[i]);
+    }
 
     // Démarrer le timer pour calculer les résultats
-    // Le if est là car j'ai deux envois du socket "elapsedTime" et donc mon setInterval qui ce lance deux fois.
+    // Le if est là car j'ai huits envois du socket "elapsedTime" et donc mon setInterval qui ce lance huits fois.
     // Ce qui permet de le limiter à le lancer 1 fois.
-    if(loadCanvas1 == true && loadCanvas2 == true
-    && loadCanvas3 == true && loadCanvas4 == true
-    && loadCanvas5 == true && loadCanvas6 == true
-    && loadCanvas7 == true && loadCanvas8 == true){
+    if(loadCanvas1 == true && loadCanvas2 == true && loadCanvas3 == true && loadCanvas4 == true
+    && loadCanvas5 == true && loadCanvas6 == true && loadCanvas7 == true && loadCanvas8 == true){
         timerFinalResult = setInterval(updateTimerResult, 1000)
     }
     
@@ -387,33 +391,6 @@ copyButton.addEventListener('click', () => {
     });
 })
 
-//// Timer
-// Fonction pour mettre à jour le timer
-const updateTimer = () => {
-    // Afficher le temps restant
-    timer.textContent = "Timer: " + timerDuration
-
-    // Vérifier si le timer est écoulé
-    if (timerDuration === 0) {
-        clearInterval(timerInterval); // Arrêter le timer
-
-        let imageDataURL = canvas.toDataURL()
-        namePlayer1.textContent = allclientsInRoom[0]
-        namePlayer2.textContent = allclientsInRoom[1]
-        namePlayer3.textContent = allclientsInRoom[2]
-        namePlayer4.textContent = allclientsInRoom[3]
-        namePlayer5.textContent = allclientsInRoom[4]
-        namePlayer6.textContent = allclientsInRoom[5]
-        namePlayer7.textContent = allclientsInRoom[6]
-        namePlayer8.textContent = allclientsInRoom[7]
-        socket.emit('endOfTimer', imageDataURL, currentRoomID);
-
-        console.log("Le temps est écoulé !");
-    } else {
-        timerDuration--; // Décrémenter le temps restant
-    }
-}
-
 // Événement pour définir le nombre de joueurs
 numberOfPlayer.addEventListener("change", () => {
     numberOfPlayerRoom = numberOfPlayer.value
@@ -428,6 +405,31 @@ timerSelect.addEventListener("change", () => {
 
     socket.emit('timerChange', timerDuration);
 })
+
+//////Div resultat final
+// Fonction pour mettre à jour le timer
+const updateTimerGame = () => {
+    // Afficher le temps restant
+    timer.textContent = "Timer: " + timerDuration
+
+    // Vérifier si le timer est écoulé
+    if (timerDuration === 0) {
+        clearInterval(timerInterval); // Arrêter le timer
+
+        let imageDataURL = canvas.toDataURL()
+        const namePlayers = [namePlayer1, namePlayer2, namePlayer3, namePlayer4, namePlayer5, namePlayer6, namePlayer7, namePlayer8];
+
+        for (let i = 0; i < allclientsInRoom.length; i++) {
+            namePlayers[i].textContent = allclientsInRoom[i];
+        }
+
+        socket.emit('endOfTimer', imageDataURL, currentRoomID);
+
+        console.log("Le temps est écoulé !");
+    } else {
+        timerDuration--; // Décrémenter le temps restant
+    }
+}
 
 //Fonction pour transformer une URL en image
 const convertURLToImage = (imageDataURL, context) => {
@@ -450,7 +452,6 @@ const convertURLToImage = (imageDataURL, context) => {
     };
 }
 
-//////Div resultat final
 // Fonction pour mettre à jour le timer
 const updateTimerResult = () => {
     // Vérifier si le timer est écoulé
@@ -464,6 +465,7 @@ const updateTimerResult = () => {
         let resultPlayer6 = compareImage(canvasPlayer6, contextPlayer6, samePixelTextPlayer6, progressBarPlayer6)
         let resultPlayer7 = compareImage(canvasPlayer7, contextPlayer7, samePixelTextPlayer7, progressBarPlayer7)
         let resultPlayer8 = compareImage(canvasPlayer8, contextPlayer8, samePixelTextPlayer8, progressBarPlayer8)
+
         if(numberOfPlayerRoom == 2){
             resultPlayer3 = 0
             resultPlayer4 = 0
@@ -566,13 +568,11 @@ const compareWithPrecision = (precision, ...values) => {
     }
 };
 
+//Revenir au menu
 returnMenu.addEventListener('click', () => {
-    finalResult.classList.add('hidden');
-    finalResult.classList.remove('flex');
-    menu.classList.remove('hidden');
-    menu.classList.add('flex');
-    buttonStartGame.classList.add('flex');
-    buttonStartGame.classList.remove('hidden');
+    makingInvisibleClass(finalResult)
+    makingVisibleClass(menu)
+    makingVisibleClass(buttonStartGame)
 
     //Remettre à zéro les variables
     initGame()
@@ -580,57 +580,21 @@ returnMenu.addEventListener('click', () => {
     socket.emit('leaveRoom', currentRoomID, currentNamePlayer)
 })
 
-const initGame = () => {
-    player.innerHTML = ''
-    allclientsInRoom.length = 0
-    numberOfPlayer.value = 2
-    numberOfPlayerText.value = 2
-    timerSelect.value = 60
-    context.clearRect(0, 0, canvas.width, canvas.height);
-    contextImageFetch.clearRect(0, 0, canvasImageFetch.width, canvasImageFetch.height);
-    contextPlayer1.clearRect(0, 0, canvasPlayer1.width, canvasPlayer1.height);
-    contextPlayer2.clearRect(0, 0, canvasPlayer2.width, canvasPlayer2.height);
-    contextPlayer3.clearRect(0, 0, canvasPlayer3.width, canvasPlayer3.height);
-    contextPlayer4.clearRect(0, 0, canvasPlayer4.width, canvasPlayer4.height);
-    contextPlayer5.clearRect(0, 0, canvasPlayer5.width, canvasPlayer5.height);
-    contextPlayer6.clearRect(0, 0, canvasPlayer6.width, canvasPlayer6.height);
-    contextPlayer7.clearRect(0, 0, canvasPlayer7.width, canvasPlayer7.height);
-    contextPlayer8.clearRect(0, 0, canvasPlayer8.width, canvasPlayer8.height);
-    samePixelTextPlayer1.textContent = 'Pourcentage de pixels identiques: 0%'
-    samePixelTextPlayer2.textContent = 'Pourcentage de pixels identiques: 0%'
-    samePixelTextPlayer3.textContent = 'Pourcentage de pixels identiques: 0%'
-    samePixelTextPlayer4.textContent = 'Pourcentage de pixels identiques: 0%'
-    samePixelTextPlayer5.textContent = 'Pourcentage de pixels identiques: 0%'
-    samePixelTextPlayer6.textContent = 'Pourcentage de pixels identiques: 0%'
-    samePixelTextPlayer7.textContent = 'Pourcentage de pixels identiques: 0%'
-    samePixelTextPlayer8.textContent = 'Pourcentage de pixels identiques: 0%'
-    namePlayer1.textContent = "Player 1"
-    namePlayer2.textContent = "Player 2"
-    namePlayer3.textContent = "Player 3"
-    namePlayer4.textContent = "Player 4"
-    namePlayer5.textContent = "Player 5"
-    namePlayer6.textContent = "Player 6"
-    namePlayer7.textContent = "Player 7"
-    namePlayer8.textContent = "Player 8"
-    winnerText.textContent = ""
-    numberOfPlayerRoom = 2
-    timerDuration = 60
-    timerDurationFinalResult = 3
-    loadCanvas1 = false
-    loadCanvas2 = false
-    loadCanvas3 = false
-    loadCanvas4 = false
-    loadCanvas5 = false
-    loadCanvas6 = false
-    loadCanvas7 = false
-    loadCanvas8 = false
-    actions.length = 0
-}
-
+//Autres fonctions
 const removePlayerFromArray = (array, stringToRemove) => {
     const index = array.indexOf(stringToRemove);
     if (index !== -1) {
         array.splice(index, 1); // Supprimer l'élément trouvé à l'index
         return array
     }
+}
+
+const makingVisibleClass = (className) => {
+    className.classList.add('flex');
+    className.classList.remove('hidden');
+}
+
+const makingInvisibleClass = (className) => {
+    className.classList.add('hidden');
+    className.classList.remove('flex');
 }

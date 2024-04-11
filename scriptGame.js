@@ -50,6 +50,13 @@ const draw = (e) => {
         context.beginPath();
         context.moveTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
     }
+    else if(tool == "line"){
+        context.lineWidth = lineWidthSize ;
+        context.lineCap = brushShape;
+        context.strokeStyle = brushColor; // Couleur du trait
+        
+        drawLine(startX, startY, e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+    }
     else if(tool == "paintBucket"){
         // paintBucket(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop, brushColor)
         context.fillStyle = brushColor
@@ -85,6 +92,10 @@ canvas.addEventListener('mouseleave', () => {
 // Événement pour commencer le dessin
 canvas.addEventListener('mousedown', (e) => {
     isDrawing = true;
+    if (tool == "line") {
+        startX = e.clientX - canvas.offsetLeft;
+        startY = e.clientY - canvas.offsetTop;
+    }
     draw(e);
 });
 
@@ -120,6 +131,13 @@ colorButtons.forEach(button => {
         }
     });
 });
+
+const drawLine = (startX, startY, endX, endY) => {
+    context.beginPath();
+    context.moveTo(startX, startY);
+    context.lineTo(endX, endY);
+    context.stroke();
+};
 
 // Fonction pour effacer le canvas
 const clearCanvas = () => {

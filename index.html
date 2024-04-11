@@ -12,17 +12,22 @@
         <h1 class="text-center text-[6rem] font-bold mt-8 mb-16 p-4">Near Faithful Reproduction</h1>
         <div class="w-120 flex flex-col justify-center items-center text-white border-4 border-[#33FFD3] p-16 bg-[#3100D3]">
           <input class="m-2 p-2 border-2 border-white bg-black" type="text" id="namePlayer" placeholder="Enter your name" value="">
-          <button id="createRoom" class="w-36 ml-2 p-2 border-2 border-white bg-black">Create Room</button>
+          <div>
+            <select id="partieSelect" class="p-2 border-2 border-white bg-black">
+              <option value="ChacunPourSoi">Chacun pour soi</option>
+            </select>
+            <button id="createRoom" class="w-36 ml-2 p-2 border-2 border-white bg-black hover:bg-white hover:border-black hover:text-black">Create Room</button>
+          </div>
           <div class="flex justify-center p-4">
             <input class="ml-2 p-2 border-2 border-white bg-black" type="text" id="roomId" placeholder="Enter Room ID" value="">
-            <button id="joinRoom" class="ml-2 p-2 border-2 border-white bg-black">Join Room</button>
+            <button id="joinRoom" class="ml-2 p-2 border-2 border-white bg-black  hover:bg-white hover:border-black hover:text-black">Join Room</button>
           </div>
         </div>
         <div class="w-[80rem] flex flex-col justify-center text-center mt-4 p-4 text-white border-4 border-[#33FFD3] bg-[#3100D3]">
           <h3 class="text-4xl p-4 underline">Règles du jeu</h3>
-          <p class="p-2">Vous devez avoir le plus de pixel identiques à l'image qui vous sera donner pour gagner.</p>
-          <p class="p-2">Pour cela, il faudra dessiner celle-ci le plus fidèlement possible avec le minimum outils et de couleurs à votre disposition.</p>
-          <p class="p-2">Le joueur ayant le pourcentage le plus haut remporte la partie.</p>
+          <p class="p-2">Vous devez avoir le plus de pixels identiques à l'image qui vous sera donnée pour gagner.</p>
+          <p class="p-2">Pour cela, il faudra la dessiner le plus fidèlement possible avec un minimum d'outils et de couleurs à votre disposition.</p>
+          <p class="p-2">Le joueur ayant le pourcentage le plus élevé remporte la partie.</p>
         </div>
     </div>
 
@@ -33,7 +38,7 @@
         <div class="flex items-center align-middle m-2">
           <h4 class="text-2xl font-bold mr-2">Room ID:</h4>
           <h4 id="nameRoomId" class=""></h4>
-          <button id="copyID" class="ml-2 p-2 border-2 border-white bg-black">Copy ID</button>
+          <button id="copyID" class="ml-2 p-2 border-2 border-white bg-black  hover:bg-white hover:border-black hover:text-black">Copy ID</button>
         </div>
       
         <div class="flex justify-between">
@@ -102,19 +107,19 @@
             </div>
           </div>
         </div>
-        <button id="leaveRoom" class="my-2 p-2 border-2 border-white bg-black">Leave room</button>
+        <button id="leaveRoom" class="my-2 p-2 border-2 border-white bg-black  hover:bg-white hover:border-black hover:text-black">Leave room</button>
       </div>
       
       <div class="buttonStartGame flex justify-center items-center">
-        <button id="startGame" class="mt-2 p-2 border-2 text-white border-white bg-black">Start Game</button>
+        <button id="startGame" class="mt-2 p-2 border-2 text-white border-white bg-black  hover:bg-white hover:border-black hover:text-black">Start Game</button>
       </div>
     </div>
 
     <div class="game hidden flex-col justify-center items-center">
-      <h2 class="text-white text-center text-[4rem] m-4 p-4 bg-[#3100D3]">A toi de jouer!</h2>
+      <h2 class="text-white text-center text-[3rem] m-4 p-4 bg-[#3100D3]">A toi de jouer!</h2>
       <div class="flex bg-[#3100D3] border-2 border-[#33FFD3] text-white">
-        <p id="round" class="text-[2rem] font-bold p-2">Manche: 1</p>
-        <p id="timer" class="text-[2rem] font-bold p-2">Timer: 60</p>
+        <p id="round" class="text-[1.5rem] font-bold p-2">Manche: 1</p>
+        <p id="timer" class="text-[1.5rem] font-bold p-2">Timer: 60</p>
       </div>
       <div class="flex">
         <canvas id="canvasImageFetch" class="bg-white border-4 border-[#33FFD3]" width="640" height="480"></canvas>
@@ -181,8 +186,8 @@
             </div>
           </div>
           <div class="flex p-2">
-              <button id="clearAll" class="w-36 mx-2 p-2 border-2 border-white bg-black text-white">Tout effacer</button>
-              <button id="undoButton" class="w-36 mx-2 p-2 border-2 border-white bg-black text-white">Retour en arrière</button>
+              <button id="clearAll" class="w-36 mx-2 p-2 border-2 border-white bg-black text-white hover:bg-white hover:border-black hover:text-black">Tout effacer</button>
+              <button id="undoButton" class="w-36 mx-2 p-2 border-2 border-white bg-black text-white hover:bg-white hover:border-black hover:text-black">Retour en arrière</button>
           </div>
       </div>
     </div>
@@ -196,7 +201,7 @@
           <p id="namePlayer1" class="text-2xl p-2">Player 1</p>
           <canvas id="canvasPlayer1" class="bg-white border-8 border-[#33FFD3]" width="640" height="480"></canvas>
           <div class="w-full bg-gray-200 rounded-full mt-2">
-            <div id="progressBarPlayer1" class="h-4 bg-green-500 rounded-full border-2 border-black"></div>
+            <div id="progressBarPlayer1" class="h-4 bg-green-500 rounded-full"></div>
           </div>
           <p id="samePixelTextPlayer1" class="text-2xl p-2">Pourcentage de pixels identiques : 0%</p>
         </div>
@@ -267,7 +272,7 @@
       </div>
       <p class="text-2xl font-bold p-2 text-white bg-[#3100D3]">Victoire</p>
       <p id="winnerText" class="text-2xl p-2 text-white bg-[#3100D3]"></p>
-      <button id="returnMenu" class="m-2 p-2 border-2 border-white bg-black text-white">Retour au menu</button>
+      <button id="returnMenu" class="m-2 p-2 border-2 border-white bg-black text-white  hover:bg-white hover:border-black hover:text-black">Retour au menu</button>
       <button></button>
     </div>
     

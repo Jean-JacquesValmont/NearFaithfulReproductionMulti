@@ -11,6 +11,7 @@ COPY script.js ./
 COPY scriptGame.js ./
 COPY src/output.css ./src/
 COPY server.js ./
+COPY image/background_NFR.png ./image/
 
 # Installez les dépendances
 RUN npm install

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	  <link href="./src/output.css" type="text/css" rel="stylesheet">
-    <title>Reproduction presque fidèle</title>
+    <title>Near Faithful Reproduction</title>
 </head>
 <body class="bg-[url('../image/background_NFR.png')]">
 
@@ -111,19 +111,20 @@
       </div>
       
       <div class="buttonStartGame flex justify-center items-center">
-        <button id="startGame" class="mt-2 p-2 border-2 text-white border-white bg-black  hover:bg-white hover:border-black hover:text-black">Start Game</button>
+        <button id="fetchImageButton" class="m-2 p-2 border-2 text-white border-white bg-black  hover:bg-white hover:border-black hover:text-black">Fetch Image</button>
+        <button id="startGame" class="m-2 p-2 border-2 text-white border-white bg-black  hover:bg-white hover:border-black hover:text-black">Start Game</button>
       </div>
     </div>
 
-    <div class="game hidden flex-col justify-center items-center">
+    <div class="game flex flex-col justify-center items-center">
       <h2 class="text-white text-center text-[3rem] m-4 p-4 bg-[#3100D3]">A toi de jouer!</h2>
       <div class="flex bg-[#3100D3] border-2 border-[#33FFD3] text-white">
         <p id="round" class="text-[1.5rem] font-bold p-2">Manche: 1</p>
         <p id="timer" class="text-[1.5rem] font-bold p-2">Timer: 60</p>
       </div>
       <div class="flex">
-        <canvas id="canvasImageFetch" class="bg-white border-4 border-[#33FFD3]" width="640" height="480"></canvas>
-        <canvas id="canvas" class="bg-white border-4 border-[#33FFD3]" width="640" height="480"></canvas>
+        <canvas id="canvasImageFetch" class="bg-white border-4 border-[#33FFD3]" width="500" height="400"></canvas>
+        <canvas id="canvas" class="bg-white border-4 border-[#33FFD3]" width="500" height="400"></canvas>
       </div>
       <div class="flex justify-center items-center">
           <div class="flex flex-col p-2">
@@ -195,12 +196,12 @@
 
     <div class="finalResult hidden flex-col justify-center items-center">
       <h2 class="text-white text-center text-[4rem] m-4 p-4 bg-[#3100D3]">Résultat</h2>
-      <canvas id="canvasImageFetchResult" class="bg-white border-8 border-[#33FFD3]" width="640" height="480"></canvas>
+      <canvas id="canvasImageFetchResult" class="bg-white border-8 border-[#33FFD3]" width="500" height="400"></canvas>
       <div class="flex flex-wrap justify-center items-center text-white">
 
         <div class="resultPlayer1Class flex flex-col justify-center items-center px-2 m-2 bg-[#3100D3]">
           <p id="namePlayer1" class="text-2xl p-2">Player 1</p>
-          <canvas id="canvasPlayer1" class="bg-white border-8 border-[#33FFD3]" width="640" height="480"></canvas>
+          <canvas id="canvasPlayer1" class="bg-white border-8 border-[#33FFD3]" width="500" height="400"></canvas>
           <div class="w-full bg-gray-200 rounded-full mt-2">
             <div id="progressBarPlayer1" class="h-4 bg-green-500 rounded-full"></div>
           </div>
@@ -209,7 +210,7 @@
 
         <div class="resultPlayer2Class flex flex-col justify-center items-center px-2 m-2 bg-[#3100D3]">
           <p id="namePlayer2" class="text-2xl p-2">Player 2</p>
-          <canvas id="canvasPlayer2" class="bg-white border-8 border-[#33FFD3]" width="640" height="480"></canvas>
+          <canvas id="canvasPlayer2" class="bg-white border-8 border-[#33FFD3]" width="500" height="400"></canvas>
           <div class="w-full bg-gray-200 rounded-full mt-2">
             <div id="progressBarPlayer2" class="h-4 bg-green-500 rounded-full"></div>
           </div>
@@ -218,7 +219,7 @@
 
         <div class="resultPlayer3Class flex flex-col justify-center items-center px-2 m-2 bg-[#3100D3]">
           <p id="namePlayer3" class="text-2xl p-2">Player 3</p>
-          <canvas id="canvasPlayer3" class="bg-white border-8 border-[#33FFD3]" width="640" height="480"></canvas>
+          <canvas id="canvasPlayer3" class="bg-white border-8 border-[#33FFD3]" width="500" height="400"></canvas>
           <div class="w-full bg-gray-200 rounded-full mt-2">
             <div id="progressBarPlayer3" class="h-4 bg-green-500 rounded-full"></div>
           </div>
@@ -227,7 +228,7 @@
 
         <div class="resultPlayer4Class flex flex-col justify-center items-center px-2 m-2 bg-[#3100D3]">
           <p id="namePlayer4" class="text-2xl p-2">Player 4</p>
-          <canvas id="canvasPlayer4" class="bg-white border-8 border-[#33FFD3]" width="640" height="480"></canvas>
+          <canvas id="canvasPlayer4" class="bg-white border-8 border-[#33FFD3]" width="500" height="400"></canvas>
           <div class="w-full bg-gray-200 rounded-full mt-2">
             <div id="progressBarPlayer4" class="h-4 bg-green-500 rounded-full"></div>
           </div>
@@ -236,7 +237,7 @@
 
         <div class="resultPlayer5Class flex flex-col justify-center items-center px-2 m-2 bg-[#3100D3]">
           <p id="namePlayer5" class="text-2xl p-2">Player 5</p>
-          <canvas id="canvasPlayer5" class="bg-white border-8 border-[#33FFD3]" width="640" height="480"></canvas>
+          <canvas id="canvasPlayer5" class="bg-white border-8 border-[#33FFD3]" width="500" height="400"></canvas>
           <div class="w-full bg-gray-200 rounded-full mt-2">
             <div id="progressBarPlayer5" class="h-4 bg-green-500 rounded-full"></div>
           </div>
@@ -245,7 +246,7 @@
 
         <div class="resultPlayer6Class flex flex-col justify-center items-center px-2 m-2 bg-[#3100D3]">
           <p id="namePlayer6" class="text-2xl p-2">Player 6</p>
-          <canvas id="canvasPlayer6" class="bg-white border-8 border-[#33FFD3]" width="640" height="480"></canvas>
+          <canvas id="canvasPlayer6" class="bg-white border-8 border-[#33FFD3]" width="500" height="400"></canvas>
           <div class="w-full bg-gray-200 rounded-full mt-2">
             <div id="progressBarPlayer6" class="h-4 bg-green-500 rounded-full"></div>
           </div>
@@ -254,7 +255,7 @@
 
         <div class="resultPlayer7Class flex flex-col justify-center items-center px-2 m-2 bg-[#3100D3]">
           <p id="namePlayer7" class="text-2xl p-2">Player 7</p>
-          <canvas id="canvasPlayer7" class="bg-white border-8 border-[#33FFD3]" width="640" height="480"></canvas>
+          <canvas id="canvasPlayer7" class="bg-white border-8 border-[#33FFD3]" width="500" height="400"></canvas>
           <div class="w-full bg-gray-200 rounded-full mt-2">
             <div id="progressBarPlayer7" class="h-4 bg-green-500 rounded-full"></div>
           </div>
@@ -263,7 +264,7 @@
 
         <div class="resultPlayer8Class flex flex-col justify-center items-center px-2 m-2 bg-[#3100D3]">
           <p id="namePlayer8" class="text-2xl p-2">Player 8</p>
-          <canvas id="canvasPlayer8" class="bg-white border-8 border-[#33FFD3]" width="640" height="480"></canvas>
+          <canvas id="canvasPlayer8" class="bg-white border-8 border-[#33FFD3]" width="500" height="400"></canvas>
           <div class="w-full bg-gray-200 rounded-full mt-2">
             <div id="progressBarPlayer8" class="h-4 bg-green-500 rounded-full"></div>
           </div>

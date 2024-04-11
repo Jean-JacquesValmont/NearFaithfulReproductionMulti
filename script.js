@@ -16,6 +16,7 @@ const precisionText = document.getElementById("precisionText")
 const toleranceSelect = document.getElementById("toleranceSelect")
 const toleranceText = document.getElementById("toleranceText")
 const leaveRoom = document.getElementById("leaveRoom")
+const fetchImageButton = document.getElementById("fetchImageButton")
 const startGame = document.getElementById("startGame")
 const timer = document.getElementById("timer")
 const samePixelTextPlayer1 = document.getElementById("samePixelTextPlayer1")
@@ -91,6 +92,7 @@ const canvasPlayer8 = document.getElementById('canvasPlayer8');
 const contextPlayer8 = canvasPlayer8.getContext('2d')
 
 //Variable
+let imageDataURL
 let currentNamePlayer = namePlayer.value
 let allclientsInRoom = []
 let currentRoomID = ""
@@ -124,6 +126,7 @@ const resetVariables = () => {
     contextPlayer7.clearRect(0, 0, canvasPlayer7.width, canvasPlayer7.height);
     contextPlayer8.clearRect(0, 0, canvasPlayer8.width, canvasPlayer8.height);
 
+    imageDataURL = ""
     currentNamePlayer = namePlayer.value
     allclientsInRoom.length = 0
     currentRoomID = ""
@@ -172,12 +175,18 @@ const resetVariables = () => {
     actions.length = 0
 }
 
+////Action pour l'host seulement
+
+fetchImageButton.addEventListener("click", async () => {
+    await fetchImage()
+    startGame.disabled = false
+    fetchImageButton.disabled = true
+})
+
 //// Envoyer les actions au serveur
 // Créer une nouvelle salle de jeu
 createRoom.addEventListener("click", async () => {
-    createRoom.disabled = true
-    // await fetchImage()
-    createRoom.disabled = false
+    startGame.disabled = true
     currentNamePlayer = namePlayer.value
     socket.emit('createRoom');
 })
@@ -204,8 +213,10 @@ leaveRoom.addEventListener("click", () => {
 
 // Lancer le jeu
 startGame.addEventListener("click", () => {
-    let imageDataURL = canvasImageFetch.toDataURL()
     if(allclientsInRoom.length == numberOfPlayerRoom){
+        imageDataURL = canvasImageFetch.toDataURL()
+        console.log("imageDataURL: ", imageDataURL)
+        
         socket.emit('startGame', imageDataURL);
     }
 })

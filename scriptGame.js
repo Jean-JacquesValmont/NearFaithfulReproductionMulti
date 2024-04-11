@@ -34,6 +34,10 @@ let pixels2 = imageData2.data;
 // Déclarer une liste pour stocker les actions de dessin
 const actions = [];
 
+let category = '';
+let width = 500;
+let height = 400;
+
 // Fonction de dessin
 const draw = (e) => {
     if (!isDrawing) return;
@@ -180,7 +184,7 @@ const fetchImage = async () => {
         const apiKey = '1rIW4mEHWJeRPQR1vGtU+g==a0KWLUCB8HcKGCKs';
 
         // Faire la requête à l'API
-        const response = await fetch(`https://api.api-ninjas.com/v1/randomimage`, {
+        const response = await fetch(`https://api.api-ninjas.com/v1/randomimage?category=${category}&width=${width}&height=${height}`, {
             method: 'GET',
             headers: {
                 'X-Api-Key': apiKey,

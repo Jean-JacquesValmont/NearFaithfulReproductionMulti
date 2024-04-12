@@ -34,6 +34,7 @@ let pixels2 = imageData2.data;
 // Déclarer une liste pour stocker les actions de dessin
 const actions = [];
 
+//Variables pour le fetch
 let category = '';
 let width = 500;
 let height = 400;

@@ -42,13 +42,13 @@
           <button id="leaveRoom" class="m-2 p-2 border-2 border-white bg-black  hover:bg-white hover:border-black hover:text-black">Leave room</button>
         </div>
       
-        <div class="flex justify-between">
+        <div class="w-full flex justify-between">
           <div class="flex flex-col ml-4 mr-4">
             <p class="text-xl font-bold mb-2">Players</p>
             <div id="player" class=""></div>
           </div>
 
-          <div class="flex flex-col justify-center items-center">
+          <div class="w-full flex flex-col justify-center items-center">
             <p class="text-xl font-bold mb-2">Select Options </p>
             <p class="text-md font-bold mb-2">Game</p>
             <div class="">
@@ -113,39 +113,39 @@
             <div>
               <div class="flex justify-between">
                   <p class="mr-4">Longueur:</p>
-                  <select id="" class=" p-2 border-2 border-white bg-black">
-                    <option value="100">100</option>
-                    <option value="200">200</option>
-                    <option value="300">300</option>
-                    <option value="400">400</option>
-                    <option value="500" selected>500</option>
-                    <option value="600">600</option>
-                    <option value="700">700</option>
-                    <option value="800">800</option>
-                    <option value="900">900</option>
-                    <option value="1000">1000</option>
+                  <select id="widthSelect" class="widthSelectClass p-2 border-2 border-white bg-black">
+                    <option value=100>100</option>
+                    <option value=200>200</option>
+                    <option value=300>300</option>
+                    <option value=400>400</option>
+                    <option value=500 selected>500</option>
+                    <option value=600>600</option>
+                    <option value=700>700</option>
+                    <option value=800>800</option>
+                    <option value=900>900</option>
+                    <option value=1000>1000</option>
                   </select>
-                  <p id="" class="">500</p>
+                  <p id="widthText" class="widthTextClass">500</p>
               </div>
               <div class="flex justify-between">
                   <p class="mr-4">Largeur:</p>
-                  <select id="" class=" p-2 border-2 border-white bg-black">
-                    <option value="100">100</option>
-                    <option value="200">200</option>
-                    <option value="300">300</option>
-                    <option value="400" selected>400</option>
-                    <option value="500">500</option>
-                    <option value="600">600</option>
-                    <option value="700">700</option>
-                    <option value="800">800</option>
-                    <option value="900">900</option>
-                    <option value="1000">1000</option>
+                  <select id="heightSelect" class="heightSelectClass p-2 border-2 border-white bg-black">
+                    <option value=100>100</option>
+                    <option value=200>200</option>
+                    <option value=300>300</option>
+                    <option value=400 selected>400</option>
+                    <option value=500>500</option>
+                    <option value=600>600</option>
+                    <option value=700>700</option>
+                    <option value=800>800</option>
+                    <option value=900>900</option>
+                    <option value=1000>1000</option>
                   </select>
-                  <p id="" class="">400</p>
+                  <p id="heightText" class="heightTextClass">400</p>
               </div>
               <div class="flex justify-between">
                 <p class="mr-4">Type d'image:</p>
-                <select id="" class=" p-2 border-2 border-white bg-black">
+                <select id="categorySelect" class="categorySelectClass p-2 border-2 border-white bg-black">
                   <option value="">Tous</option>
                   <option value="nature">Nature</option>
                   <option value="city">Ville</option>
@@ -155,22 +155,22 @@
                   <option value="abstract">Art abstrait</option>
                   <option value="wildlife">Vie sauvage</option>
                 </select>
-                <p id="" class="">Tous</p>
+                <p id="categoryText" class="categoryTextClass">Tous</p>
               </div>
             </div>
-            <button id="fetchImageButton" class="m-2 p-2 border-2 text-white border-white bg-black  hover:bg-white hover:border-black hover:text-black">Fetch Image</button>
+            <button id="fetchImageButton" class="fetchImageButtonClass m-2 p-2 border-2 text-white border-white bg-black  hover:bg-white hover:border-black hover:text-black">Fetch Image</button>
             
           </div>
         </div>
       </div>
-      
+
       <div class="buttonStartGame flex justify-center items-center">
         <button id="startGame" class="m-2 p-2 border-2 text-white border-white bg-black  hover:bg-white hover:border-black hover:text-black">Start Game</button>
       </div>
     </div>
 
     <div class="game hidden flex-col justify-center items-center">
-      <h2 class="text-white text-center text-[3rem] m-4 p-4 bg-[#3100D3]">A toi de jouer!</h2>
+      <h2 class="text-white text-center text-[2rem] m-4 p-4 bg-[#3100D3]">A toi de jouer!</h2>
       <div class="flex bg-[#3100D3] border-2 border-[#33FFD3] text-white">
         <p id="round" class="text-[1.5rem] font-bold p-2">Manche: 1</p>
         <p id="timer" class="text-[1.5rem] font-bold p-2">Timer: 60</p>

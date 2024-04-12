@@ -65,8 +65,10 @@ io.on('connection', (socket) => {
     io.to(roomID).emit("roomLeaved", namePlayerLeaved)
   })
 
-  socket.on('sendPlayersInRoom', (allclientsInRoom, roomID, timerDuration, numberOfPlayerRoom, currentPrecision, currentTolerance) => {
-    io.to(roomID).emit("sendedPlayersInRoom", allclientsInRoom, timerDuration, numberOfPlayerRoom, currentPrecision, currentTolerance)
+  socket.on('sendPlayersInRoom', (allclientsInRoom, roomID, 
+    timerDuration, numberOfPlayerRoom, currentPrecision, currentTolerance, currentWidth, currentHeight, currentCategory) => {
+    io.to(roomID).emit("sendedPlayersInRoom", allclientsInRoom, timerDuration, 
+    numberOfPlayerRoom, currentPrecision, currentTolerance, currentWidth, currentHeight, currentCategory)
   });
 
   socket.on("numberOfPlayerChange", (numberOfPlayerRoom) => {
@@ -87,6 +89,21 @@ io.on('connection', (socket) => {
   socket.on("toleranceChange", (toleranceChanged) => {
     console.log("toleranceChanged: ", toleranceChanged)
     io.to(socket.id).emit("toleranceChanged", toleranceChanged);
+  })
+
+  socket.on("widthChange", (widthChanged) => {
+    console.log("widthChanged: ", widthChanged)
+    io.to(socket.id).emit("widthChanged", widthChanged);
+  })
+
+  socket.on("heightChange", (heightChanged) => {
+    console.log("heightChanged: ", heightChanged)
+    io.to(socket.id).emit("heightChanged", heightChanged);
+  })
+
+  socket.on("categoryChange", (categoryChanged) => {
+    console.log("categoryChanged: ", categoryChanged)
+    io.to(socket.id).emit("categoryChanged", categoryChanged);
   })
 
   socket.on("startGame", (imageURL) => {

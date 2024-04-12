@@ -3,10 +3,12 @@ const createRoom = document.getElementById("createRoom")
 const joinRoom = document.getElementById("joinRoom")
 const roomId = document.getElementById('roomId')
 const nameRoomId = document.getElementById('nameRoomId')
-const copyButton = document.getElementById('copyID');
-const errorCopyID = document.getElementById('errorCopyID');
+const copyButton = document.getElementById('copyID')
+const errorCopyID = document.getElementById('errorCopyID')
+const leaveRoom = document.getElementById("leaveRoom")
 const namePlayer = document.getElementById('namePlayer')
 const player = document.getElementById("player")
+
 const numberOfPlayer = document.getElementById("numberOfPlayer")
 const numberOfPlayerText = document.getElementById("numberOfPlayerText")
 const timerSelect = document.getElementById("timerSelect")
@@ -15,9 +17,16 @@ const precisionSelect = document.getElementById("precisionSelect")
 const precisionText = document.getElementById("precisionText")
 const toleranceSelect = document.getElementById("toleranceSelect")
 const toleranceText = document.getElementById("toleranceText")
-const leaveRoom = document.getElementById("leaveRoom")
+const widthSelect = document.getElementById("widthSelect")
+const widthText = document.getElementById("widthText")
+const heightSelect = document.getElementById("heightSelect")
+const heightText = document.getElementById("heightText")
+const categorySelect = document.getElementById("categorySelect")
+const categoryText = document.getElementById("categoryText")
+
 const fetchImageButton = document.getElementById("fetchImageButton")
 const startGame = document.getElementById("startGame")
+
 const timer = document.getElementById("timer")
 const samePixelTextPlayer1 = document.getElementById("samePixelTextPlayer1")
 const samePixelTextPlayer2 = document.getElementById("samePixelTextPlayer2")
@@ -56,7 +65,15 @@ const precisionSelectClass = document.querySelector('.precisionSelectClass');
 const precisionTextClass = document.querySelector('.precisionTextClass');
 const toleranceSelectClass = document.querySelector('.toleranceSelectClass');
 const toleranceTextClass = document.querySelector('.toleranceTextClass');
+const widthSelectClass = document.querySelector('.widthSelectClass');
+const widthTextClass = document.querySelector('.widthTextClass');
+const heightSelectClass = document.querySelector(".heightSelectClass");
+const heightTextClass = document.querySelector(".heightTextClass");
+const categorySelectClass = document.querySelector(".categorySelectClass");
+const categoryTextClass = document.querySelector(".categoryTextClass");
+const fetchImageButtonClass = document.querySelector(".fetchImageButtonClass")
 const buttonStartGame = document.querySelector('.buttonStartGame');
+
 const game = document.querySelector('.game');
 const resultPlayer1Class = document.querySelector(".resultPlayer1Class")
 const resultPlayer2Class = document.querySelector(".resultPlayer2Class")
@@ -143,8 +160,11 @@ const resetVariables = () => {
     loadCanvas6 = false
     loadCanvas7 = false
     loadCanvas8 = false
-    tolerance = 50;
+    tolerance = 50
     precision = 2
+    category = ''
+    width = 500
+    height = 400
 
     player.innerHTML = ''
     numberOfPlayer.value = 2
@@ -155,6 +175,20 @@ const resetVariables = () => {
     precisionText.value = 2
     toleranceSelect.value = 50
     toleranceText.value = 50
+    widthSelect.value = 500
+    widthText.value = 500
+    heightSelect.value = 400
+    heightText.value = 400
+    categorySelect.value = ""
+    categoryText.value = "Tous"
+    fetchImageButton.disabled = false
+    widthSelectClass.classList.remove("text-gray-500")
+    widthSelect.disabled = false
+    heightSelectClass.classList.remove("text-gray-500")
+    heightSelect.disabled = false
+    categorySelectClass.classList.remove("text-gray-500")
+    categorySelect.disabled = false
+
     samePixelTextPlayer1.textContent = 'Pourcentage de pixels identiques: 0%'
     samePixelTextPlayer2.textContent = 'Pourcentage de pixels identiques: 0%'
     samePixelTextPlayer3.textContent = 'Pourcentage de pixels identiques: 0%'
@@ -178,15 +212,20 @@ const resetVariables = () => {
 ////Action pour l'host seulement
 
 fetchImageButton.addEventListener("click", async () => {
-    await fetchImage()
-    startGame.disabled = false
     fetchImageButton.disabled = true
+    await fetchImage()
+    widthSelect.disabled = true
+    widthSelectClass.classList.add("text-gray-500")
+    heightSelect.disabled = true
+    heightSelectClass.classList.add("text-gray-500")
+    categorySelect.disabled = true
+    categorySelectClass.classList.add("text-gray-500")
+    makingVisibleClass(buttonStartGame)
 })
 
 //// Envoyer les actions au serveur
 // Créer une nouvelle salle de jeu
-createRoom.addEventListener("click", async () => {
-    startGame.disabled = true
+createRoom.addEventListener("click", () => {
     currentNamePlayer = namePlayer.value
     socket.emit('createRoom');
 })
@@ -215,8 +254,7 @@ leaveRoom.addEventListener("click", () => {
 startGame.addEventListener("click", () => {
     if(allclientsInRoom.length == numberOfPlayerRoom){
         imageDataURL = canvasImageFetch.toDataURL()
-        console.log("imageDataURL: ", imageDataURL)
-        
+
         socket.emit('startGame', imageDataURL);
     }
 })
@@ -225,6 +263,7 @@ startGame.addEventListener("click", () => {
 socket.on('roomCreated', (roomID) => {
     makingInvisibleClass(menu)
     makingVisibleClass(roomMenu)
+    makingInvisibleClass(buttonStartGame)
 
     numberOfPlayerTextClass.classList.add("hidden")
     numberOfPlayerClass.classList.remove("hidden")
@@ -234,6 +273,12 @@ socket.on('roomCreated', (roomID) => {
     precisionSelectClass.classList.remove("hidden")
     toleranceTextClass.classList.add("hidden")
     toleranceSelectClass.classList.remove("hidden")
+    widthTextClass.classList.add("hidden")
+    widthSelectClass.classList.remove("hidden")
+    heightTextClass.classList.add("hidden")
+    heightSelectClass.classList.remove("hidden")
+    categoryTextClass.classList.add("hidden")
+    categorySelectClass.classList.remove("hidden")
 
     currentRoomID = roomID
     nameRoomId.textContent = roomID
@@ -251,7 +296,8 @@ socket.on('roomJoined', (clientsInRoom, namePlayerJoin) => {
     if(currentNamePlayer != namePlayerJoin){
         allclientsInRoom.push(namePlayerJoin)
         
-        socket.emit('sendPlayersInRoom', allclientsInRoom, clientsInRoom[0], timerDuration, numberOfPlayerRoom, precision, tolerance);
+        socket.emit('sendPlayersInRoom', allclientsInRoom, clientsInRoom[0], 
+        timerDuration, numberOfPlayerRoom, precision, tolerance, width, height, category);
     }
     else{
         currentRoomID = clientsInRoom[0]
@@ -267,6 +313,14 @@ socket.on('roomJoined', (clientsInRoom, namePlayerJoin) => {
         precisionTextClass.classList.remove("hidden")
         toleranceSelectClass.classList.add("hidden")
         toleranceTextClass.classList.remove("hidden")
+        widthSelectClass.classList.add("hidden")
+        widthTextClass.classList.remove("hidden")
+        heightSelectClass.classList.add("hidden")
+        heightTextClass.classList.remove("hidden")
+        categorySelectClass.classList.add("hidden")
+        categoryTextClass.classList.remove("hidden")
+
+        fetchImageButtonClass.classList.add("hidden")
     }
 
     console.log('Room joined:', clientsInRoom[0]);
@@ -285,7 +339,8 @@ socket.on("roomLeaved", (namePlayerLeaved) => {
     }
 })
 
-socket.on("sendedPlayersInRoom", (allclientsInRoomSended, currentTimer, numberOfPlayerRoomSended, currentPrecision, currentTolerance) => {
+socket.on("sendedPlayersInRoom", (allclientsInRoomSended, currentTimer,
+     numberOfPlayerRoomSended, currentPrecision, currentTolerance, currentWidth, currentHeight, currentCategory) => {
     numberOfPlayerRoom = numberOfPlayerRoomSended
     numberOfPlayerText.textContent = numberOfPlayerRoomSended
     timerDuration = currentTimer
@@ -294,6 +349,29 @@ socket.on("sendedPlayersInRoom", (allclientsInRoomSended, currentTimer, numberOf
     precisionText.textContent = currentPrecision
     tolerance = currentTolerance
     toleranceText.textContent = currentTolerance
+    width = currentWidth
+    widthText.textContent = currentWidth
+    height = currentHeight
+    heightText.textContent = currentHeight
+
+    category = currentCategory
+    if(currentCategory == ""){
+        categoryText.textContent = "Tous"
+    }else if(currentCategory == "nature"){
+        categoryText.textContent = "Nature"
+    }else if(currentCategory == "city"){
+        categoryText.textContent = "Ville"
+    }else if(currentCategory == "technology"){
+        categoryText.textContent = "Technologie"
+    }else if(currentCategory == "food"){
+        categoryText.textContent = "Nourriture"
+    }else if(currentCategory == "still_life"){
+        categoryText.textContent = "Nature morte"
+    }else if(currentCategory == "abstract"){
+        categoryText.textContent = "Art abstrait"
+    }else if(currentCategory == "wildlife"){
+        categoryText.textContent = "Vie sauvage"
+    }
 
     player.innerHTML = ''
     allclientsInRoom = allclientsInRoomSended
@@ -323,6 +401,59 @@ socket.on("precisionChanged", (precisionChanged) => {
 socket.on("toleranceChanged", (toleranceChanged) => {
     tolerance = toleranceChanged
     toleranceText.textContent = toleranceChanged
+})
+
+socket.on("widthChanged", (widthChanged) => {
+    width = widthChanged
+    widthText.textContent = widthChanged
+    canvas.width = widthChanged
+    canvasImageFetch.width = widthChanged
+    canvasImageFetchResult.width = widthChanged
+    canvasPlayer1.width = widthChanged
+    canvasPlayer2.width = widthChanged
+    canvasPlayer3.width = widthChanged
+    canvasPlayer4.width = widthChanged
+    canvasPlayer5.width = widthChanged
+    canvasPlayer6.width = widthChanged
+    canvasPlayer7.width = widthChanged
+    canvasPlayer8.width = widthChanged
+})
+
+socket.on("heightChanged", (heightChanged) => {
+    height = heightChanged
+    heightText.textContent = heightChanged
+    canvas.height = heightChanged
+    canvasImageFetch.height = heightChanged
+    canvasImageFetchResult.height = heightChanged
+    canvasPlayer1.height = heightChanged
+    canvasPlayer2.height = heightChanged
+    canvasPlayer3.height = heightChanged
+    canvasPlayer4.height = heightChanged
+    canvasPlayer5.height = heightChanged
+    canvasPlayer6.height = heightChanged
+    canvasPlayer7.height = heightChanged
+    canvasPlayer8.height = heightChanged
+})
+
+socket.on("categoryChanged", (categoryChanged) => {
+    category = categoryChanged
+    if(categoryChanged == ""){
+        categoryText.textContent = "Tous"
+    }else if(categoryChanged == "nature"){
+        categoryText.textContent = "Nature"
+    }else if(categoryChanged == "city"){
+        categoryText.textContent = "Ville"
+    }else if(categoryChanged == "technology"){
+        categoryText.textContent = "Technologie"
+    }else if(categoryChanged == "food"){
+        categoryText.textContent = "Nourriture"
+    }else if(categoryChanged == "still_life"){
+        categoryText.textContent = "Nature morte"
+    }else if(categoryChanged == "abstract"){
+        categoryText.textContent = "Art abstrait"
+    }else if(categoryChanged == "wildlife"){
+        categoryText.textContent = "Vie sauvage"
+    }
 })
 
 socket.on("gameStarted", (imageURL) => {
@@ -446,6 +577,7 @@ copyButton.addEventListener('click', () => {
     });
 })
 
+////Game
 // Événement pour définir le nombre de joueurs
 numberOfPlayer.addEventListener("change", () => {
     numberOfPlayerRoom = numberOfPlayer.value
@@ -461,18 +593,40 @@ timerSelect.addEventListener("change", () => {
     socket.emit('timerChange', timerDuration);
 })
 
-// Événement pour définir le timer
+// Événement pour définir la précision
 precisionSelect.addEventListener("change", () => {
     precision = precisionSelect.value
 
     socket.emit('precisionChange', precision);
 })
 
-// Événement pour définir le timer
+// Événement pour définir la tolérance
 toleranceSelect.addEventListener("change", () => {
     tolerance = toleranceSelect.value
 
     socket.emit('toleranceChange', tolerance);
+})
+
+////Canvas
+// Événement pour définir la longueur
+widthSelect.addEventListener("change", () => {
+    width = widthSelect.value
+
+    socket.emit('widthChange', width);
+})
+
+// Événement pour définir la largeur
+heightSelect.addEventListener("change", () => {
+    height = heightSelect.value
+
+    socket.emit('heightChange', height);
+})
+
+// Événement pour définir la categorie
+categorySelect.addEventListener("change", () => {
+    category = categorySelect.value
+
+    socket.emit('categoryChange', category);
 })
 
 //////Div resultat final

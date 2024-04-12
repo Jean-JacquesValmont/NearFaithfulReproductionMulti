@@ -214,6 +214,7 @@ const resetVariables = () => {
 fetchImageButton.addEventListener("click", async () => {
     fetchImageButton.disabled = true
     await fetchImage()
+    fetchImageButtonClass.classList.add("text-gray-500")
     widthSelect.disabled = true
     widthSelectClass.classList.add("text-gray-500")
     heightSelect.disabled = true
@@ -255,7 +256,7 @@ startGame.addEventListener("click", () => {
     if(allclientsInRoom.length == numberOfPlayerRoom){
         imageDataURL = canvasImageFetch.toDataURL()
 
-        socket.emit('startGame', imageDataURL);
+        socket.emit('startGame', imageDataURL, width, height);
     }
 })
     
@@ -349,11 +350,11 @@ socket.on("sendedPlayersInRoom", (allclientsInRoomSended, currentTimer,
     precisionText.textContent = currentPrecision
     tolerance = currentTolerance
     toleranceText.textContent = currentTolerance
+
     width = currentWidth
     widthText.textContent = currentWidth
     height = currentHeight
     heightText.textContent = currentHeight
-
     category = currentCategory
     if(currentCategory == ""){
         categoryText.textContent = "Tous"
@@ -456,9 +457,36 @@ socket.on("categoryChanged", (categoryChanged) => {
     }
 })
 
-socket.on("gameStarted", (imageURL) => {
+socket.on("gameStarted", (imageURL, widthForGame, heightForGame) => {
     convertURLToImage(imageURL, contextImageFetch)
     convertURLToImage(imageURL, contextImageFetchResult)
+
+    //Je suis obliger de modifier la taille du canvas des invités ici et pas au moment de sendedPlayersInRoom car cela
+    //me faisait disparaitre mon image fetcher du canvas et le remetter blanc. Cela envoyer donc une image blanche aux invités.
+    canvas.width = widthForGame
+    canvasImageFetch.width = widthForGame
+    canvasImageFetchResult.width = widthForGame
+    canvasPlayer1.width = widthForGame
+    canvasPlayer2.width = widthForGame
+    canvasPlayer3.width = widthForGame
+    canvasPlayer4.width = widthForGame
+    canvasPlayer5.width = widthForGame
+    canvasPlayer6.width = widthForGame
+    canvasPlayer7.width = widthForGame
+    canvasPlayer8.width = widthForGame
+
+    canvas.height = heightForGame
+    canvasImageFetch.height = heightForGame
+    canvasImageFetchResult.height = heightForGame
+    canvasPlayer1.height = heightForGame
+    canvasPlayer2.height = heightForGame
+    canvasPlayer3.height = heightForGame
+    canvasPlayer4.height = heightForGame
+    canvasPlayer5.height = heightForGame
+    canvasPlayer6.height = heightForGame
+    canvasPlayer7.height = heightForGame
+    canvasPlayer8.height = heightForGame
+
     makingInvisibleClass(roomMenu)
     makingVisibleClass(game)
 

@@ -41,6 +41,10 @@ let height = 400;
 
 // Fonction de dessin
 const draw = (e) => {
+    const rect = canvas.getBoundingClientRect(); // Obtenez les coordonnées du canvas par rapport à la fenêtre
+    const mouseX = e.pageX - rect.left - window.scrollX; // Ajoutez le défilement horizontal
+    const mouseY = e.pageY - rect.top - window.scrollY; // Ajoutez le défilement vertical
+
     if (!isDrawing) return;
 
     if (tool == "brush"){
@@ -50,20 +54,20 @@ const draw = (e) => {
         context.strokeStyle = brushColor; // Couleur du trait
 
         // Dessiner
-        context.lineTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+        context.lineTo(mouseX, mouseY);
         context.stroke();
         context.beginPath();
-        context.moveTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+        context.moveTo(mouseX, mouseY);
     }
     else if(tool == "line"){
         context.lineWidth = lineWidthSize ;
         context.lineCap = brushShape;
         context.strokeStyle = brushColor; // Couleur du trait
         
-        drawLine(startX, startY, e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+        drawLine(startX, startY, mouseX, mouseY);
     }
     else if(tool == "paintBucket"){
-        // paintBucket(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop, brushColor)
+        // paintBucket(mouseX, mouseY, brushColor)
         context.fillStyle = brushColor
         context.fillRect(0, 0, canvas.width, canvas.height)
 
@@ -74,10 +78,10 @@ const draw = (e) => {
         context.strokeStyle = '#FFFFFF';
 
         // Effacer avec la gomme
-        context.lineTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+        context.lineTo(mouseX, mouseY);
         context.stroke();
         context.beginPath();
-        context.moveTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+        context.moveTo(mouseX, mouseY);
     }
 }
 
@@ -98,8 +102,8 @@ canvas.addEventListener('mouseleave', () => {
 canvas.addEventListener('mousedown', (e) => {
     isDrawing = true;
     if (tool == "line") {
-        startX = e.clientX - canvas.offsetLeft;
-        startY = e.clientY - canvas.offsetTop;
+        startX = e.pageX - canvas.offsetLeft;
+        startY = e.pageY - canvas.offsetTop;
     }
     draw(e);
 });

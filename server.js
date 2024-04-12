@@ -106,8 +106,8 @@ io.on('connection', (socket) => {
     io.to(socket.id).emit("categoryChanged", categoryChanged);
   })
 
-  socket.on("startGame", (imageURL) => {
-    io.to(socket.id).emit("gameStarted", imageURL);
+  socket.on("startGame", (imageURL, widthForGame, heightForGame) => {
+    io.to(socket.id).emit("gameStarted", imageURL, widthForGame, heightForGame);
   });
 
   socket.on("endOfTimer", (URL, roomId) => {

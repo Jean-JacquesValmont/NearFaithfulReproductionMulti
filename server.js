@@ -65,10 +65,10 @@ io.on('connection', (socket) => {
     io.to(roomID).emit("roomLeaved", namePlayerLeaved)
   })
 
-  socket.on('sendPlayersInRoom', (allclientsInRoom, roomID, 
-    timerDuration, numberOfPlayerRoom, currentPrecision, currentTolerance, currentWidth, currentHeight, currentCategory) => {
-    io.to(roomID).emit("sendedPlayersInRoom", allclientsInRoom, timerDuration, 
-    numberOfPlayerRoom, currentPrecision, currentTolerance, currentWidth, currentHeight, currentCategory)
+  socket.on('sendPlayersInRoom', (allclientsInRoom, roomID, timerDuration, numberOfPlayerRoom, 
+    currentRound, currentPrecision, currentTolerance, currenvVictoryCondition, currentWidth, currentHeight, currentCategory) => {
+    io.to(roomID).emit("sendedPlayersInRoom", allclientsInRoom, timerDuration, numberOfPlayerRoom,
+     currentRound, currentPrecision, currentTolerance, currenvVictoryCondition, currentWidth, currentHeight, currentCategory)
   });
 
   socket.on("numberOfPlayerChange", (numberOfPlayerRoom) => {
@@ -81,6 +81,11 @@ io.on('connection', (socket) => {
     io.to(socket.id).emit("timerChanged", timerDuration);
   })
 
+  socket.on("roundChange", (roundChanged) => {
+    console.log("roundChanged: ", roundChanged)
+    io.to(socket.id).emit("roundChanged", roundChanged);
+  })
+
   socket.on("precisionChange", (precisionChanged) => {
     console.log("precisionChanged: ", precisionChanged)
     io.to(socket.id).emit("precisionChanged", precisionChanged);
@@ -89,6 +94,11 @@ io.on('connection', (socket) => {
   socket.on("toleranceChange", (toleranceChanged) => {
     console.log("toleranceChanged: ", toleranceChanged)
     io.to(socket.id).emit("toleranceChanged", toleranceChanged);
+  })
+
+  socket.on("victoryConditionChange", (victoryConditionChanged) => {
+    console.log("victoryConditionChanged: ", victoryConditionChanged)
+    io.to(socket.id).emit("victoryConditionChanged", victoryConditionChanged);
   })
 
   socket.on("widthChange", (widthChanged) => {

@@ -81,6 +81,17 @@
                 <p id="timerText" class="timerTextClass">60</p>
               </div>
               <div class="flex justify-between">
+                <p class="mr-4">Nombre de manche:</p>
+                <select id="roundSelect" class="roundSelectClass p-2 border-2 border-white bg-black">
+                  <option id="optionNumberofRoundOne" value=1>1</option>
+                  <option value=2>2</option>
+                  <option value=3>3</option>
+                  <option value=4>4</option>
+                  <option value=5>5</option>
+                </select>
+                <p id="roundText" class="roundTextClass">1</p>
+              </div>
+              <div class="flex justify-between">
                 <p class="mr-4">Précision:</p>
                 <select id="precisionSelect" class="precisionSelectClass p-2 border-2 border-white bg-black">
                   <option value="0">0</option>
@@ -106,6 +117,14 @@
                   <option value="80">80</option>
                 </select>
                 <p id="toleranceText" class="toleranceTextClass">50</p>
+              </div>
+              <div class="flex justify-between">
+                <p class="mr-4">Condition de victoire:</p>
+                <select id="victoryConditionSelect" class="victoryConditionSelectClass p-2 border-2 border-white bg-black">
+                  <option value="hight">Le plus haut pourcentage</option>
+                  <option value="average">Moyenne des pourcentages</option>
+                </select>
+                <p id="victoryConditionText" class="victoryConditionTextClass">1</p>
               </div>
             </div>
 

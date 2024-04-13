@@ -13,16 +13,22 @@ const numberOfPlayer = document.getElementById("numberOfPlayer")
 const numberOfPlayerText = document.getElementById("numberOfPlayerText")
 const timerSelect = document.getElementById("timerSelect")
 const timerText = document.getElementById("timerText")
+const roundSelect = document.getElementById("roundSelect")
+const roundText = document.getElementById("roundText")
 const precisionSelect = document.getElementById("precisionSelect")
 const precisionText = document.getElementById("precisionText")
 const toleranceSelect = document.getElementById("toleranceSelect")
 const toleranceText = document.getElementById("toleranceText")
+const victoryConditionSelect = document.getElementById("victoryConditionSelect")
+const victoryConditionText = document.getElementById("victoryConditionText")
 const widthSelect = document.getElementById("widthSelect")
 const widthText = document.getElementById("widthText")
 const heightSelect = document.getElementById("heightSelect")
 const heightText = document.getElementById("heightText")
 const categorySelect = document.getElementById("categorySelect")
 const categoryText = document.getElementById("categoryText")
+
+const optionNumberofRoundOne = document.getElementById("optionNumberofRoundOne")
 
 const fetchImageButton = document.getElementById("fetchImageButton")
 const startGame = document.getElementById("startGame")
@@ -61,10 +67,14 @@ const numberOfPlayerClass = document.querySelector('.numberOfPlayerClass');
 const numberOfPlayerTextClass = document.querySelector('.numberOfPlayerTextClass');
 const timerSelectClass = document.querySelector('.timerSelectClass');
 const timerTextClass = document.querySelector('.timerTextClass');
+const roundSelectClass = document.querySelector('.roundSelectClass');
+const roundTextClass = document.querySelector('.roundTextClass');
 const precisionSelectClass = document.querySelector('.precisionSelectClass');
 const precisionTextClass = document.querySelector('.precisionTextClass');
 const toleranceSelectClass = document.querySelector('.toleranceSelectClass');
 const toleranceTextClass = document.querySelector('.toleranceTextClass');
+const victoryConditionSelectClass = document.querySelector('.victoryConditionSelectClass');
+const victoryConditionTextClass = document.querySelector('.victoryConditionTextClass');
 const widthSelectClass = document.querySelector('.widthSelectClass');
 const widthTextClass = document.querySelector('.widthTextClass');
 const heightSelectClass = document.querySelector(".heightSelectClass");
@@ -108,7 +118,7 @@ const contextPlayer7 = canvasPlayer7.getContext('2d')
 const canvasPlayer8 = document.getElementById('canvasPlayer8');
 const contextPlayer8 = canvasPlayer8.getContext('2d')
 
-//Variable
+//Variables
 let imageDataURL
 let currentNamePlayer = namePlayer.value
 let allclientsInRoom = []
@@ -118,6 +128,11 @@ let timerDuration = 60
 let timerInterval
 let timerDurationFinalResult = 3
 let timerFinalResult
+let round = 1
+let tolerance = 50;
+let precision = 2
+let victoryCondition = "hight"
+
 let loadCanvas1 = false
 let loadCanvas2 = false
 let loadCanvas3 = false
@@ -126,10 +141,6 @@ let loadCanvas5 = false
 let loadCanvas6 = false
 let loadCanvas7 = false
 let loadCanvas8 = false
-
-let tolerance = 50;
-let precision = 2
-
 
 const resetVariables = () => {
     context.clearRect(0, 0, canvas.width, canvas.height);
@@ -152,6 +163,13 @@ const resetVariables = () => {
     timerInterval
     timerDurationFinalResult = 3
     timerFinalResult
+    round = 1
+    tolerance = 50
+    precision = 2
+    victoryCondition = "hight"
+    category = ''
+    width = 500
+    height = 400
     loadCanvas1 = false
     loadCanvas2 = false
     loadCanvas3 = false
@@ -160,27 +178,27 @@ const resetVariables = () => {
     loadCanvas6 = false
     loadCanvas7 = false
     loadCanvas8 = false
-    tolerance = 50
-    precision = 2
-    category = ''
-    width = 500
-    height = 400
 
     player.innerHTML = ''
     numberOfPlayer.value = 2
     numberOfPlayerText.value = 2
     timerSelect.value = 60
     timerText.value = 60
+    roundSelect.value = 1
+    roundText.value = 1
     precisionSelect.value = 2
     precisionText.value = 2
     toleranceSelect.value = 50
     toleranceText.value = 50
+    victoryConditionSelect.value = "hight"
+    victoryConditionText.value = "Le plus haut pourcentage"
     widthSelect.value = 500
     widthText.value = 500
     heightSelect.value = 400
     heightText.value = 400
     categorySelect.value = ""
     categoryText.value = "Tous"
+
     fetchImageButton.disabled = false
     widthSelectClass.classList.remove("text-gray-500")
     widthSelect.disabled = false
@@ -270,10 +288,14 @@ socket.on('roomCreated', (roomID) => {
     numberOfPlayerClass.classList.remove("hidden")
     timerTextClass.classList.add("hidden")
     timerSelectClass.classList.remove("hidden")
+    roundTextClass.classList.add("hidden")
+    roundSelectClass.classList.remove("hidden")
     precisionTextClass.classList.add("hidden")
     precisionSelectClass.classList.remove("hidden")
     toleranceTextClass.classList.add("hidden")
     toleranceSelectClass.classList.remove("hidden")
+    victoryConditionTextClass.classList.add("hidden")
+    victoryConditionSelectClass.classList.remove("hidden")
     widthTextClass.classList.add("hidden")
     widthSelectClass.classList.remove("hidden")
     heightTextClass.classList.add("hidden")
@@ -297,8 +319,8 @@ socket.on('roomJoined', (clientsInRoom, namePlayerJoin) => {
     if(currentNamePlayer != namePlayerJoin){
         allclientsInRoom.push(namePlayerJoin)
         
-        socket.emit('sendPlayersInRoom', allclientsInRoom, clientsInRoom[0], 
-        timerDuration, numberOfPlayerRoom, precision, tolerance, width, height, category);
+        socket.emit('sendPlayersInRoom', allclientsInRoom, clientsInRoom[0], timerDuration, numberOfPlayerRoom, 
+        round, precision, tolerance, victoryCondition, width, height, category);
     }
     else{
         currentRoomID = clientsInRoom[0]
@@ -310,10 +332,14 @@ socket.on('roomJoined', (clientsInRoom, namePlayerJoin) => {
         numberOfPlayerTextClass.classList.remove("hidden")
         timerSelectClass.classList.add("hidden")
         timerTextClass.classList.remove("hidden")
+        roundSelectClass.classList.add("hidden")
+        roundTextClass.classList.remove("hidden")
         precisionSelectClass.classList.add("hidden")
         precisionTextClass.classList.remove("hidden")
         toleranceSelectClass.classList.add("hidden")
         toleranceTextClass.classList.remove("hidden")
+        victoryConditionSelectClass.classList.add("hidden")
+        victoryConditionTextClass.classList.remove("hidden")
         widthSelectClass.classList.add("hidden")
         widthTextClass.classList.remove("hidden")
         heightSelectClass.classList.add("hidden")
@@ -340,21 +366,31 @@ socket.on("roomLeaved", (namePlayerLeaved) => {
     }
 })
 
-socket.on("sendedPlayersInRoom", (allclientsInRoomSended, currentTimer,
-     numberOfPlayerRoomSended, currentPrecision, currentTolerance, currentWidth, currentHeight, currentCategory) => {
+socket.on("sendedPlayersInRoom", (allclientsInRoomSended, currentTimer, numberOfPlayerRoomSended,
+     currentRound, currentPrecision, currentTolerance, currenvVictoryCondition, currentWidth, currentHeight, currentCategory) => {
     numberOfPlayerRoom = numberOfPlayerRoomSended
     numberOfPlayerText.textContent = numberOfPlayerRoomSended
     timerDuration = currentTimer
     timerText.textContent = currentTimer
+    round = currentRound
+    roundText.textContent = currentRound
     precision = currentPrecision
     precisionText.textContent = currentPrecision
     tolerance = currentTolerance
     toleranceText.textContent = currentTolerance
 
+    victoryCondition = currenvVictoryCondition
+    if(currenvVictoryCondition == "hight"){
+        victoryConditionText.textContent = "Le plus haut pourcentage"
+    }else if(currenvVictoryCondition == "average"){
+        victoryConditionText.textContent = "Moyenne des pourcentages"
+    }
+
     width = currentWidth
     widthText.textContent = currentWidth
     height = currentHeight
     heightText.textContent = currentHeight
+
     category = currentCategory
     if(currentCategory == ""){
         categoryText.textContent = "Tous"
@@ -394,6 +430,11 @@ socket.on("timerChanged", (timerChanged) => {
     timerDuration = timerChanged
 })
 
+socket.on("roundChanged", (roundChanged) => {
+    round = roundChanged
+    roundText.textContent = roundChanged
+})
+
 socket.on("precisionChanged", (precisionChanged) => {
     precision = precisionChanged
     precisionText.textContent = precisionChanged
@@ -402,6 +443,23 @@ socket.on("precisionChanged", (precisionChanged) => {
 socket.on("toleranceChanged", (toleranceChanged) => {
     tolerance = toleranceChanged
     toleranceText.textContent = toleranceChanged
+})
+
+socket.on("victoryConditionChanged", (victoryConditionChanged) => {
+    victoryCondition = victoryConditionChanged
+    if(victoryConditionChanged == "hight"){
+        victoryConditionText.textContent = "Le plus haut pourcentage"
+        optionNumberofRoundOne.disabled = false
+        
+    }else if(victoryConditionChanged == "average"){
+        victoryConditionText.textContent = "Moyenne des pourcentages"
+        optionNumberofRoundOne.disabled = true
+        if(round == 1){
+            roundSelect.value = 2
+            roundText.textContent = 2
+            round = 2
+        } 
+    }
 })
 
 socket.on("widthChanged", (widthChanged) => {
@@ -621,6 +679,13 @@ timerSelect.addEventListener("change", () => {
     socket.emit('timerChange', timerDuration);
 })
 
+// Événement pour définir le nombre de manche
+roundSelect.addEventListener("change", () => {
+    round = roundSelect.value
+
+    socket.emit('roundChange', round);
+})
+
 // Événement pour définir la précision
 precisionSelect.addEventListener("change", () => {
     precision = precisionSelect.value
@@ -633,6 +698,13 @@ toleranceSelect.addEventListener("change", () => {
     tolerance = toleranceSelect.value
 
     socket.emit('toleranceChange', tolerance);
+})
+
+// Événement pour définir la condition de victoire
+victoryConditionSelect.addEventListener("change", () => {
+    victoryCondition = victoryConditionSelect.value
+
+    socket.emit('victoryConditionChange', victoryCondition);
 })
 
 ////Canvas

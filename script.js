@@ -34,14 +34,7 @@ const fetchImageButton = document.getElementById("fetchImageButton")
 const startGame = document.getElementById("startGame")
 
 const timer = document.getElementById("timer")
-const samePixelTextPlayer1 = document.getElementById("samePixelTextPlayer1")
-const samePixelTextPlayer2 = document.getElementById("samePixelTextPlayer2")
-const samePixelTextPlayer3 = document.getElementById("samePixelTextPlayer3")
-const samePixelTextPlayer4 = document.getElementById("samePixelTextPlayer4")
-const samePixelTextPlayer5 = document.getElementById("samePixelTextPlayer5")
-const samePixelTextPlayer6 = document.getElementById("samePixelTextPlayer6")
-const samePixelTextPlayer7 = document.getElementById("samePixelTextPlayer7")
-const samePixelTextPlayer8 = document.getElementById("samePixelTextPlayer8")
+const roundGame = document.getElementById("roundGame")
 const namePlayer1 = document.getElementById("namePlayer1")
 const namePlayer2 = document.getElementById("namePlayer2")
 const namePlayer3 = document.getElementById("namePlayer3")
@@ -50,6 +43,23 @@ const namePlayer5 = document.getElementById("namePlayer5")
 const namePlayer6 = document.getElementById("namePlayer6")
 const namePlayer7 = document.getElementById("namePlayer7")
 const namePlayer8 = document.getElementById("namePlayer8")
+const numberOfRoundWinPlayer1 = document.getElementById("numberOfRoundWinPlayer1")
+const numberOfRoundWinPlayer2 = document.getElementById("numberOfRoundWinPlayer2")
+const numberOfRoundWinPlayer3 = document.getElementById("numberOfRoundWinPlayer3")
+const numberOfRoundWinPlayer4 = document.getElementById("numberOfRoundWinPlayer4")
+const numberOfRoundWinPlayer5 = document.getElementById("numberOfRoundWinPlayer5")
+const numberOfRoundWinPlayer6 = document.getElementById("numberOfRoundWinPlayer6")
+const numberOfRoundWinPlayer7 = document.getElementById("numberOfRoundWinPlayer7")
+const numberOfRoundWinPlayer8 = document.getElementById("numberOfRoundWinPlayer8")
+
+const samePixelTextPlayer1 = document.getElementById("samePixelTextPlayer1")
+const samePixelTextPlayer2 = document.getElementById("samePixelTextPlayer2")
+const samePixelTextPlayer3 = document.getElementById("samePixelTextPlayer3")
+const samePixelTextPlayer4 = document.getElementById("samePixelTextPlayer4")
+const samePixelTextPlayer5 = document.getElementById("samePixelTextPlayer5")
+const samePixelTextPlayer6 = document.getElementById("samePixelTextPlayer6")
+const samePixelTextPlayer7 = document.getElementById("samePixelTextPlayer7")
+const samePixelTextPlayer8 = document.getElementById("samePixelTextPlayer8")
 const progressBarPlayer1 = document.getElementById("progressBarPlayer1")
 const progressBarPlayer2 = document.getElementById("progressBarPlayer2")
 const progressBarPlayer3 = document.getElementById("progressBarPlayer3")
@@ -59,6 +69,8 @@ const progressBarPlayer6 = document.getElementById("progressBarPlayer6")
 const progressBarPlayer7 = document.getElementById("progressBarPlayer7")
 const progressBarPlayer8 = document.getElementById("progressBarPlayer8")
 const winnerText = document.getElementById("winnerText")
+const fetchImageButtonRound = document.getElementById("fetchImageButtonRound")
+const nextRound = document.getElementById("nextRound")
 const returnMenu = document.getElementById('returnMenu')
 
 const menu = document.querySelector('.menu');
@@ -82,6 +94,7 @@ const heightTextClass = document.querySelector(".heightTextClass");
 const categorySelectClass = document.querySelector(".categorySelectClass");
 const categoryTextClass = document.querySelector(".categoryTextClass");
 const fetchImageButtonClass = document.querySelector(".fetchImageButtonClass")
+const nextRoundClass = document.querySelector(".nextRoundClass")
 const buttonStartGame = document.querySelector('.buttonStartGame');
 
 const game = document.querySelector('.game');
@@ -94,6 +107,8 @@ const resultPlayer6Class = document.querySelector(".resultPlayer6Class")
 const resultPlayer7Class = document.querySelector(".resultPlayer7Class")
 const resultPlayer8Class = document.querySelector(".resultPlayer8Class")
 const finalResult = document.querySelector('.finalResult')
+const fetchImageButtonRoundClass = document.querySelector(".fetchImageButtonRoundClass")
+const returnMenuClass = document.querySelector('.returnMenuClass')
 
 const canvas = document.getElementById('canvas');
 const context = canvas.getContext('2d');
@@ -132,6 +147,16 @@ let round = 1
 let tolerance = 50;
 let precision = 2
 let victoryCondition = "hight"
+let currentRound = 1
+
+let roundWinPlayer1 = 0
+let roundWinPlayer2 = 0
+let roundWinPlayer3 = 0
+let roundWinPlayer4 = 0
+let roundWinPlayer5 = 0
+let roundWinPlayer6 = 0
+let roundWinPlayer7 = 0
+let roundWinPlayer8 = 0
 
 let loadCanvas1 = false
 let loadCanvas2 = false
@@ -167,9 +192,19 @@ const resetVariables = () => {
     tolerance = 50
     precision = 2
     victoryCondition = "hight"
+    currentRound = 1
     category = ''
     width = 500
     height = 400
+
+    roundWinPlayer1 = 0
+    roundWinPlayer2 = 0
+    roundWinPlayer3 = 0
+    roundWinPlayer4 = 0
+    roundWinPlayer5 = 0
+    roundWinPlayer6 = 0
+    roundWinPlayer7 = 0
+    roundWinPlayer8 = 0
     loadCanvas1 = false
     loadCanvas2 = false
     loadCanvas3 = false
@@ -207,6 +242,7 @@ const resetVariables = () => {
     categorySelectClass.classList.remove("text-gray-500")
     categorySelect.disabled = false
 
+    roundGame.textContent = "Manche: 1"
     samePixelTextPlayer1.textContent = 'Pourcentage de pixels identiques: 0%'
     samePixelTextPlayer2.textContent = 'Pourcentage de pixels identiques: 0%'
     samePixelTextPlayer3.textContent = 'Pourcentage de pixels identiques: 0%'
@@ -223,6 +259,15 @@ const resetVariables = () => {
     namePlayer6.textContent = "Player 6"
     namePlayer7.textContent = "Player 7"
     namePlayer8.textContent = "Player 8"
+    numberOfRoundWinPlayer1.textContent = "Round win: " + roundWinPlayer1
+    numberOfRoundWinPlayer2.textContent = "Round win: " + roundWinPlayer2
+    numberOfRoundWinPlayer3.textContent = "Round win: " + roundWinPlayer3
+    numberOfRoundWinPlayer4.textContent = "Round win: " + roundWinPlayer4
+    numberOfRoundWinPlayer5.textContent = "Round win: " + roundWinPlayer5
+    numberOfRoundWinPlayer6.textContent = "Round win: " + roundWinPlayer6
+    numberOfRoundWinPlayer7.textContent = "Round win: " + roundWinPlayer7
+    numberOfRoundWinPlayer8.textContent = "Round win: " + roundWinPlayer8
+    fetchImageButtonRoundClass.classList.remove("hidden")
     winnerText.textContent = ""
     actions.length = 0
 }
@@ -348,6 +393,8 @@ socket.on('roomJoined', (clientsInRoom, namePlayerJoin) => {
         categoryTextClass.classList.remove("hidden")
 
         fetchImageButtonClass.classList.add("hidden")
+
+        fetchImageButtonRoundClass.classList.add("hidden")
     }
 
     console.log('Room joined:', clientsInRoom[0]);
@@ -563,7 +610,8 @@ socket.on("gameStarted", (imageURL, widthForGame, heightForGame) => {
     timerInterval = setInterval(updateTimerGame, 1000)
 })
 
-socket.on("elapsedTime", (imageDataURL, User) => {
+socket.on("elapsedTime", (imageDataURLPlayer, User) => {
+    convertURLToImage(imageDataURL, contextImageFetchResult)
     makingInvisibleClass(game)
     makingVisibleClass(finalResult)
     
@@ -604,35 +652,35 @@ socket.on("elapsedTime", (imageDataURL, User) => {
     }
 
     if(User == 0){
-        convertURLToImage(imageDataURL, contextPlayer1)
+        convertURLToImage(imageDataURLPlayer, contextPlayer1)
         loadCanvas1 = true
     }
     else if(User == 1) {
-        convertURLToImage(imageDataURL, contextPlayer2)
+        convertURLToImage(imageDataURLPlayer, contextPlayer2)
         loadCanvas2 = true
     }
     else if(User == 2) {
-        convertURLToImage(imageDataURL, contextPlayer3)
+        convertURLToImage(imageDataURLPlayer, contextPlayer3)
         loadCanvas3 = true
     }
     else if(User == 3) {
-        convertURLToImage(imageDataURL, contextPlayer4)
+        convertURLToImage(imageDataURLPlayer, contextPlayer4)
         loadCanvas4 = true
     }
     else if(User == 4) {
-        convertURLToImage(imageDataURL, contextPlayer5)
+        convertURLToImage(imageDataURLPlayer, contextPlayer5)
         loadCanvas5 = true
     }
     else if(User == 5) {
-        convertURLToImage(imageDataURL, contextPlayer6)
+        convertURLToImage(imageDataURLPlayer, contextPlayer6)
         loadCanvas6 = true
     }
     else if(User == 6) {
-        convertURLToImage(imageDataURL, contextPlayer7)
+        convertURLToImage(imageDataURLPlayer, contextPlayer7)
         loadCanvas7 = true
     }
     else if(User == 7) {
-        convertURLToImage(imageDataURL, contextPlayer8)
+        convertURLToImage(imageDataURLPlayer, contextPlayer8)
         loadCanvas8 = true
     }
 
@@ -648,6 +696,46 @@ socket.on("elapsedTime", (imageDataURL, User) => {
         timerFinalResult = setInterval(updateTimerResult, 1000)
     }
     
+})
+
+socket.on("nextRoundStart", (timerForNextRound, imageURL) => {
+    convertURLToImage(imageURL, contextImageFetch)
+    convertURLToImage(imageURL, contextImageFetchResult)
+
+    timerDuration = timerForNextRound
+    timerDurationFinalResult = 3
+    loadCanvas1 = false
+    loadCanvas2 = false
+    loadCanvas3 = false
+    loadCanvas4 = false
+    loadCanvas5 = false
+    loadCanvas6 = false
+    loadCanvas7 = false
+    loadCanvas8 = false
+
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    contextPlayer1.clearRect(0, 0, canvasPlayer1.width, canvasPlayer1.height);
+    contextPlayer2.clearRect(0, 0, canvasPlayer2.width, canvasPlayer2.height);
+    contextPlayer3.clearRect(0, 0, canvasPlayer3.width, canvasPlayer3.height);
+    contextPlayer4.clearRect(0, 0, canvasPlayer4.width, canvasPlayer4.height);
+    contextPlayer5.clearRect(0, 0, canvasPlayer5.width, canvasPlayer5.height);
+    contextPlayer6.clearRect(0, 0, canvasPlayer6.width, canvasPlayer6.height);
+    contextPlayer7.clearRect(0, 0, canvasPlayer7.width, canvasPlayer7.height);
+    contextPlayer8.clearRect(0, 0, canvasPlayer8.width, canvasPlayer8.height);
+    samePixelTextPlayer1.textContent = 'Pourcentage de pixels identiques: 0%'
+    samePixelTextPlayer2.textContent = 'Pourcentage de pixels identiques: 0%'
+    samePixelTextPlayer3.textContent = 'Pourcentage de pixels identiques: 0%'
+    samePixelTextPlayer4.textContent = 'Pourcentage de pixels identiques: 0%'
+    samePixelTextPlayer5.textContent = 'Pourcentage de pixels identiques: 0%'
+    samePixelTextPlayer6.textContent = 'Pourcentage de pixels identiques: 0%'
+    samePixelTextPlayer7.textContent = 'Pourcentage de pixels identiques: 0%'
+    samePixelTextPlayer8.textContent = 'Pourcentage de pixels identiques: 0%'
+
+    makingInvisibleClass(finalResult)
+    makingVisibleClass(game)
+    
+    // Démarrer le timer et lancer la fonction updateTimer toutes les secondes
+    timerInterval = setInterval(updateTimerGame, 1000)
 })
 
 ////// Option roomMenu
@@ -891,13 +979,65 @@ const compareWithPrecision = (precision, ...values) => {
         winnerText.textContent = "Égalité";
     } else {
         winnerText.textContent = allclientsInRoom[maxIndex1];
+        if(maxIndex1 == 0){
+            roundWinPlayer1 += 1
+            numberOfRoundWinPlayer1.textContent = "Round win: " + roundWinPlayer1
+        }else if(maxIndex1 == 1){
+            roundWinPlayer2 += 1
+            numberOfRoundWinPlayer2.textContent = "Round win: " + roundWinPlayer2
+        }else if(maxIndex1 == 2){
+            roundWinPlayer3 += 1
+            numberOfRoundWinPlayer3.textContent = "Round win: " + roundWinPlayer3
+        }else if(maxIndex1 == 3){
+            roundWinPlayer4 += 1
+            numberOfRoundWinPlayer4.textContent = "Round win: " + roundWinPlayer4
+        }else if(maxIndex1 == 4){
+            roundWinPlayer5 += 1
+            numberOfRoundWinPlayer5.textContent = "Round win: " + roundWinPlayer5
+        }else if(maxIndex1 == 5){
+            roundWinPlayer6 += 1
+            numberOfRoundWinPlayer6.textContent = "Round win: " + roundWinPlayer6
+        }else if(maxIndex1 == 6){
+            roundWinPlayer7 += 1
+            numberOfRoundWinPlayer7.textContent = "Round win: " + roundWinPlayer7
+        }else if(maxIndex1 == 7){
+            roundWinPlayer8 += 1
+            numberOfRoundWinPlayer8.textContent = "Round win: " + roundWinPlayer8
+        }
+    }
+
+    if(round == roundWinPlayer1 || round == roundWinPlayer2 || round == roundWinPlayer3 || round == roundWinPlayer4 
+    || round == roundWinPlayer5 || round == roundWinPlayer6 || round == roundWinPlayer7 || round == roundWinPlayer8){
+        fetchImageButtonRoundClass.classList.add("hidden")
+        returnMenuClass.classList.remove("hidden")
+    }else{
+        currentRound += 1 
+        roundGame.textContent = "Manche: " + currentRound
     }
 }
+
+fetchImageButtonRound.addEventListener("click", async () => {
+    fetchImageButtonRound.disabled = true
+    await fetchImage()
+    fetchImageButtonRoundClass.classList.add("hidden")
+    makingVisibleClass(nextRound)
+})
+
+nextRound.addEventListener("click", () => {
+    fetchImageButtonRound.disabled = false
+    fetchImageButtonRoundClass.classList.remove("hidden")
+    makingInvisibleClass(nextRound)
+    const timerForNextRound = timerSelect.value
+    imageDataURL = canvasImageFetch.toDataURL()
+
+    socket.emit("nextRound", timerForNextRound, imageDataURL)
+})
 
 returnMenu.addEventListener('click', () => {
     makingInvisibleClass(finalResult)
     makingVisibleClass(menu)
     makingVisibleClass(buttonStartGame)
+    returnMenuClass.classList.add("hidden")
 
     resetVariables()
 

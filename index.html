@@ -185,7 +185,7 @@
     <div class="game hidden flex-col justify-center items-center">
       <h2 class="text-white text-center text-[2rem] m-4 p-4 bg-[#3100D3]">A toi de jouer!</h2>
       <div class="flex bg-[#3100D3] border-2 border-[#33FFD3] text-white">
-        <p id="round" class="text-[1.5rem] font-bold p-2">Manche: 1</p>
+        <p id="roundGame" class="text-[1.5rem] font-bold p-2">Manche: 1</p>
         <p id="timer" class="text-[1.5rem] font-bold p-2">Timer: 60</p>
       </div>
       <div class="flex">
@@ -266,7 +266,10 @@
       <div class="flex flex-wrap justify-center items-center text-white">
 
         <div class="resultPlayer1Class flex flex-col justify-center items-center px-2 m-2 bg-[#3100D3]">
-          <p id="namePlayer1" class="text-2xl p-2">Player 1</p>
+          <div class="flex">
+            <p id="namePlayer1" class="text-2xl p-2">Player 1</p>
+            <p id="numberOfRoundWinPlayer1" class="text-2xl p-2">Round win: 0</p>
+          </div>
           <canvas id="canvasPlayer1" class="bg-white border-8 border-[#33FFD3]" width="500" height="400"></canvas>
           <div class="w-full bg-gray-200 rounded-full mt-2">
             <div id="progressBarPlayer1" class="h-4 bg-green-500 rounded-full"></div>
@@ -275,7 +278,10 @@
         </div>
 
         <div class="resultPlayer2Class flex flex-col justify-center items-center px-2 m-2 bg-[#3100D3]">
-          <p id="namePlayer2" class="text-2xl p-2">Player 2</p>
+          <div class="flex">
+            <p id="namePlayer2" class="text-2xl p-2">Player 2</p>
+            <p id="numberOfRoundWinPlayer2" class="text-2xl p-2">Round win: 0</p>
+          </div>
           <canvas id="canvasPlayer2" class="bg-white border-8 border-[#33FFD3]" width="500" height="400"></canvas>
           <div class="w-full bg-gray-200 rounded-full mt-2">
             <div id="progressBarPlayer2" class="h-4 bg-green-500 rounded-full"></div>
@@ -284,7 +290,10 @@
         </div>
 
         <div class="resultPlayer3Class flex flex-col justify-center items-center px-2 m-2 bg-[#3100D3]">
-          <p id="namePlayer3" class="text-2xl p-2">Player 3</p>
+          <div>
+            <p id="namePlayer3" class="text-2xl p-2">Player 3</p>
+            <p id="numberOfRoundWinPlayer3" class="text-2xl p-2">Round win: 0</p>
+          </div>
           <canvas id="canvasPlayer3" class="bg-white border-8 border-[#33FFD3]" width="500" height="400"></canvas>
           <div class="w-full bg-gray-200 rounded-full mt-2">
             <div id="progressBarPlayer3" class="h-4 bg-green-500 rounded-full"></div>
@@ -293,7 +302,10 @@
         </div>
 
         <div class="resultPlayer4Class flex flex-col justify-center items-center px-2 m-2 bg-[#3100D3]">
-          <p id="namePlayer4" class="text-2xl p-2">Player 4</p>
+          <div>
+            <p id="namePlayer4" class="text-2xl p-2">Player 4</p>
+            <p id="numberOfRoundWinPlayer4" class="text-2xl p-2">Round win: 0</p>
+          </div>
           <canvas id="canvasPlayer4" class="bg-white border-8 border-[#33FFD3]" width="500" height="400"></canvas>
           <div class="w-full bg-gray-200 rounded-full mt-2">
             <div id="progressBarPlayer4" class="h-4 bg-green-500 rounded-full"></div>
@@ -302,7 +314,10 @@
         </div>
 
         <div class="resultPlayer5Class flex flex-col justify-center items-center px-2 m-2 bg-[#3100D3]">
-          <p id="namePlayer5" class="text-2xl p-2">Player 5</p>
+          <div>
+            <p id="namePlayer5" class="text-2xl p-2">Player 5</p>
+            <p id="numberOfRoundWinPlayer5" class="text-2xl p-2">Round win: 0</p>
+          </div>
           <canvas id="canvasPlayer5" class="bg-white border-8 border-[#33FFD3]" width="500" height="400"></canvas>
           <div class="w-full bg-gray-200 rounded-full mt-2">
             <div id="progressBarPlayer5" class="h-4 bg-green-500 rounded-full"></div>
@@ -311,7 +326,10 @@
         </div>
 
         <div class="resultPlayer6Class flex flex-col justify-center items-center px-2 m-2 bg-[#3100D3]">
-          <p id="namePlayer6" class="text-2xl p-2">Player 6</p>
+          <div>
+            <p id="namePlayer6" class="text-2xl p-2">Player 6</p>
+            <p id="numberOfRoundWinPlayer6" class="text-2xl p-2">Round win: 0</p>
+          </div>
           <canvas id="canvasPlayer6" class="bg-white border-8 border-[#33FFD3]" width="500" height="400"></canvas>
           <div class="w-full bg-gray-200 rounded-full mt-2">
             <div id="progressBarPlayer6" class="h-4 bg-green-500 rounded-full"></div>
@@ -320,7 +338,10 @@
         </div>
 
         <div class="resultPlayer7Class flex flex-col justify-center items-center px-2 m-2 bg-[#3100D3]">
-          <p id="namePlayer7" class="text-2xl p-2">Player 7</p>
+          <div>
+            <p id="namePlayer7" class="text-2xl p-2">Player 7</p>
+            <p id="numberOfRoundWinPlayer7" class="text-2xl p-2">Round win: 0</p>
+          </div>
           <canvas id="canvasPlayer7" class="bg-white border-8 border-[#33FFD3]" width="500" height="400"></canvas>
           <div class="w-full bg-gray-200 rounded-full mt-2">
             <div id="progressBarPlayer7" class="h-4 bg-green-500 rounded-full"></div>
@@ -329,7 +350,10 @@
         </div>
 
         <div class="resultPlayer8Class flex flex-col justify-center items-center px-2 m-2 bg-[#3100D3]">
-          <p id="namePlayer8" class="text-2xl p-2">Player 8</p>
+          <div>
+            <p id="namePlayer8" class="text-2xl p-2">Player 8</p>
+            <p id="numberOfRoundWinPlayer8" class="text-2xl p-2">Round win: 0</p>
+          </div>
           <canvas id="canvasPlayer8" class="bg-white border-8 border-[#33FFD3]" width="500" height="400"></canvas>
           <div class="w-full bg-gray-200 rounded-full mt-2">
             <div id="progressBarPlayer8" class="h-4 bg-green-500 rounded-full"></div>
@@ -340,7 +364,9 @@
       </div>
       <p class="text-2xl font-bold p-2 text-white bg-[#3100D3]">Victoire</p>
       <p id="winnerText" class="text-2xl p-2 text-white bg-[#3100D3]"></p>
-      <button id="returnMenu" class="m-2 p-2 border-2 border-white bg-black text-white  hover:bg-white hover:border-black hover:text-black">Retour au menu</button>
+      <button id="fetchImageButtonRound" class="fetchImageButtonRoundClass m-2 p-2 border-2 text-white border-white bg-black  hover:bg-white hover:border-black hover:text-black">Fetch Image</button>
+      <button id="nextRound" class="nextRoundClass hidden m-2 p-2 border-2 border-white bg-black text-white  hover:bg-white hover:border-black hover:text-black">Start Next Round</button>
+      <button id="returnMenu" class="returnMenuClass hidden m-2 p-2 border-2 border-white bg-black text-white  hover:bg-white hover:border-black hover:text-black">Retour au menu</button>
       <button></button>
     </div>
     

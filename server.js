@@ -139,6 +139,10 @@ io.on('connection', (socket) => {
     }
   })
 
+  socket.on("nextRound", (timerForNextRound, imageURL) => {
+    io.to(socket.id).emit("nextRoundStart", timerForNextRound, imageURL)
+  })
+
   socket.on('disconnect', () => {
       console.log('Client disconnected ', socket.id);
   });

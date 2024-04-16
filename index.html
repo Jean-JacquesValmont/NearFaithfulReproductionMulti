@@ -10,21 +10,22 @@
 
     <div class="menu flex flex-col justify-center items-center m-2">
         <h1 class="text-center text-[6rem] font-bold mt-8 mb-16 p-4">Near Faithful Reproduction</h1>
-        <div class="w-120 flex flex-col justify-center items-center text-white border-4 border-[#33FFD3] p-16 bg-[#3100D3]">
-          <input class="m-2 p-2 border-2 border-white bg-black" type="text" id="namePlayer" placeholder="Enter your name" value="">
+        <div class="w-120 flex flex-col justify-center items-center text-white border-4 border-[#33FFD3] p-8 bg-[#3100D3]">
+          <input class="m-2 p-2 border-2 border-white bg-black" type="text" id="namePlayer" placeholder="Enter your name" maxlength="16" value="">
           <div>
             <select id="partieSelect" class="p-2 border-2 border-white bg-black">
               <option value="ChacunPourSoi">Chacun pour soi</option>
+              <option disabled value="Team">En équipe (prochainement)</option>
             </select>
-            <button id="createRoom" class="w-36 ml-2 p-2 border-2 border-white bg-black hover:bg-white hover:border-black hover:text-black">Create Room</button>
+            <button id="createRoom" class="ml-2 p-2 border-2 border-white bg-black hover:bg-white hover:border-black hover:text-black">Create Room</button>
           </div>
           <div class="flex justify-center p-4">
-            <input class="ml-2 p-2 border-2 border-white bg-black" type="text" id="roomId" placeholder="Enter Room ID" value="">
+            <input class="p-2 border-2 border-white bg-black" type="text" id="roomId" placeholder="Enter Room ID" value="">
             <button id="joinRoom" class="ml-2 p-2 border-2 border-white bg-black  hover:bg-white hover:border-black hover:text-black">Join Room</button>
           </div>
         </div>
-        <div class="w-[80rem] flex flex-col justify-center text-center mt-4 p-4 text-white border-4 border-[#33FFD3] bg-[#3100D3]">
-          <h3 class="text-4xl p-4 underline">Règles du jeu</h3>
+        <div class="w-[60rem] flex flex-col justify-center text-center mt-4 p-4 text-white border-4 border-[#33FFD3] bg-[#3100D3]">
+          <h3 class="text-4xl px-4 pb-4 underline">Règles du jeu</h3>
           <p class="p-2">Vous devez avoir le plus de pixels identiques à l'image qui vous sera donnée pour gagner.</p>
           <p class="p-2">Pour cela, il faudra la dessiner le plus fidèlement possible avec un minimum d'outils et de couleurs à votre disposition.</p>
           <p class="p-2">Le joueur ayant le pourcentage le plus élevé remporte la partie.</p>
@@ -377,6 +378,11 @@
       <button id="returnMenu" class="returnMenuClass hidden m-2 p-2 border-2 border-white bg-black text-white  hover:bg-white hover:border-black hover:text-black">Retour au menu</button>
       <button></button>
     </div>
+
+    <footer class='mt-32 flex flex-col items-center justify-center bg-[#3100D3] text-white'>
+      <p>Conçu et réalisé par Jean-Jacques Valmont</p>
+      <p>©Copyright 2024 - Jean-Jacques Valmont</p>
+    </footer>
     
     <script src="/socket.io/socket.io.js"></script>
     <script src="/scriptVariables.js"></script>

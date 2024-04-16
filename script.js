@@ -51,6 +51,14 @@ const numberOfRoundWinPlayer5 = document.getElementById("numberOfRoundWinPlayer5
 const numberOfRoundWinPlayer6 = document.getElementById("numberOfRoundWinPlayer6")
 const numberOfRoundWinPlayer7 = document.getElementById("numberOfRoundWinPlayer7")
 const numberOfRoundWinPlayer8 = document.getElementById("numberOfRoundWinPlayer8")
+const percentAveragePlayer1 = document.getElementById("percentAveragePlayer1")
+const percentAveragePlayer2 = document.getElementById("percentAveragePlayer2")
+const percentAveragePlayer3 = document.getElementById("percentAveragePlayer3")
+const percentAveragePlayer4 = document.getElementById("percentAveragePlayer4")
+const percentAveragePlayer5 = document.getElementById("percentAveragePlayer5")
+const percentAveragePlayer6 = document.getElementById("percentAveragePlayer6")
+const percentAveragePlayer7 = document.getElementById("percentAveragePlayer7")
+const percentAveragePlayer8 = document.getElementById("percentAveragePlayer8")
 
 const samePixelTextPlayer1 = document.getElementById("samePixelTextPlayer1")
 const samePixelTextPlayer2 = document.getElementById("samePixelTextPlayer2")
@@ -106,6 +114,22 @@ const resultPlayer5Class = document.querySelector(".resultPlayer5Class")
 const resultPlayer6Class = document.querySelector(".resultPlayer6Class")
 const resultPlayer7Class = document.querySelector(".resultPlayer7Class")
 const resultPlayer8Class = document.querySelector(".resultPlayer8Class")
+const numberOfRoundWinPlayer1Class = document.querySelector(".numberOfRoundWinPlayer1Class")
+const numberOfRoundWinPlayer2Class = document.querySelector(".numberOfRoundWinPlayer2Class")
+const numberOfRoundWinPlayer3Class = document.querySelector(".numberOfRoundWinPlayer3Class")
+const numberOfRoundWinPlayer4Class = document.querySelector(".numberOfRoundWinPlayer4Class")
+const numberOfRoundWinPlayer5Class = document.querySelector(".numberOfRoundWinPlayer5Class")
+const numberOfRoundWinPlayer6Class = document.querySelector(".numberOfRoundWinPlayer6Class")
+const numberOfRoundWinPlayer7Class = document.querySelector(".numberOfRoundWinPlayer7Class")
+const numberOfRoundWinPlayer8Class = document.querySelector(".numberOfRoundWinPlayer8Class")
+const percentAveragePlayer1Class = document.querySelector(".percentAveragePlayer1Class")
+const percentAveragePlayer2Class = document.querySelector(".percentAveragePlayer2Class")
+const percentAveragePlayer3Class = document.querySelector(".percentAveragePlayer3Class")
+const percentAveragePlayer4Class = document.querySelector(".percentAveragePlayer4Class")
+const percentAveragePlayer5Class = document.querySelector(".percentAveragePlayer5Class")
+const percentAveragePlayer6Class = document.querySelector(".percentAveragePlayer6Class")
+const percentAveragePlayer7Class = document.querySelector(".percentAveragePlayer7Class")
+const percentAveragePlayer8Class = document.querySelector(".percentAveragePlayer8Class")
 const finalResult = document.querySelector('.finalResult')
 const fetchImageButtonRoundClass = document.querySelector(".fetchImageButtonRoundClass")
 const returnMenuClass = document.querySelector('.returnMenuClass')
@@ -158,6 +182,24 @@ let roundWinPlayer6 = 0
 let roundWinPlayer7 = 0
 let roundWinPlayer8 = 0
 
+let percentageAveragePlayer1 = 0
+let percentageAveragePlayer2 = 0
+let percentageAveragePlayer3 = 0
+let percentageAveragePlayer4 = 0
+let percentageAveragePlayer5 = 0
+let percentageAveragePlayer6 = 0
+let percentageAveragePlayer7 = 0
+let percentageAveragePlayer8 = 0
+
+let percentageArrayPlayer1 = []
+let percentageArrayPlayer2 = []
+let percentageArrayPlayer3 = []
+let percentageArrayPlayer4 = []
+let percentageArrayPlayer5 = []
+let percentageArrayPlayer6 = []
+let percentageArrayPlayer7 = []
+let percentageArrayPlayer8 = []
+
 let loadCanvas1 = false
 let loadCanvas2 = false
 let loadCanvas3 = false
@@ -205,6 +247,24 @@ const resetVariables = () => {
     roundWinPlayer6 = 0
     roundWinPlayer7 = 0
     roundWinPlayer8 = 0
+
+    percentageAveragePlayer1 = 0
+    percentageAveragePlayer2 = 0
+    percentageAveragePlayer3 = 0
+    percentageAveragePlayer4 = 0
+    percentageAveragePlayer5 = 0
+    percentageAveragePlayer6 = 0
+    percentageAveragePlayer7 = 0
+    percentageAveragePlayer8 = 0
+    percentageArrayPlayer1.length = 0
+    percentageArrayPlayer2.length = 0
+    percentageArrayPlayer3.length = 0
+    percentageArrayPlayer4.length = 0
+    percentageArrayPlayer5.length = 0
+    percentageArrayPlayer6.length = 0
+    percentageArrayPlayer7.length = 0
+    percentageArrayPlayer8.length = 0
+
     loadCanvas1 = false
     loadCanvas2 = false
     loadCanvas3 = false
@@ -917,7 +977,7 @@ const updateTimerResult = () => {
     }
 }
 
-//Partie du code pour comparer les deux images
+//Partie du code pour comparer les deux images pour savoir qui à gagner
 const compareImage = (canvas, context, samePixelText, progressBar) => {
     imageData1 = context.getImageData(0, 0, canvas.width, canvas.height);
     imageData2 = contextImageFetchResult.getImageData(0, 0, canvasImageFetchResult.width, canvasImageFetchResult.height);
@@ -957,6 +1017,50 @@ const updateProgressBar = (progress, progressBarID) => {
 }
 
 const compareWithPrecision = (precision, ...values) => {
+    if(victoryCondition == "hight"){
+        percentAveragePlayer1Class.classList.add("hidden")
+        percentAveragePlayer2Class.classList.add("hidden")
+        percentAveragePlayer3Class.classList.add("hidden")
+        percentAveragePlayer4Class.classList.add("hidden")
+        percentAveragePlayer5Class.classList.add("hidden")
+        percentAveragePlayer6Class.classList.add("hidden")
+        percentAveragePlayer7Class.classList.add("hidden")
+        percentAveragePlayer8Class.classList.add("hidden")
+
+        numberOfRoundWinPlayer1Class.classList.remove("hidden")
+        numberOfRoundWinPlayer2Class.classList.remove("hidden")
+        numberOfRoundWinPlayer3Class.classList.remove("hidden")
+        numberOfRoundWinPlayer4Class.classList.remove("hidden")
+        numberOfRoundWinPlayer5Class.classList.remove("hidden")
+        numberOfRoundWinPlayer6Class.classList.remove("hidden")
+        numberOfRoundWinPlayer7Class.classList.remove("hidden")
+        numberOfRoundWinPlayer8Class.classList.remove("hidden")
+
+        victoryByHighPercentage(precision, ...values)
+    }else if(victoryCondition == "average"){
+        numberOfRoundWinPlayer1Class.classList.add("hidden")
+        numberOfRoundWinPlayer2Class.classList.add("hidden")
+        numberOfRoundWinPlayer3Class.classList.add("hidden")
+        numberOfRoundWinPlayer4Class.classList.add("hidden")
+        numberOfRoundWinPlayer5Class.classList.add("hidden")
+        numberOfRoundWinPlayer6Class.classList.add("hidden")
+        numberOfRoundWinPlayer7Class.classList.add("hidden")
+        numberOfRoundWinPlayer8Class.classList.add("hidden")
+
+        percentAveragePlayer1Class.classList.remove("hidden")
+        percentAveragePlayer2Class.classList.remove("hidden")
+        percentAveragePlayer3Class.classList.remove("hidden")
+        percentAveragePlayer4Class.classList.remove("hidden")
+        percentAveragePlayer5Class.classList.remove("hidden")
+        percentAveragePlayer6Class.classList.remove("hidden")
+        percentAveragePlayer7Class.classList.remove("hidden")
+        percentAveragePlayer8Class.classList.remove("hidden")
+
+        victoryByAveragePercentage(precision, ...values)
+    }
+}
+
+const victoryByHighPercentage = (precision, ...values) => {
     let maxValue1 = -Infinity;
     let maxIndex1 = -1;
     let maxValue2 = -Infinity;
@@ -1016,6 +1120,108 @@ const compareWithPrecision = (precision, ...values) => {
     }
 }
 
+const victoryByAveragePercentage = (precision, ...values) => {
+    
+    //Reset sinon la manche précédente se cumule.
+    percentageAveragePlayer1 = 0
+    percentageAveragePlayer2 = 0
+    percentageAveragePlayer3 = 0
+    percentageAveragePlayer4 = 0
+    percentageAveragePlayer5 = 0
+    percentageAveragePlayer6 = 0
+    percentageAveragePlayer7 = 0
+    percentageAveragePlayer8 = 0
+
+    percentageArrayPlayer1.push(parseFloat(values[0]))
+    percentageArrayPlayer2.push(parseFloat(values[1]))
+    percentageArrayPlayer3.push(parseFloat(values[2]))
+    percentageArrayPlayer4.push(parseFloat(values[3]))
+    percentageArrayPlayer5.push(parseFloat(values[4]))
+    percentageArrayPlayer6.push(parseFloat(values[5]))
+    percentageArrayPlayer7.push(parseFloat(values[6]))
+    percentageArrayPlayer8.push(parseFloat(values[7]))
+
+    for(let i=0; i < percentageArrayPlayer1.length; i++){
+        percentageAveragePlayer1 += percentageArrayPlayer1[i]
+    }
+    for(let i=0; i < percentageArrayPlayer2.length; i++){
+        percentageAveragePlayer2 += percentageArrayPlayer2[i]
+    }
+    for(let i=0; i < percentageArrayPlayer3.length; i++){
+        percentageAveragePlayer3 += percentageArrayPlayer3[i]
+    }
+    for(let i=0; i < percentageArrayPlayer4.length; i++){
+        percentageAveragePlayer4 += percentageArrayPlayer4[i]
+    }
+    for(let i=0; i < percentageArrayPlayer5.length; i++){
+        percentageAveragePlayer5 += percentageArrayPlayer5[i]
+    }
+    for(let i=0; i < percentageArrayPlayer6.length; i++){
+        percentageAveragePlayer6 += percentageArrayPlayer6[i]
+    }
+    for(let i=0; i < percentageArrayPlayer7.length; i++){
+        percentageAveragePlayer7 += percentageArrayPlayer7[i]
+    }
+    for(let i=0; i < percentageArrayPlayer8.length; i++){
+        percentageAveragePlayer8 += percentageArrayPlayer8[i]
+    }
+
+    percentageAveragePlayer1 = percentageAveragePlayer1/percentageArrayPlayer1.length
+    percentageAveragePlayer2 = percentageAveragePlayer2/percentageArrayPlayer2.length
+    percentageAveragePlayer3 = percentageAveragePlayer3/percentageArrayPlayer3.length
+    percentageAveragePlayer4 = percentageAveragePlayer4/percentageArrayPlayer4.length
+    percentageAveragePlayer5 = percentageAveragePlayer5/percentageArrayPlayer5.length
+    percentageAveragePlayer6 = percentageAveragePlayer6/percentageArrayPlayer6.length
+    percentageAveragePlayer7 = percentageAveragePlayer7/percentageArrayPlayer7.length
+    percentageAveragePlayer8 = percentageAveragePlayer8/percentageArrayPlayer8.length
+
+    percentAveragePlayer1.textContent = "Pourcentage moyen: " + percentageAveragePlayer1
+    percentAveragePlayer2.textContent = "Pourcentage moyen: " + percentageAveragePlayer2
+    percentAveragePlayer3.textContent = "Pourcentage moyen: " + percentageAveragePlayer3
+    percentAveragePlayer4.textContent = "Pourcentage moyen: " + percentageAveragePlayer4
+    percentAveragePlayer5.textContent = "Pourcentage moyen: " + percentageAveragePlayer5
+    percentAveragePlayer6.textContent = "Pourcentage moyen: " + percentageAveragePlayer6
+    percentAveragePlayer7.textContent = "Pourcentage moyen: " + percentageAveragePlayer7
+    percentAveragePlayer8.textContent = "Pourcentage moyen: " + percentageAveragePlayer8
+
+    if(round == currentRound){
+        let maxValue1 = -Infinity;
+        let maxIndex1 = -1;
+        let maxValue2 = -Infinity;
+        let maxIndex2 = -1;
+
+        let percentageAverageAllPlayer = [percentageAveragePlayer1,percentageAveragePlayer2,percentageAveragePlayer3,
+            percentageAveragePlayer4,percentageAveragePlayer5,percentageAveragePlayer6,percentageAveragePlayer7,percentageAveragePlayer8]
+            console.log("percentageAverageAllPlayer: ",percentageAverageAllPlayer)
+        percentageAverageAllPlayer.forEach((value, index) => {
+            const roundedValue = Math.round(value * 10 ** precision);
+            if (roundedValue > maxValue1) {
+                maxValue2 = maxValue1;
+                maxIndex2 = maxIndex1;
+                maxValue1 = roundedValue;
+                maxIndex1 = index;
+            } else if (roundedValue > maxValue2) {
+                maxValue2 = roundedValue;
+                maxIndex2 = index;
+            }
+        });
+
+        if (maxValue1 === maxValue2) {
+            winnerText.textContent = "Égalité";
+        } else {
+            winnerText.textContent = allclientsInRoom[maxIndex1];
+        }
+
+        fetchImageButtonRoundClass.classList.add("hidden")
+        returnMenuClass.classList.remove("hidden")
+    }else{
+        currentRound += 1
+        roundGame.textContent = "Manche: " + currentRound
+        
+    }
+}
+
+//Partie pour une autre manche ou retourner au menu
 fetchImageButtonRound.addEventListener("click", async () => {
     fetchImageButtonRound.disabled = true
     await fetchImage()

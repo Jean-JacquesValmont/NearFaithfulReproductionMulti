@@ -12,14 +12,34 @@ app.get('/', (req, res) => {
 });
 
 // Définir le type MIME pour les fichiers JavaScript
-app.get('/script.js', (req, res) => {
+app.get('/scriptVariables.js', (req, res) => {
   res.set('Content-Type', 'text/javascript');
-  res.sendFile(join(__dirname, 'script.js'));
+  res.sendFile(join(__dirname, 'scriptVariables.js'));
+});
+
+app.get('/scriptSocketClient.js', (req, res) => {
+  res.set('Content-Type', 'text/javascript');
+  res.sendFile(join(__dirname, 'scriptSocketClient.js'));
+});
+
+app.get('/scriptRoomMenu.js', (req, res) => {
+  res.set('Content-Type', 'text/javascript');
+  res.sendFile(join(__dirname, 'scriptRoomMenu.js'));
 });
 
 app.get('/scriptGame.js', (req, res) => {
   res.set('Content-Type', 'text/javascript');
   res.sendFile(join(__dirname, 'scriptGame.js'));
+});
+
+app.get('/scriptResultFinal.js', (req, res) => {
+  res.set('Content-Type', 'text/javascript');
+  res.sendFile(join(__dirname, 'scriptResultFinal.js'));
+});
+
+app.get('/scriptOtherFunctions.js', (req, res) => {
+  res.set('Content-Type', 'text/javascript');
+  res.sendFile(join(__dirname, 'scriptOtherFunctions.js'));
 });
 
 // Définir le type MIME pour les fichiers css

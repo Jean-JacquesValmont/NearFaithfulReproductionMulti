@@ -79,10 +79,21 @@ io.on('connection', (socket) => {
   });
 
   socket.on("leaveRoom", (roomID, namePlayerLeaved) => {
-    socket.leave(roomID)
-    console.log("Leave room ID server:", roomID)
+    const clientsInRoom = io.sockets.adapter.rooms.get(roomID);
+    const arrayClientsInRoom = [...clientsInRoom]
 
-    io.to(roomID).emit("roomLeaved", namePlayerLeaved)
+    if(arrayClientsInRoom[0] == socket.id){
+      io.to(roomID).emit("roomLeaved", namePlayerLeaved) // On envois le socket avant que tous les joueurs ne soit plus dans la room sinon ils ne reçeveront pas.
+
+      clientsInRoom.forEach(socketId => {
+            io.sockets.sockets.get(socketId).leave(roomID);
+      });
+      delete clientsInRoom[roomID]; // Supprimer la salle de jeu de la liste des salles
+      
+    }else{
+      socket.leave(roomID)
+      io.to(roomID).emit("roomLeaved", namePlayerLeaved)
+    }
   })
 
   socket.on('sendPlayersInRoom', (allclientsInRoom, roomID, timerDuration, numberOfPlayerRoom, 

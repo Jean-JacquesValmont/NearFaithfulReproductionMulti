@@ -16,12 +16,14 @@ fetchImageButton.addEventListener("click", async () => {
 //// Envoyer les actions au serveur
 // Créer une nouvelle salle de jeu
 createRoom.addEventListener("click", () => {
+    resetVariables()
     currentNamePlayer = namePlayer.value
     socket.emit('createRoom');
 })
 
 // Rejoindre salle de jeu
 joinRoom.addEventListener("click", () => {
+    resetVariables()
     currentNamePlayer = namePlayer.value
     let roomIdValue = roomId.value;
     if(roomIdValue == ""){
@@ -34,8 +36,6 @@ joinRoom.addEventListener("click", () => {
 leaveRoom.addEventListener("click", () => {
     makingVisibleClass(menu)
     makingInvisibleClass(roomMenu)
-
-    resetVariables()
 
     socket.emit('leaveRoom', currentRoomID, currentNamePlayer)
 })
@@ -75,6 +75,7 @@ socket.on('roomCreated', (roomID) => {
     categorySelectClass.classList.remove("hidden")
 
     currentRoomID = roomID
+    console.log("currentRoomID:", currentRoomID)
     nameRoomId.textContent = roomID
     allclientsInRoom.push(currentNamePlayer)
 
@@ -127,7 +128,11 @@ socket.on('roomJoined', (clientsInRoom, namePlayerJoin) => {
 });
 
 socket.on("roomLeaved", (namePlayerLeaved) => {
-    if(allclientsInRoom != undefined && allclientsInRoom.length >= 1){
+    if(allclientsInRoom[0] == namePlayerLeaved){
+        makingVisibleClass(menu)
+        makingInvisibleClass(roomMenu)
+    }
+    else{
         allclientsInRoom = removePlayerFromArray(allclientsInRoom, namePlayerLeaved)
 
         player.innerHTML = ''

@@ -1,4 +1,9 @@
 //Autres fonctions
+window.onload = function() {
+    // Votre fonction JavaScript à exécuter lorsque la page est chargée
+    resetVariables()
+};
+
 const removePlayerFromArray = (array, stringToRemove) => {
     const index = array.indexOf(stringToRemove);
     if (index !== -1) {

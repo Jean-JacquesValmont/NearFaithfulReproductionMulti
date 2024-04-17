@@ -63,7 +63,7 @@ widthSelect.addEventListener("change", () => {
     socket.emit('widthChange', width);
 })
 
-// Événement pour définir la largeur
+// Événement pour définir la hauteur
 heightSelect.addEventListener("change", () => {
     height = heightSelect.value
 

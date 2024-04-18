@@ -55,7 +55,7 @@
             <p class="text-md font-bold mb-2">Game</p>
             <div class="">
               <div class="flex justify-between">
-                <p class="mr-4">Nombre de joueurs:</p>
+                <p class="">Nombre de joueurs:</p>
                 <select id="numberOfPlayer" class="numberOfPlayerClass p-2 border-2 border-white bg-black">
                   <option value="2">2</option>
                   <option value="3">3</option>
@@ -68,7 +68,7 @@
                 <p id="numberOfPlayerText" class="numberOfPlayerTextClass">2</p>
               </div>
               <div class="flex justify-between">
-                <p class="mr-4">Timer (en seconde):</p>
+                <p class="">Timer (en seconde):</p>
                 <select id="timerSelect" class="timerSelectClass p-2 border-2 border-white bg-black">
                   <option value="5">5</option>
                   <option value="10">10</option>
@@ -83,7 +83,7 @@
                 <p id="timerText" class="timerTextClass">60</p>
               </div>
               <div class="flex justify-between">
-                <p class="mr-4">Nombre de manche:</p>
+                <p class="">Nombre de manche:</p>
                 <select id="roundSelect" class="roundSelectClass p-2 border-2 border-white bg-black">
                   <option id="optionNumberofRoundOne" value=1>1</option>
                   <option value=2>2</option>
@@ -94,7 +94,10 @@
                 <p id="roundText" class="roundTextClass">1</p>
               </div>
               <div class="flex justify-between">
-                <p class="mr-4">Précision:</p>
+                <div class="flex items-start">
+                  <p class="">Précision:</p>
+                  <img src="/image/question_mark_circle.png" alt="question_mark_circle" width="20" height="20" title="C'est le nombre de chiffre après la virgule lors du résultat du pourcentage."/>
+                </div>
                 <select id="precisionSelect" class="precisionSelectClass p-2 border-2 border-white bg-black">
                   <option value="0">0</option>
                   <option value="1">1</option>
@@ -106,7 +109,10 @@
                 <p id="precisionText" class="precisionTextClass">2</p>
               </div>
               <div class="flex justify-between">
-                <p class="mr-4">Tolérance:</p>
+                <div class="flex items-start">
+                  <p class="">Tolérance:</p>
+                  <img src="/image/question_mark_circle.png" alt="question_mark_circle" width="20" height="20" title="C'est l'écart de différence accepter entre la couleur du pixel de l'image et celui du dessin. Plus la valeur de la tolérance sera basse, plus compliqué sera le jeu."/>
+                </div>
                 <select id="toleranceSelect" class="toleranceSelectClass p-2 border-2 border-white bg-black">
                   <option value="0">0</option>
                   <option value="10">10</option>
@@ -121,7 +127,13 @@
                 <p id="toleranceText" class="toleranceTextClass">50</p>
               </div>
               <div class="flex justify-between">
-                <p class="mr-4">Condition de victoire:</p>
+                <div class="flex items-start">
+                  <p class="">Condition de victoire:</p>
+                  <img src="/image/question_mark_circle.png" alt="question_mark_circle" width="20" height="20" title="Le plus haut pourcentage: 
+                  Celui avec le pourcentage le plus élevé à chaque manche remporte la manche. Moyenne des pourcentages: 
+                  On fait la moyenne des pourcentages de toutes les manches jouées. 
+                  Celui avec la moyenne la plus élevé remporte la partie."/>
+                </div>
                 <select id="victoryConditionSelect" class="victoryConditionSelectClass p-2 border-2 border-white bg-black">
                   <option value="hight">Le plus haut pourcentage</option>
                   <option value="average">Moyenne des pourcentages</option>
@@ -133,7 +145,7 @@
             <p class="text-md font-bold mb-2">Canvas</p>
             <div>
               <div class="flex justify-between">
-                  <p class="mr-4">Longueur:</p>
+                  <p class="">Longueur:</p>
                   <select id="widthSelect" class="widthSelectClass p-2 border-2 border-white bg-black">
                     <option value=100>100</option>
                     <option value=200>200</option>
@@ -146,7 +158,7 @@
                   <p id="widthText" class="widthTextClass">500</p>
               </div>
               <div class="flex justify-between">
-                  <p class="mr-4">Hauteur:</p>
+                  <p class="">Hauteur:</p>
                   <select id="heightSelect" class="heightSelectClass p-2 border-2 border-white bg-black">
                     <option value=100>100</option>
                     <option value=200>200</option>
@@ -159,7 +171,7 @@
                   <p id="heightText" class="heightTextClass">400</p>
               </div>
               <div class="flex justify-between">
-                <p class="mr-4">Type d'image:</p>
+                <p class="">Type d'image:</p>
                 <select id="categorySelect" class="categorySelectClass p-2 border-2 border-white bg-black">
                   <option value="">Tous</option>
                   <option value="nature">Nature</option>

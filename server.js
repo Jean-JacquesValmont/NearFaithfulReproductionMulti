@@ -53,6 +53,10 @@ app.get('/image/background_NFR.png', (req, res) => {
   res.sendFile(join(__dirname, 'image/background_NFR.png'));
 });
 
+app.get('/image/question_mark_circle.png', (req, res) => {
+  res.set('Content-Type', 'text/css');
+  res.sendFile(join(__dirname, 'image/question_mark_circle.png'));
+});
 
 io.on('connection', (socket) => {
   console.log('New client connected ', socket.id);

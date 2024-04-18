@@ -184,7 +184,7 @@ const redrawCanvas = () => {
 undoButton.addEventListener('click', undo);
 
 // Pour récupérer une image
-const fetchImage = async () => {
+const fetchImage = async (fetchMessage) => {
     try {
         const apiKey = '1rIW4mEHWJeRPQR1vGtU+g==a0KWLUCB8HcKGCKs';
 
@@ -213,11 +213,31 @@ const fetchImage = async () => {
         randomImage.onload = function() {
             // Cette fonction est appelée lorsque l'image a été chargée
             contextImageFetch.drawImage(this,0,0); // this fait référence à l'objet courant (=image)
-            // contextImageFetchResult.drawImage(this,0,0);
+            
+            if(fetchMessage == "fetchImageMessage"){
+                goodMessageFetchImage(fetchImageMessageClass, fetchImageMessage)
+                fetchImageButtonClass.classList.add("text-gray-500")
+                widthSelect.disabled = true
+                widthSelectClass.classList.add("text-gray-500")
+                heightSelect.disabled = true
+                heightSelectClass.classList.add("text-gray-500")
+                categorySelect.disabled = true
+                categorySelectClass.classList.add("text-gray-500")
+            }else if(fetchMessage == "fetchImageMessageButton"){
+                goodMessageFetchImage(fetchImageMessageButtonClass, fetchImageMessageButton)
+                fetchImageButtonRoundClass.classList.add("hidden")
+            }
           };
 
     } catch (error) {
         console.error('Une erreur s\'est produite lors de la récupération de l\'image :', error);
+        if(fetchMessage == "fetchImageMessage"){
+            errorMessageFetchImage(fetchImageMessageClass)
+            fetchImageButton.disabled = false
+        }else if(fetchMessage == "fetchImageMessageButton") {
+            errorMessageFetchImage(fetchImageMessageButtonClass)
+            fetchImageButtonRound.disabled = false
+        }
     }
 }
 

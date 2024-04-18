@@ -2,14 +2,7 @@
 
 fetchImageButton.addEventListener("click", async () => {
     fetchImageButton.disabled = true
-    await fetchImage()
-    fetchImageButtonClass.classList.add("text-gray-500")
-    widthSelect.disabled = true
-    widthSelectClass.classList.add("text-gray-500")
-    heightSelect.disabled = true
-    heightSelectClass.classList.add("text-gray-500")
-    categorySelect.disabled = true
-    categorySelectClass.classList.add("text-gray-500")
+    await fetchImage("fetchImageMessage")
     makingVisibleClass(buttonStartGame)
 })
 
@@ -272,7 +265,7 @@ socket.on("gameStarted", (imageURL, widthForGame, heightForGame) => {
     convertURLToImage(imageURL, contextImageFetchResult)
 
     //Je suis obliger de modifier la taille du canvas des invités ici et pas au moment de sendedPlayersInRoom car cela
-    //me faisait disparaitre mon image fetcher du canvas et le remetter blanc. Cela envoyer donc une image blanche aux invités.
+    //me faisait disparaitre mon image fetcher du canvas et le remet blanc. Cela envoyer donc une image blanche aux invités.
     canvas.width = widthForGame
     canvasImageFetch.width = widthForGame
     canvasImageFetchResult.width = widthForGame
@@ -435,6 +428,8 @@ socket.on("nextRoundStart", (timerForNextRound, imageURL) => {
     samePixelTextPlayer6.textContent = 'Pourcentage de pixels identiques: 0%'
     samePixelTextPlayer7.textContent = 'Pourcentage de pixels identiques: 0%'
     samePixelTextPlayer8.textContent = 'Pourcentage de pixels identiques: 0%'
+
+    fetchImageMessageButtonClass.classList.add("hidden")
 
     makingInvisibleClass(finalResult)
     makingVisibleClass(game)

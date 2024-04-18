@@ -345,8 +345,7 @@ const victoryByAveragePercentage = (precision, ...values) => {
 //Partie pour une autre manche ou retourner au menu
 fetchImageButtonRound.addEventListener("click", async () => {
     fetchImageButtonRound.disabled = true
-    await fetchImage()
-    fetchImageButtonRoundClass.classList.add("hidden")
+    await fetchImage("fetchImageMessageButton")
     makingVisibleClass(nextRound)
 })
 

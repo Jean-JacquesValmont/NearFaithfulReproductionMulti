@@ -31,6 +31,7 @@ const categoryText = document.getElementById("categoryText")
 
 const optionNumberofRoundOne = document.getElementById("optionNumberofRoundOne")
 
+const fetchImageMessage = document.getElementById("fetchImageMessage")
 const fetchImageButton = document.getElementById("fetchImageButton")
 const startGame = document.getElementById("startGame")
 
@@ -78,6 +79,7 @@ const progressBarPlayer6 = document.getElementById("progressBarPlayer6")
 const progressBarPlayer7 = document.getElementById("progressBarPlayer7")
 const progressBarPlayer8 = document.getElementById("progressBarPlayer8")
 const winnerText = document.getElementById("winnerText")
+const fetchImageMessageButton = document.getElementById("fetchImageMessageButton")
 const fetchImageButtonRound = document.getElementById("fetchImageButtonRound")
 const nextRound = document.getElementById("nextRound")
 const returnMenu = document.getElementById('returnMenu')
@@ -103,6 +105,7 @@ const heightSelectClass = document.querySelector(".heightSelectClass");
 const heightTextClass = document.querySelector(".heightTextClass");
 const categorySelectClass = document.querySelector(".categorySelectClass");
 const categoryTextClass = document.querySelector(".categoryTextClass");
+const fetchImageMessageClass = document.querySelector(".fetchImageMessageClass")
 const fetchImageButtonClass = document.querySelector(".fetchImageButtonClass")
 const nextRoundClass = document.querySelector(".nextRoundClass")
 const buttonStartGame = document.querySelector('.buttonStartGame');
@@ -133,6 +136,7 @@ const percentAveragePlayer6Class = document.querySelector(".percentAveragePlayer
 const percentAveragePlayer7Class = document.querySelector(".percentAveragePlayer7Class")
 const percentAveragePlayer8Class = document.querySelector(".percentAveragePlayer8Class")
 const finalResult = document.querySelector('.finalResult')
+const fetchImageMessageButtonClass = document.querySelector(".fetchImageMessageButtonClass")
 const fetchImageButtonRoundClass = document.querySelector(".fetchImageButtonRoundClass")
 const returnMenuClass = document.querySelector('.returnMenuClass')
 
@@ -298,6 +302,7 @@ const resetVariables = () => {
     categorySelect.value = ""
     categoryText.value = "Tous"
 
+    fetchImageMessageClass.classList.add("hidden")
     fetchImageButton.disabled = false
     widthSelectClass.classList.remove("text-gray-500")
     widthSelect.disabled = false

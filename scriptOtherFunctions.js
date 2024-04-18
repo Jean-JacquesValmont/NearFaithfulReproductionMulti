@@ -4,6 +4,18 @@ window.onload = function() {
     resetVariables()
 };
 
+const goodMessageFetchImage = (className, idName) => {
+    className.classList.add("text-white")
+    className.classList.remove("hidden")
+    idName.textContent = "L'image à correctement été chargée."
+}
+
+const errorMessageFetchImage = (className, idName) => {
+    className.classList.add("text-red-500")
+    className.classList.remove("hidden")
+    idName.textContent = "Une erreur s'est produite lors de la récupération de l'image. Veuillez réessayer."
+}
+
 const searchingPlayerFromArray = (array, stringToSearch) => {
     for(let i = 0; i < array.length; i++){
         if(array[i] == stringToSearch){

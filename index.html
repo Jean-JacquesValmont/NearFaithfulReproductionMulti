@@ -45,7 +45,7 @@
         </div>
       
         <div class="w-full flex justify-between">
-          <div class="flex flex-col ml-4 mr-4">
+          <div class="w-[10rem] flex flex-col ml-4 mr-4">
             <p class="text-xl font-bold mb-2">Players</p>
             <div id="player" class=""></div>
           </div>
@@ -53,7 +53,7 @@
           <div class="w-full flex flex-col justify-center items-center">
             <p class="text-xl font-bold mb-2">Select Options </p>
             <p class="text-md font-bold mb-2">Game</p>
-            <div class="">
+            <div class="w-full">
               <div class="flex justify-between">
                 <p class="">Nombre de joueurs:</p>
                 <select id="numberOfPlayer" class="numberOfPlayerClass p-2 border-2 border-white bg-black">
@@ -65,7 +65,7 @@
                   <option value="7">7</option>
                   <option value="8">8</option>
                 </select>
-                <p id="numberOfPlayerText" class="numberOfPlayerTextClass">2</p>
+                <p id="numberOfPlayerText" class="numberOfPlayerTextClass mr-2">2</p>
               </div>
               <div class="flex justify-between">
                 <p class="">Timer (en seconde):</p>
@@ -80,7 +80,7 @@
                   <option value="150">150</option>
                   <option value="180">180</option>
                 </select>
-                <p id="timerText" class="timerTextClass">60</p>
+                <p id="timerText" class="timerTextClass mr-2">60</p>
               </div>
               <div class="flex justify-between">
                 <p class="">Nombre de manche:</p>
@@ -91,7 +91,7 @@
                   <option value=4>4</option>
                   <option value=5>5</option>
                 </select>
-                <p id="roundText" class="roundTextClass">1</p>
+                <p id="roundText" class="roundTextClass mr-2">1</p>
               </div>
               <div class="flex justify-between">
                 <div class="flex items-start">
@@ -106,7 +106,7 @@
                   <option value="4">4</option>
                   <option value="5">5</option>
                 </select>
-                <p id="precisionText" class="precisionTextClass">2</p>
+                <p id="precisionText" class="precisionTextClass mr-2">2</p>
               </div>
               <div class="flex justify-between">
                 <div class="flex items-start">
@@ -124,7 +124,7 @@
                   <option value="70">70</option>
                   <option value="80">80</option>
                 </select>
-                <p id="toleranceText" class="toleranceTextClass">50</p>
+                <p id="toleranceText" class="toleranceTextClass mr-2">50</p>
               </div>
               <div class="flex justify-between">
                 <div class="flex items-start">
@@ -138,12 +138,12 @@
                   <option value="hight">Le plus haut pourcentage</option>
                   <option value="average">Moyenne des pourcentages</option>
                 </select>
-                <p id="victoryConditionText" class="victoryConditionTextClass">1</p>
+                <p id="victoryConditionText" class="victoryConditionTextClass mr-2">1</p>
               </div>
             </div>
 
-            <p class="text-md font-bold mb-2">Canvas</p>
-            <div>
+            <p class="text-md font-bold my-2">Canvas</p>
+            <div class="w-full">
               <div class="flex justify-between">
                   <p class="">Longueur:</p>
                   <select id="widthSelect" class="widthSelectClass p-2 border-2 border-white bg-black">
@@ -155,7 +155,7 @@
                     <option value=600>600</option>
                     <option value=700>700</option>
                   </select>
-                  <p id="widthText" class="widthTextClass">500</p>
+                  <p id="widthText" class="widthTextClass mr-2">500</p>
               </div>
               <div class="flex justify-between">
                   <p class="">Hauteur:</p>
@@ -168,7 +168,7 @@
                     <option value=600>600</option>
                     <option value=700>700</option>
                   </select>
-                  <p id="heightText" class="heightTextClass">400</p>
+                  <p id="heightText" class="heightTextClass mr-2">400</p>
               </div>
               <div class="flex justify-between">
                 <p class="">Type d'image:</p>
@@ -182,11 +182,11 @@
                   <option value="abstract">Art abstrait</option>
                   <option value="wildlife">Vie sauvage</option>
                 </select>
-                <p id="categoryText" class="categoryTextClass">Tous</p>
+                <p id="categoryText" class="categoryTextClass mr-2 mb-2">Tous</p>
               </div>
             </div>
             <button id="fetchImageButton" class="fetchImageButtonClass m-2 p-2 border-2 text-white border-white bg-black  hover:bg-white hover:border-black hover:text-black">Fetch Image</button>
-            
+            <p id="fetchImageMessage" class="fetchImageMessageClass hidden font-bold text-xl mb-2"></p>
           </div>
         </div>
       </div>
@@ -282,8 +282,8 @@
         <div class="resultPlayer1Class flex flex-col justify-center items-center px-2 m-2 bg-[#3100D3]">
           <div class="flex">
             <p id="namePlayer1" class="text-2xl p-2">Player 1</p>
-            <p id="numberOfRoundWinPlayer1" class="numberOfRoundWinPlayer1Class text-2xl p-2">Round win: 0</p>
-            <p id="percentAveragePlayer1" class="percentAveragePlayer1Class text-2xl p-2">Pourcentage moyen: 0</p>
+            <p id="numberOfRoundWinPlayer1" class="numberOfRoundWinPlayer1Class hidden text-2xl p-2">Round win: 0</p>
+            <p id="percentAveragePlayer1" class="percentAveragePlayer1Class hidden text-2xl p-2">Pourcentage moyen: 0</p>
           </div>
           <canvas id="canvasPlayer1" class="bg-white border-8 border-[#33FFD3]" width="500" height="400"></canvas>
           <div class="w-full bg-gray-200 rounded-full mt-2">
@@ -295,8 +295,8 @@
         <div class="resultPlayer2Class flex flex-col justify-center items-center px-2 m-2 bg-[#3100D3]">
           <div class="flex">
             <p id="namePlayer2" class="text-2xl p-2">Player 2</p>
-            <p id="numberOfRoundWinPlayer2" class="numberOfRoundWinPlayer2Class text-2xl p-2">Round win: 0</p>
-            <p id="percentAveragePlayer2" class="percentAveragePlayer2Class text-2xl p-2">Pourcentage moyen: 0</p>
+            <p id="numberOfRoundWinPlayer2" class="numberOfRoundWinPlayer2Class hidden text-2xl p-2">Round win: 0</p>
+            <p id="percentAveragePlayer2" class="percentAveragePlayer2Class hidden text-2xl p-2">Pourcentage moyen: 0</p>
           </div>
           <canvas id="canvasPlayer2" class="bg-white border-8 border-[#33FFD3]" width="500" height="400"></canvas>
           <div class="w-full bg-gray-200 rounded-full mt-2">
@@ -308,8 +308,8 @@
         <div class="resultPlayer3Class flex flex-col justify-center items-center px-2 m-2 bg-[#3100D3]">
           <div>
             <p id="namePlayer3" class="text-2xl p-2">Player 3</p>
-            <p id="numberOfRoundWinPlayer3" class="numberOfRoundWinPlayer3Class text-2xl p-2">Round win: 0</p>
-            <p id="percentAveragePlayer3" class="percentAveragePlayer3Class text-2xl p-2">Pourcentage moyen: 0</p>
+            <p id="numberOfRoundWinPlayer3" class="numberOfRoundWinPlayer3Class hidden text-2xl p-2">Round win: 0</p>
+            <p id="percentAveragePlayer3" class="percentAveragePlayer3Class hidden text-2xl p-2">Pourcentage moyen: 0</p>
           </div>
           <canvas id="canvasPlayer3" class="bg-white border-8 border-[#33FFD3]" width="500" height="400"></canvas>
           <div class="w-full bg-gray-200 rounded-full mt-2">
@@ -321,8 +321,8 @@
         <div class="resultPlayer4Class flex flex-col justify-center items-center px-2 m-2 bg-[#3100D3]">
           <div>
             <p id="namePlayer4" class="text-2xl p-2">Player 4</p>
-            <p id="numberOfRoundWinPlayer4" class="numberOfRoundWinPlayer4Class text-2xl p-2">Round win: 0</p>
-            <p id="percentAveragePlayer4" class="percentAveragePlayer4Class text-2xl p-2">Pourcentage moyen: 0</p>
+            <p id="numberOfRoundWinPlayer4" class="numberOfRoundWinPlayer4Class hidden text-2xl p-2">Round win: 0</p>
+            <p id="percentAveragePlayer4" class="percentAveragePlayer4Class hidden text-2xl p-2">Pourcentage moyen: 0</p>
           </div>
           <canvas id="canvasPlayer4" class="bg-white border-8 border-[#33FFD3]" width="500" height="400"></canvas>
           <div class="w-full bg-gray-200 rounded-full mt-2">
@@ -334,8 +334,8 @@
         <div class="resultPlayer5Class flex flex-col justify-center items-center px-2 m-2 bg-[#3100D3]">
           <div>
             <p id="namePlayer5" class="text-2xl p-2">Player 5</p>
-            <p id="numberOfRoundWinPlayer5" class="numberOfRoundWinPlayer5Class text-2xl p-2">Round win: 0</p>
-            <p id="percentAveragePlayer5" class="percentAveragePlayer5Class text-2xl p-2">Pourcentage moyen: 0</p>
+            <p id="numberOfRoundWinPlayer5" class="numberOfRoundWinPlayer5Class hidden text-2xl p-2">Round win: 0</p>
+            <p id="percentAveragePlayer5" class="percentAveragePlayer5Class hidden text-2xl p-2">Pourcentage moyen: 0</p>
           </div>
           <canvas id="canvasPlayer5" class="bg-white border-8 border-[#33FFD3]" width="500" height="400"></canvas>
           <div class="w-full bg-gray-200 rounded-full mt-2">
@@ -347,8 +347,8 @@
         <div class="resultPlayer6Class flex flex-col justify-center items-center px-2 m-2 bg-[#3100D3]">
           <div>
             <p id="namePlayer6" class="text-2xl p-2">Player 6</p>
-            <p id="numberOfRoundWinPlayer6" class="numberOfRoundWinPlayer6Class text-2xl p-2">Round win: 0</p>
-            <p id="percentAveragePlayer6" class="percentAveragePlayer6Class text-2xl p-2">Pourcentage moyen: 0</p>
+            <p id="numberOfRoundWinPlayer6" class="numberOfRoundWinPlayer6Class hidden text-2xl p-2">Round win: 0</p>
+            <p id="percentAveragePlayer6" class="percentAveragePlayer6Class hidden text-2xl p-2">Pourcentage moyen: 0</p>
           </div>
           <canvas id="canvasPlayer6" class="bg-white border-8 border-[#33FFD3]" width="500" height="400"></canvas>
           <div class="w-full bg-gray-200 rounded-full mt-2">
@@ -360,8 +360,8 @@
         <div class="resultPlayer7Class flex flex-col justify-center items-center px-2 m-2 bg-[#3100D3]">
           <div>
             <p id="namePlayer7" class="text-2xl p-2">Player 7</p>
-            <p id="numberOfRoundWinPlayer7" class="numberOfRoundWinPlayer7Class text-2xl p-2">Round win: 0</p>
-            <p id="percentAveragePlayer7" class="percentAveragePlayer7Class text-2xl p-2">Pourcentage moyen: 0</p>
+            <p id="numberOfRoundWinPlayer7" class="numberOfRoundWinPlayer7Class hidden text-2xl p-2">Round win: 0</p>
+            <p id="percentAveragePlayer7" class="percentAveragePlayer7Class hidden text-2xl p-2">Pourcentage moyen: 0</p>
           </div>
           <canvas id="canvasPlayer7" class="bg-white border-8 border-[#33FFD3]" width="500" height="400"></canvas>
           <div class="w-full bg-gray-200 rounded-full mt-2">
@@ -373,8 +373,8 @@
         <div class="resultPlayer8Class flex flex-col justify-center items-center px-2 m-2 bg-[#3100D3]">
           <div>
             <p id="namePlayer8" class="text-2xl p-2">Player 8</p>
-            <p id="numberOfRoundWinPlayer8" class="numberOfRoundWinPlayer8Class text-2xl p-2">Round win: 0</p>
-            <p id="percentAveragePlayer8" class="percentAveragePlayer8Class text-2xl p-2">Pourcentage moyen: 0</p>
+            <p id="numberOfRoundWinPlayer8" class="numberOfRoundWinPlayer8Class hidden text-2xl p-2">Round win: 0</p>
+            <p id="percentAveragePlayer8" class="percentAveragePlayer8Class hidden text-2xl p-2">Pourcentage moyen: 0</p>
           </div>
           <canvas id="canvasPlayer8" class="bg-white border-8 border-[#33FFD3]" width="500" height="400"></canvas>
           <div class="w-full bg-gray-200 rounded-full mt-2">
@@ -387,6 +387,7 @@
       <p class="text-2xl font-bold p-2 text-white bg-[#3100D3]">Victoire</p>
       <p id="winnerText" class="text-2xl p-2 text-white bg-[#3100D3]"></p>
       <button id="fetchImageButtonRound" class="fetchImageButtonRoundClass m-2 p-2 border-2 text-white border-white bg-black  hover:bg-white hover:border-black hover:text-black">Fetch Image</button>
+      <p id="fetchImageMessageButton" class="fetchImageMessageButtonClass hidden font-bold text-xl mb-2 bg-[#3100D3]"></p>
       <button id="nextRound" class="nextRoundClass hidden m-2 p-2 border-2 border-white bg-black text-white  hover:bg-white hover:border-black hover:text-black">Start Next Round</button>
       <button id="returnMenu" class="returnMenuClass hidden m-2 p-2 border-2 border-white bg-black text-white  hover:bg-white hover:border-black hover:text-black">Retour au menu</button>
       <button></button>

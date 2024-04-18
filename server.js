@@ -100,9 +100,9 @@ io.on('connection', (socket) => {
     }
   })
 
-  socket.on('sendPlayersInRoom', (allclientsInRoom, roomID, timerDuration, numberOfPlayerRoom, 
+  socket.on('sendPlayersInRoom', (allClientsInRoom, roomID, timerDuration, numberOfPlayerRoom, 
     currentRound, currentPrecision, currentTolerance, currenvVictoryCondition, currentWidth, currentHeight, currentCategory) => {
-    io.to(roomID).emit("sendedPlayersInRoom", allclientsInRoom, timerDuration, numberOfPlayerRoom,
+    io.to(roomID).emit("sendedPlayersInRoom", allClientsInRoom, timerDuration, numberOfPlayerRoom,
      currentRound, currentPrecision, currentTolerance, currenvVictoryCondition, currentWidth, currentHeight, currentCategory)
   });
 

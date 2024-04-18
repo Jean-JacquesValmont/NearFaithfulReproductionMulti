@@ -162,7 +162,7 @@ const contextPlayer8 = canvasPlayer8.getContext('2d')
 //Variables
 let imageDataURL
 let currentNamePlayer = namePlayer.value
-let allclientsInRoom = []
+let allClientsInRoom = []
 let currentRoomID = ""
 let numberOfPlayerRoom = 2
 let timerDuration = 60
@@ -225,7 +225,7 @@ const resetVariables = () => {
 
     imageDataURL = ""
     currentNamePlayer = namePlayer.value
-    allclientsInRoom.length = 0
+    allClientsInRoom.length = 0
     currentRoomID = ""
     numberOfPlayerRoom = 2
     timerDuration = 60

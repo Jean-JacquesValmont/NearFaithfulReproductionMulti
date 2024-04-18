@@ -5,7 +5,7 @@ window.onload = function() {
 };
 
 const searchingPlayerFromArray = (array, stringToSearch) => {
-    for(let i = 0; i < array.lenght; i++){
+    for(let i = 0; i < array.length; i++){
         if(array[i] == stringToSearch){
             return true
         }

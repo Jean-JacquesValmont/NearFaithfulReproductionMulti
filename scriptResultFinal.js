@@ -10,8 +10,8 @@ const updateTimerGame = () => {
         let imageDataURL = canvas.toDataURL()
         const namePlayers = [namePlayer1, namePlayer2, namePlayer3, namePlayer4, namePlayer5, namePlayer6, namePlayer7, namePlayer8];
 
-        for (let i = 0; i < allclientsInRoom.length; i++) {
-            namePlayers[i].textContent = allclientsInRoom[i];
+        for (let i = 0; i < allClientsInRoom.length; i++) {
+            namePlayers[i].textContent = allClientsInRoom[i];
         }
 
         socket.emit('endOfTimer', imageDataURL, currentRoomID);
@@ -203,7 +203,7 @@ const victoryByHighPercentage = (precision, ...values) => {
     if (maxValue1 === maxValue2) {
         winnerText.textContent = "Égalité";
     } else {
-        winnerText.textContent = allclientsInRoom[maxIndex1];
+        winnerText.textContent = allClientsInRoom[maxIndex1];
         if(maxIndex1 == 0){
             roundWinPlayer1 += 1
             numberOfRoundWinPlayer1.textContent = "Round win: " + roundWinPlayer1
@@ -330,7 +330,7 @@ const victoryByAveragePercentage = (precision, ...values) => {
         if (maxValue1 === maxValue2) {
             winnerText.textContent = "Égalité";
         } else {
-            winnerText.textContent = allclientsInRoom[maxIndex1];
+            winnerText.textContent = allClientsInRoom[maxIndex1];
         }
 
         fetchImageButtonRoundClass.classList.add("hidden")

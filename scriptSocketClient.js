@@ -42,7 +42,7 @@ leaveRoom.addEventListener("click", () => {
 
 // Lancer le jeu
 startGame.addEventListener("click", () => {
-    if(allclientsInRoom.length == numberOfPlayerRoom){
+    if(allClientsInRoom.length == numberOfPlayerRoom){
         imageDataURL = canvasImageFetch.toDataURL()
 
         socket.emit('startGame', imageDataURL, width, height);
@@ -59,7 +59,7 @@ socket.on('roomCreated', (roomID) => {
 
     currentRoomID = roomID
     nameRoomId.textContent = roomID
-    allclientsInRoom.push(currentNamePlayer)
+    allClientsInRoom.push(currentNamePlayer)
 
     const newParagraph = document.createElement('p');
     newParagraph.textContent = currentNamePlayer
@@ -67,62 +67,50 @@ socket.on('roomCreated', (roomID) => {
 });
 
 socket.on('roomJoined', (clientsInRoom, namePlayerJoin) => {
-    //Quand la room à déjà le nombre de joueur selectionner
-    if(clientsInRoom.length - 1 == numberOfPlayerRoom){
-        console.log("Enter in condition if the room is full. ")
-        if(namePlayerJoin == currentNamePlayer){
-            console.log("Enter if namePlayerJoin == currentNamePlayer. ")
-            currentRoomID = clientsInRoom[0]
-            errorMessageText("La salle que tu veux rejoindre est compléte.")
-            socket.emit('leaveRoom', currentRoomID, namePlayerJoin)
-        }
 
-    }else{// Quand il reste de la place
-        console.log("Enter in condition else the room is no full. ")
-        if(namePlayerJoin != currentNamePlayer){
-            console.log("Enter if namePlayerJoin == allclientsInRoom[0]. ")
-            allclientsInRoom.push(namePlayerJoin)
-        
-            socket.emit('sendPlayersInRoom', allclientsInRoom, clientsInRoom[0], timerDuration, numberOfPlayerRoom, 
-            round, precision, tolerance, victoryCondition, width, height, category);
-        }else{
-            console.log("Enter if namePlayerJoin != allclientsInRoom[0]. ")
-            currentRoomID = clientsInRoom[0]
-            nameRoomId.textContent = clientsInRoom[0]
-            makingInvisibleClass(menu)
-            makingVisibleClass(roomMenu)
-            makingInvisibleClass(buttonStartGame)
+    if(namePlayerJoin != currentNamePlayer){
+        allClientsInRoom.push(namePlayerJoin)
+    
+        socket.emit('sendPlayersInRoom', allClientsInRoom, clientsInRoom[0], timerDuration, numberOfPlayerRoom, 
+        round, precision, tolerance, victoryCondition, width, height, category);
+    }else{
+        currentRoomID = clientsInRoom[0]
+        nameRoomId.textContent = clientsInRoom[0]
+        makingInvisibleClass(menu)
+        makingVisibleClass(roomMenu)
+        makingInvisibleClass(buttonStartGame)
 
-            hiddenSelectOptionSection("guest")
-        }
+        hiddenSelectOptionSection("guest")
+
         console.log('Room joined:', clientsInRoom[0]);
     }
+    
 });
 
 socket.on("roomLeaved", (namePlayerLeaved) => {
-    if(allclientsInRoom[0] == namePlayerLeaved){
-        console.log("Enter in host leave.")
+    if(allClientsInRoom[0] == namePlayerLeaved){
         makingVisibleClass(menu)
         makingInvisibleClass(roomMenu)
         errorMessageText("Le créateur de la partie à quitter la salle")
     }
     else{
-        if(searchingPlayerFromArray(allclientsInRoom, namePlayerLeaved) == true){
-            console.log("Enter in else of roomLeaved")
-            allclientsInRoom = removePlayerFromArray(allclientsInRoom, namePlayerLeaved)
+        if(searchingPlayerFromArray(allClientsInRoom, namePlayerLeaved) == true){
+            allClientsInRoom = removePlayerFromArray(allClientsInRoom, namePlayerLeaved)
 
             player.innerHTML = ''
-            for(let i = 0; i < allclientsInRoom.length; i++){
+            for(let i = 0; i < allClientsInRoom.length; i++){
                 const newParagraph = document.createElement('p');
-                newParagraph.textContent = allclientsInRoom[i]
+                newParagraph.textContent = allClientsInRoom[i]
                 player.appendChild(newParagraph)
             }
         }
     }
 })
 
-socket.on("sendedPlayersInRoom", (allclientsInRoomSended, currentTimer, numberOfPlayerRoomSended,
+socket.on("sendedPlayersInRoom", (allClientsInRoomSended, currentTimer, numberOfPlayerRoomSended,
      currentRound, currentPrecision, currentTolerance, currenvVictoryCondition, currentWidth, currentHeight, currentCategory) => {
+
+    //Mise à jour des options par rapport à l'host
     numberOfPlayerRoom = numberOfPlayerRoomSended
     numberOfPlayerText.textContent = numberOfPlayerRoomSended
     timerDuration = currentTimer
@@ -164,13 +152,22 @@ socket.on("sendedPlayersInRoom", (allclientsInRoomSended, currentTimer, numberOf
     }else if(currentCategory == "wildlife"){
         categoryText.textContent = "Vie sauvage"
     }
-
-    player.innerHTML = ''
-    allclientsInRoom = allclientsInRoomSended
-    for(let i = 0; i < allclientsInRoom.length; i++){
-        const newParagraph = document.createElement('p');
-        newParagraph.textContent = allclientsInRoom[i]
-        player.appendChild(newParagraph)
+    //////////////////////////////////////////////////
+    //Si la room est full
+    if(allClientsInRoom.length > numberOfPlayerRoom && allClientsInRoom[allClientsInRoom.length - 1] == currentNamePlayer){
+        console.log("Enter in condition if the room is full. ")
+        makingVisibleClass(menu)
+        makingInvisibleClass(roomMenu)
+        errorMessageText("La salle que tu veux rejoindre est compléte.")
+        socket.emit('leaveRoom', currentRoomID, currentNamePlayer)
+    }else{//S'il reste de la place
+        player.innerHTML = ''
+        allClientsInRoom = allClientsInRoomSended
+        for(let i = 0; i < allClientsInRoom.length; i++){
+            const newParagraph = document.createElement('p');
+            newParagraph.textContent = allClientsInRoom[i]
+            player.appendChild(newParagraph)
+        }
     }
 })
 

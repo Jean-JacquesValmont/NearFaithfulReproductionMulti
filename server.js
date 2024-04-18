@@ -80,7 +80,10 @@ io.on('connection', (socket) => {
 
   socket.on("leaveRoom", (roomID, namePlayerLeaved) => {
     const clientsInRoom = io.sockets.adapter.rooms.get(roomID);
-    const arrayClientsInRoom = [...clientsInRoom]
+    let arrayClientsInRoom = []
+    if(clientsInRoom != undefined){
+      arrayClientsInRoom = [...clientsInRoom]
+    }
 
     if(arrayClientsInRoom[0] == socket.id){
       io.to(roomID).emit("roomLeaved", namePlayerLeaved) // On envois le socket avant que tous les joueurs ne soit plus dans la room sinon ils ne reçeveront pas.
@@ -91,6 +94,7 @@ io.on('connection', (socket) => {
       delete clientsInRoom[roomID]; // Supprimer la salle de jeu de la liste des salles
       
     }else{
+      console.log("namePlayerLeaved: ", namePlayerLeaved)
       socket.leave(roomID)
       io.to(roomID).emit("roomLeaved", namePlayerLeaved)
     }

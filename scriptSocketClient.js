@@ -55,27 +55,9 @@ socket.on('roomCreated', (roomID) => {
     makingVisibleClass(roomMenu)
     makingInvisibleClass(buttonStartGame)
 
-    numberOfPlayerTextClass.classList.add("hidden")
-    numberOfPlayerClass.classList.remove("hidden")
-    timerTextClass.classList.add("hidden")
-    timerSelectClass.classList.remove("hidden")
-    roundTextClass.classList.add("hidden")
-    roundSelectClass.classList.remove("hidden")
-    precisionTextClass.classList.add("hidden")
-    precisionSelectClass.classList.remove("hidden")
-    toleranceTextClass.classList.add("hidden")
-    toleranceSelectClass.classList.remove("hidden")
-    victoryConditionTextClass.classList.add("hidden")
-    victoryConditionSelectClass.classList.remove("hidden")
-    widthTextClass.classList.add("hidden")
-    widthSelectClass.classList.remove("hidden")
-    heightTextClass.classList.add("hidden")
-    heightSelectClass.classList.remove("hidden")
-    categoryTextClass.classList.add("hidden")
-    categorySelectClass.classList.remove("hidden")
+    hiddenSelectOptionSection("host")
 
     currentRoomID = roomID
-    console.log("currentRoomID:", currentRoomID)
     nameRoomId.textContent = roomID
     allclientsInRoom.push(currentNamePlayer)
 
@@ -85,61 +67,56 @@ socket.on('roomCreated', (roomID) => {
 });
 
 socket.on('roomJoined', (clientsInRoom, namePlayerJoin) => {
-    makingInvisibleClass(menu)
-    makingVisibleClass(roomMenu)
+    //Quand la room à déjà le nombre de joueur selectionner
+    if(clientsInRoom.length - 1 == numberOfPlayerRoom){
+        console.log("Enter in condition if the room is full. ")
+        if(namePlayerJoin == currentNamePlayer){
+            console.log("Enter if namePlayerJoin == currentNamePlayer. ")
+            currentRoomID = clientsInRoom[0]
+            errorMessageText("La salle que tu veux rejoindre est compléte.")
+            socket.emit('leaveRoom', currentRoomID, namePlayerJoin)
+        }
 
-    if(currentNamePlayer != namePlayerJoin){
-        allclientsInRoom.push(namePlayerJoin)
+    }else{// Quand il reste de la place
+        console.log("Enter in condition else the room is no full. ")
+        if(namePlayerJoin != currentNamePlayer){
+            console.log("Enter if namePlayerJoin == allclientsInRoom[0]. ")
+            allclientsInRoom.push(namePlayerJoin)
         
-        socket.emit('sendPlayersInRoom', allclientsInRoom, clientsInRoom[0], timerDuration, numberOfPlayerRoom, 
-        round, precision, tolerance, victoryCondition, width, height, category);
+            socket.emit('sendPlayersInRoom', allclientsInRoom, clientsInRoom[0], timerDuration, numberOfPlayerRoom, 
+            round, precision, tolerance, victoryCondition, width, height, category);
+        }else{
+            console.log("Enter if namePlayerJoin != allclientsInRoom[0]. ")
+            currentRoomID = clientsInRoom[0]
+            nameRoomId.textContent = clientsInRoom[0]
+            makingInvisibleClass(menu)
+            makingVisibleClass(roomMenu)
+            makingInvisibleClass(buttonStartGame)
+
+            hiddenSelectOptionSection("guest")
+        }
+        console.log('Room joined:', clientsInRoom[0]);
     }
-    else{
-        currentRoomID = clientsInRoom[0]
-        nameRoomId.textContent = clientsInRoom[0]
-        makingInvisibleClass(buttonStartGame)
-        makingVisibleClass(roomMenu)
-
-        numberOfPlayerClass.classList.add("hidden")
-        numberOfPlayerTextClass.classList.remove("hidden")
-        timerSelectClass.classList.add("hidden")
-        timerTextClass.classList.remove("hidden")
-        roundSelectClass.classList.add("hidden")
-        roundTextClass.classList.remove("hidden")
-        precisionSelectClass.classList.add("hidden")
-        precisionTextClass.classList.remove("hidden")
-        toleranceSelectClass.classList.add("hidden")
-        toleranceTextClass.classList.remove("hidden")
-        victoryConditionSelectClass.classList.add("hidden")
-        victoryConditionTextClass.classList.remove("hidden")
-        widthSelectClass.classList.add("hidden")
-        widthTextClass.classList.remove("hidden")
-        heightSelectClass.classList.add("hidden")
-        heightTextClass.classList.remove("hidden")
-        categorySelectClass.classList.add("hidden")
-        categoryTextClass.classList.remove("hidden")
-
-        fetchImageButtonClass.classList.add("hidden")
-
-        fetchImageButtonRoundClass.classList.add("hidden")
-    }
-
-    console.log('Room joined:', clientsInRoom[0]);
 });
 
 socket.on("roomLeaved", (namePlayerLeaved) => {
     if(allclientsInRoom[0] == namePlayerLeaved){
+        console.log("Enter in host leave.")
         makingVisibleClass(menu)
         makingInvisibleClass(roomMenu)
+        errorMessageText("Le créateur de la partie à quitter la salle")
     }
     else{
-        allclientsInRoom = removePlayerFromArray(allclientsInRoom, namePlayerLeaved)
+        if(searchingPlayerFromArray(allclientsInRoom, namePlayerLeaved) == true){
+            console.log("Enter in else of roomLeaved")
+            allclientsInRoom = removePlayerFromArray(allclientsInRoom, namePlayerLeaved)
 
-        player.innerHTML = ''
-        for(let i = 0; i < allclientsInRoom.length; i++){
-            const newParagraph = document.createElement('p');
-            newParagraph.textContent = allclientsInRoom[i]
-            player.appendChild(newParagraph)
+            player.innerHTML = ''
+            for(let i = 0; i < allclientsInRoom.length; i++){
+                const newParagraph = document.createElement('p');
+                newParagraph.textContent = allclientsInRoom[i]
+                player.appendChild(newParagraph)
+            }
         }
     }
 })

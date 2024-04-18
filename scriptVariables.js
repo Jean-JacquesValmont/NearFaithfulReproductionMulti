@@ -8,6 +8,7 @@ const errorCopyID = document.getElementById('errorCopyID')
 const leaveRoom = document.getElementById("leaveRoom")
 const namePlayer = document.getElementById('namePlayer')
 const player = document.getElementById("player")
+const errorMessage = document.getElementById("errorMessage")
 
 const numberOfPlayer = document.getElementById("numberOfPlayer")
 const numberOfPlayerText = document.getElementById("numberOfPlayerText")
@@ -82,6 +83,7 @@ const nextRound = document.getElementById("nextRound")
 const returnMenu = document.getElementById('returnMenu')
 
 const menu = document.querySelector('.menu');
+const errorMessageClass = document.querySelector('.errorMessageClass');
 const roomMenu = document.querySelector('.roomMenu');
 const numberOfPlayerClass = document.querySelector('.numberOfPlayerClass');
 const numberOfPlayerTextClass = document.querySelector('.numberOfPlayerTextClass');
@@ -273,6 +275,8 @@ const resetVariables = () => {
     loadCanvas6 = false
     loadCanvas7 = false
     loadCanvas8 = false
+
+    errorMessageClass.classList.add("hidden")
 
     player.innerHTML = ''
     numberOfPlayer.value = 2

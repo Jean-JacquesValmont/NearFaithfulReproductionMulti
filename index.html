@@ -96,7 +96,7 @@
               <div class="flex justify-between">
                 <div class="flex items-start">
                   <p class="">Précision:</p>
-                  <img src="/image/question_mark_circle.png" alt="question_mark_circle" width="20" height="20" title="C'est le nombre de chiffre après la virgule lors du résultat du pourcentage."/>
+                  <img src="/image/question_mark_circle.png" alt="question_mark_circle" width="20" height="20" title="C'est le nombre de chiffres après la virgule dans le résultat du pourcentage."/>
                 </div>
                 <select id="precisionSelect" class="precisionSelectClass p-2 border-2 border-white bg-black">
                   <option value="0">0</option>
@@ -111,7 +111,7 @@
               <div class="flex justify-between">
                 <div class="flex items-start">
                   <p class="">Tolérance:</p>
-                  <img src="/image/question_mark_circle.png" alt="question_mark_circle" width="20" height="20" title="C'est l'écart de différence accepter entre la couleur du pixel de l'image et celui du dessin. Plus la valeur de la tolérance sera basse, plus compliqué sera le jeu."/>
+                  <img src="/image/question_mark_circle.png" alt="question_mark_circle" width="20" height="20" title="C'est l'écart de différence accepté entre la couleur du pixel de l'image et celle du dessin. Plus la valeur de la tolérance sera basse, plus le jeu sera compliqué."/>
                 </div>
                 <select id="toleranceSelect" class="toleranceSelectClass p-2 border-2 border-white bg-black">
                   <option value="0">0</option>
@@ -129,10 +129,10 @@
               <div class="flex justify-between">
                 <div class="flex items-start">
                   <p class="">Condition de victoire:</p>
-                  <img src="/image/question_mark_circle.png" alt="question_mark_circle" width="20" height="20" title="Le plus haut pourcentage: 
+                  <img src="/image/question_mark_circle.png" alt="question_mark_circle" width="20" height="20" title="Le plus haut pourcentage:
                   Celui avec le pourcentage le plus élevé à chaque manche remporte la manche. Moyenne des pourcentages: 
                   On fait la moyenne des pourcentages de toutes les manches jouées. 
-                  Celui avec la moyenne la plus élevé remporte la partie."/>
+                  Celui avec la moyenne la plus élevée remporte la partie."/>
                 </div>
                 <select id="victoryConditionSelect" class="victoryConditionSelectClass p-2 border-2 border-white bg-black">
                   <option value="hight">Le plus haut pourcentage</option>
@@ -394,6 +394,7 @@
     </div>
 
     <footer class='mt-32 flex flex-col items-center justify-center bg-[#3100D3] text-white'>
+      <p>Version alpha</p>
       <p>Conçu et réalisé par Jean-Jacques Valmont</p>
       <p>©Copyright 2024 - Jean-Jacques Valmont</p>
     </footer>
